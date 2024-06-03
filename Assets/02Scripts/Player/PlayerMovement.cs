@@ -4,15 +4,50 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("# 이동 관련")]
+    public float m_Speed = 5.0f;
+    public float m_RotateSpeedInDegree = 180.0f;
+
+    private Vector3 _LookDirection;
+
+    private Vector3 _InputDirection;
+
+    private CharacterController _CharacterController;
+
+    public CharacterController characterController => _CharacterController ?? (_CharacterController = GetComponent<CharacterController>());
+
+
+    private void FixedUpdate()
     {
-        
+        CalculateXZVelocity();
+
+        CalculateYVelocity();
+
+        CalculateLookDirection();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CalculateXZVelocity()
     {
-        
+
+    }
+
+    private void CalculateYVelocity()
+    {
+
+    }
+
+    private void CalculateLookDirection()
+    {
+
+    }
+
+    public void OnMoveInput(Vector2 inputDirection)
+    {
+        _InputDirection = inputDirection;
+    }
+
+    public void OnRotateInput()
+    {
+
     }
 }
