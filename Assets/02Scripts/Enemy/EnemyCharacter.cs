@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class EnemyCharacter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    EnemyAIController aiController;
+    EnemyMovement enemyMove;
+    EnemyAttack enemyAttack;
+
+
+    private void Start()
     {
-        
+        aiController = GetComponent<EnemyAIController>();
+        enemyMove = GetComponent<EnemyMovement>();
+        enemyAttack = GetComponent<EnemyAttack>();
+
+        aiController.onStartMove += enemyMove.MoveToPlayer;
+        aiController.onStartAttack += enemyAttack.AttackPlayer;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+   
+
 }
+

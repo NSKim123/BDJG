@@ -4,15 +4,29 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    // 플레이어 방향으로 이동
+
+    private Rigidbody _rigid;
+    [SerializeField] private float _moveSpeed;
+    [SerializeField] private GameObject _target;
+    private Vector3 _moveDirection;
+
+
+    private void Start()
     {
-        
+        _rigid = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //private void FixedUpdate()
+    //{
+    //    MoveToPlayer();
+    //}
+
+    public void MoveToPlayer(GameObject target)
     {
-        
+        _moveDirection = target.transform.position - transform.position;
+        _rigid.velocity = _moveDirection * _moveSpeed * Time.deltaTime;
     }
+
+
 }
