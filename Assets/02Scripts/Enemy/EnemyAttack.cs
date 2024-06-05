@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class EnemyAttack : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private Rigidbody _rigid;
+    [SerializeField] private GameObject _target;
+    [SerializeField] private float _attackForce;
+
+    private void Start()
     {
-        
+        _rigid = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    //private void FixedUpdate()
+    //{
+    //    if (Vector3.Distance(_target.transform.position, transform.position) < 2)
+    //    {
+    //        AttackPlayer();
+    //    }
+    //}
+
+    // 플레이어를 밀어서 공격
+    public void AttackPlayer(GameObject target)
     {
-        
+      
+        _rigid.AddForce((target.transform.position - transform.position).normalized * _attackForce, ForceMode.Impulse);
+
     }
 }
