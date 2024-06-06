@@ -24,8 +24,8 @@ public class EnemyAttack : MonoBehaviour
     // 플레이어를 밀어서 공격
     public void AttackPlayer(GameObject target)
     {
-      
-        _rigid.AddForce((target.transform.position - transform.position).normalized * _attackForce, ForceMode.Impulse);
+        target.transform.position += Vector3.back * 3;
+        //_rigid.AddForce((target.transform.position - transform.position).normalized * _attackForce, ForceMode.Impulse);
 
     }
 }

@@ -25,7 +25,7 @@ public class EnemyMovement : MonoBehaviour
     public void MoveToPlayer(GameObject target)
     {
         _moveDirection = target.transform.position - transform.position;
-        _rigid.velocity = _moveDirection * _moveSpeed * Time.deltaTime;
+        _rigid.velocity = _moveDirection.normalized * _moveSpeed * Time.deltaTime;
     }
 
 

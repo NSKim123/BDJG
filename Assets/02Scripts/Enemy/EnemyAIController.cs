@@ -22,6 +22,8 @@ public class EnemyAIController : MonoBehaviour
 
     [SerializeField] private float _attackDistance;
     [SerializeField] private LayerMask _targetLayer;
+    [SerializeField] private bool _attacked = false;
+
 
     private void Start()
     {
@@ -32,11 +34,14 @@ public class EnemyAIController : MonoBehaviour
     {
 
         // 타켓(플레이어) 감지
-        if (Physics.OverlapSphere(transform.position, _attackDistance, _targetLayer).Length > 0)
+        if (Physics.OverlapSphere(transform.position, _attackDistance, _targetLayer).Length > 0 && !_attacked)
         {
-            Debug.Log("감지");
+            _attacked = true;
             currentState = EnemyState.attack;
             onStartAttack?.Invoke(target);
+            Debug.Log(currentState);
+            Debug.Log("감지");
+
         }
         else
         {
@@ -44,7 +49,10 @@ public class EnemyAIController : MonoBehaviour
             onStartMove?.Invoke(target);
         }
 
-
+        if (currentState == EnemyState.move && _attacked)
+        {
+            _attacked = false;
+        }
 
 
     }
