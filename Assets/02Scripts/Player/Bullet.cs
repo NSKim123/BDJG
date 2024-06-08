@@ -7,6 +7,20 @@ using UnityEngine;
 /// </summary>
 public class Bullet : Projectile
 {
+    /// <summary>
+    /// 이 투사체가 가질 공격력
+    /// </summary>
+    private float _AttackPower;
+
+    /// <summary>
+    /// 공격력 설정 메서드
+    /// </summary>
+    /// <param name="power"> 설정할 공격력</param>
+    public void SetAttackPower(float power)
+    {
+        _AttackPower = power;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         // 이 투사체가 적에게 닿으면

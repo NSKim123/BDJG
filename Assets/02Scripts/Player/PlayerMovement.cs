@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
     public float m_Speed = 5.0f;
 
     [Header("회전 속력")]
-    public float m_RotateSpeedInDegree = 30.0f;
+    public float m_RotateSpeedInDegree = 30.0f;    
 
     [Header("----------------------------------------")]
 
@@ -51,6 +51,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _TargetVelocity;
 
     /// <summary>
+    /// 대쉬 속도
+    /// </summary>
+    private Vector3 _DashVelocity;
+
+    /// <summary>
     /// CharacterController 컴포넌트 객체입니다.
     /// </summary>
     private CharacterController _CharacterController;
@@ -74,6 +79,9 @@ public class PlayerMovement : MonoBehaviour
 
         // 계산한 속도를 토대로 이동시킵니다.
         Move();
+
+        // 강제로 대쉬할 속도가 있다면 대쉬를 적용합니다.
+        Dash();
     }
 
     /// <summary>
@@ -144,7 +152,20 @@ public class PlayerMovement : MonoBehaviour
     {
         // 이동이 가능한 상태라면 이동시킵니다.
         if(_AbleToMove)
-            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);
+            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);        
+    }
+
+    /// <summary>
+    /// 대쉬 속도를 계산하여 플레이어의 대쉬를 적용합니다.
+    /// </summary>
+    private void Dash()
+    {
+        // 대쉬 속도를 적용하여 객체를 이동시킵니다.
+        _CharacterController.Move(_DashVelocity * Time.fixedDeltaTime);
+
+        // 대쉬 속도를 줄입니다.
+        _DashVelocity = Vector3.Lerp(_DashVelocity, Vector3.zero, 0.3f);
+        if (_DashVelocity.magnitude < 0.1f) _DashVelocity = Vector3.zero;
     }
 
     /// <summary>
@@ -157,10 +178,10 @@ public class PlayerMovement : MonoBehaviour
         Vector3 center = characterController.center + transform.position;
 
         // Box cast 크기 설정
-        Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius;
+        Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y;
 
         // Box cast 최대 길이 설정
-        float maxDistance = characterController.height * 0.5f + characterController.skinWidth;
+        float maxDistance = (characterController.height * 0.5f * transform.lossyScale.y + characterController.skinWidth);
 
         // Box cast 실행
         return Physics.BoxCast(
@@ -179,6 +200,16 @@ public class PlayerMovement : MonoBehaviour
     public void SetMovable(bool movable)
     {
         _AbleToMove = movable;
+    }
+
+    /// <summary>
+    /// 몬스터에게 맞았을 때 호출되는 메서드입니다.
+    /// </summary>
+    /// <param name="distance"> 밀려날 거리</param>
+    /// <param name="direction"> 밀려날 방향</param>
+    public void OnHit(float distance, Vector3 direction)
+    {
+        _DashVelocity += distance * direction;
     }
 
     /// <summary>

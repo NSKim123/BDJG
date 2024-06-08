@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 /// <summary>
 /// 플레이어의 캐릭터에 대한 컴포넌트입니다.
 /// </summary>
-public class PlayerCharacter : MonoBehaviour
+public class PlayerCharacter : MonoBehaviour, IHit
 {
     /// <summary>
     /// 이 캐릭터의 레벨
     /// </summary>
-    private int _Level;
+    private LevelSystem _LevelSystem;
 
     /// <summary>
     /// 이동 컴포넌트
@@ -22,6 +23,8 @@ public class PlayerCharacter : MonoBehaviour
     /// </summary>
     private PlayerAttack _PlayerAttack;
 
+    private PlayerModel _PlayerModel;
+
     /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
@@ -32,9 +35,53 @@ public class PlayerCharacter : MonoBehaviour
     /// </summary>
     public PlayerAttack attackComponent => _PlayerAttack ?? (_PlayerAttack = GetComponent<PlayerAttack>());
 
-    private void Awake()
+    public PlayerModel modelComponent => _PlayerModel ?? (_PlayerModel = GetComponent<PlayerModel>());
+
+    private void Start()
     {
-        _Level = 1;
+        // 레벨 시스템을 생성합니다.
+        InitLevelSystem();
+
+        // test
+        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+    }
+    private void Update()
+    {
+        _LevelSystem.UpdateSurvivalTime();
+    }
+
+    // test
+    Coroutine testCoroutine;
+    private void OnDestroy()
+    {
+        if(testCoroutine != null)
+            StopCoroutine(testCoroutine);
+    }
+
+    //test
+    private IEnumerator Test_IncreaseKillCountPer5s()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(5.0f);
+            _LevelSystem.IncreaseKillCount();
+        }
+    }
+
+    /// <summary>
+    /// 레벨 시스템을 생성하는 메서드입니다.
+    /// </summary>
+    private void InitLevelSystem()
+    {
+        // 레벨 시스템을 생성합니다.
+        _LevelSystem = new LevelSystem();
+
+        // 레벨업할 때 호출되어야하는 함수들을 바인딩합니다.
+        _LevelSystem.onLevelUp += modelComponent.OnLevelUp;
+        _LevelSystem.onLevelUp += attackComponent.OnlevelUp;
+
+        // 레벨 시스템 내부에서의 초기화를 진행합니다.
+        _LevelSystem.Initailize();
     }
 
     /// <summary>
@@ -70,4 +117,38 @@ public class PlayerCharacter : MonoBehaviour
     {
         attackComponent?.OnAttackInput();
     }
+
+    /// <summary>
+    /// 공격을 받을 시 호출되는 메서드입니다.
+    /// </summary>
+    /// <param name="distance"> 밀려날 거리</param>
+    /// <param name="direction"> 밀려날 방향</param>
+    public void OnDamaged(float distance, Vector3 direction)
+    {
+        // 조작하여 움직이는 것을 제한합니다. 
+        // TO DO : 이동 제한이 풀리는 작업을 애니메이션 이벤트에 추가시켜야함!!
+        //movementComponent.SetMovable(false);
+
+        // 밀려나도록 movement 컴포넌트에 명령합니다.
+        movementComponent.OnHit(distance, direction);
+    }
+
+    /// <summary>
+    /// 죽을 시 호출되는 메서드입니다.
+    /// </summary>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void OnDead()
+    {
+        throw new System.NotImplementedException();
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (_LevelSystem == null) return;        
+
+        _LevelSystem.OnDrawGizmos(transform.position);        
+    }
+#endif
+
 }
