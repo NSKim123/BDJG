@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -19,6 +20,13 @@ public class PlayerMovement : MonoBehaviour
     [Header("# 점프 관련")]
     [Header("점프력")]
     public float m_JumpForce = 5.0f;
+
+    [Header("----------------------------------------")]
+
+    [Header("# 피격 관련")]
+    [Header("넉백 계수(넉백 계산식에서 데미지값에 곱해지는 수)")]
+    public float m_KnockBackCoefficient = 5.0f;
+
 
     /// <summary>
     /// 점프 입력을 받았는지를 나타냅니다.
@@ -41,6 +49,16 @@ public class PlayerMovement : MonoBehaviour
     private bool _AbleToMove = true;
 
     /// <summary>
+    /// 방어력
+    /// </summary>
+    private float _Defence;
+
+    /// <summary>
+    /// 최대 방어력
+    /// </summary>
+    private float _MaxDefence;
+
+    /// <summary>
     /// 입력받은 이동 방향을 저장하는 멤버변수입니다.
     /// </summary>
     private Vector2 _InputDirection;
@@ -51,14 +69,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _TargetVelocity;
 
     /// <summary>
-    /// 대쉬 속도
+    /// 넉백 속도
     /// </summary>
-    private Vector3 _DashVelocity;
+    private Vector3 _KnockBackVelocity;
 
     /// <summary>
     /// CharacterController 컴포넌트 객체입니다.
     /// </summary>
     private CharacterController _CharacterController;
+
+    /// <summary>
+    /// 밀려나고 있는지에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public bool isKnockBack => _KnockBackVelocity.sqrMagnitude > 0.0f;
 
     /// <summary>
     /// CharacterController 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
@@ -80,8 +103,8 @@ public class PlayerMovement : MonoBehaviour
         // 계산한 속도를 토대로 이동시킵니다.
         Move();
 
-        // 강제로 대쉬할 속도가 있다면 대쉬를 적용합니다.
-        Dash();
+        // 넉백 속도가 있다면 넉백를 적용합니다.
+        KnockBack();
     }
 
     /// <summary>
@@ -156,16 +179,19 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// 대쉬 속도를 계산하여 플레이어의 대쉬를 적용합니다.
+    /// 넉백 속도를 계산하여 넉백을 적용합니다.
     /// </summary>
-    private void Dash()
+    private void KnockBack()
     {
+        // 넉백 상태가 아니라면 호출 종료합니다.
+        if (!isKnockBack) return;
+
         // 대쉬 속도를 적용하여 객체를 이동시킵니다.
-        _CharacterController.Move(_DashVelocity * Time.fixedDeltaTime);
+        _CharacterController.Move(_KnockBackVelocity * Time.fixedDeltaTime);
 
         // 대쉬 속도를 줄입니다.
-        _DashVelocity = Vector3.Lerp(_DashVelocity, Vector3.zero, 0.3f);
-        if (_DashVelocity.magnitude < 0.1f) _DashVelocity = Vector3.zero;
+        _KnockBackVelocity = Vector3.Lerp(_KnockBackVelocity, Vector3.zero, 0.3f);
+        if (_KnockBackVelocity.magnitude < 0.1f) _KnockBackVelocity = Vector3.zero;
     }
 
     /// <summary>
@@ -194,6 +220,18 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
+    /// 데미지를 계산합니다. (데미지 = 상대 공격력 - 내 방어력)
+    /// </summary>
+    /// <param name="attack"> 받은 공격력</param>
+    /// <returns></returns>
+    private float CalculateDamage(float attack)
+    {
+        float damage = attack - _Defence;
+
+        return (damage >= 0.0f) ? damage : 0.0f;
+    }
+
+    /// <summary>
     /// 이동 가능 여부를 설정합니다.
     /// </summary>
     /// <param name="movable"> 이동 가능은 참, 이동 불가능은 거짓</param>
@@ -203,13 +241,33 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
+    /// 방어력을 갱신합니다.
+    /// </summary>
+    /// <param name="ratio"> 적용할 최대 방어력의 비율</param>
+    public void UpdateDefence(float ratio)
+    {
+        _Defence = _MaxDefence * ratio;
+    }
+
+    /// <summary>
+    /// 레벨업 시 호출될 메서드입니다.
+    /// </summary>
+    /// <param name="level"> 달성 레벨</param>
+    public void OnLevelUp(int level)
+    {
+        _MaxDefence = 10.0f + level * 2.0f;
+    }
+
+    /// <summary>
     /// 몬스터에게 맞았을 때 호출되는 메서드입니다.
     /// </summary>
     /// <param name="distance"> 밀려날 거리</param>
     /// <param name="direction"> 밀려날 방향</param>
     public void OnHit(float distance, Vector3 direction)
     {
-        _DashVelocity += distance * direction;
+        float damage = CalculateDamage(distance);
+
+        _KnockBackVelocity += (damage * m_KnockBackCoefficient) * direction;
     }
 
     /// <summary>
@@ -241,4 +299,13 @@ public class PlayerMovement : MonoBehaviour
         if (_IsGrounded)
             _IsJumpInput = true;
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        GUIContent gUIContent = new GUIContent();
+        gUIContent.text = $"\n\n\n\n\n\n\n\n방어력 / 최대 방어력: {_Defence} / {_MaxDefence}";
+        Handles.Label(transform.position + Vector3.down, gUIContent);
+    }
+#endif
 }

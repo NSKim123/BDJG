@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
     /// </summary>
     protected float _Speed;
 
-    protected void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         // 이동합니다.
         Move();
@@ -31,7 +31,7 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// 이동방향으로 회전시키고 이동시키는 메서드입니다.
     /// </summary>
-    protected void Move()
+    protected virtual void Move()
     {        
         transform.forward = _Direction;
         transform.position += _Direction * _Speed * Time.fixedDeltaTime;

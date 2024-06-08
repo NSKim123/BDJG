@@ -9,7 +9,12 @@ using UnityEngine;
 public class PlayerCharacter : MonoBehaviour, IHit
 {
     /// <summary>
-    /// 이 캐릭터의 레벨
+    /// 이 캐릭터가 죽었는지를 나타냅니다.
+    /// </summary>
+    private bool _IsDead;
+
+    /// <summary>
+    /// 이 캐릭터의 레벨 시스템
     /// </summary>
     private LevelSystem _LevelSystem;
 
@@ -23,7 +28,15 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// </summary>
     private PlayerAttack _PlayerAttack;
 
+    /// <summary>
+    /// 모델 컴포넌트
+    /// </summary>
     private PlayerModel _PlayerModel;
+
+    /// <summary>
+    /// 이 캐릭터가 죽었는지를 나타내는 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public bool isDead => _IsDead;
 
     /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
@@ -35,6 +48,9 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// </summary>
     public PlayerAttack attackComponent => _PlayerAttack ?? (_PlayerAttack = GetComponent<PlayerAttack>());
 
+    /// <summary>
+    /// 모델 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
     public PlayerModel modelComponent => _PlayerModel ?? (_PlayerModel = GetComponent<PlayerModel>());
 
     private void Start()
@@ -47,7 +63,11 @@ public class PlayerCharacter : MonoBehaviour, IHit
     }
     private void Update()
     {
+        // 레벨 시스템의 생존 시간을 갱신합니다.
         _LevelSystem.UpdateSurvivalTime();
+
+        // 탄환 게이지 정보를 이용하고 있는 객체에 탄환 게이지 정보를 전달합니다. 
+        UpdateBulletGaugeInfo();
     }
 
     // test
@@ -78,10 +98,36 @@ public class PlayerCharacter : MonoBehaviour, IHit
 
         // 레벨업할 때 호출되어야하는 함수들을 바인딩합니다.
         _LevelSystem.onLevelUp += modelComponent.OnLevelUp;
-        _LevelSystem.onLevelUp += attackComponent.OnlevelUp;
+        _LevelSystem.onLevelUp += attackComponent.OnLevelUp;
+        _LevelSystem.onLevelUp += movementComponent.OnLevelUp;
 
         // 레벨 시스템 내부에서의 초기화를 진행합니다.
         _LevelSystem.Initailize();
+    }
+    
+    /// <summary>
+    /// 탄환 게이지 정보를 전달하여 모델 스케일을 조정하게 하는 메서드입니다.
+    /// </summary>
+    private void SetModelScaleByBulletGauge()
+    {
+        modelComponent.UpdateTargetScale(attackComponent.bulletGauge.currentValue);
+    }
+
+    /// <summary>
+    /// 탄환 게이지 정보를 전달하여 방어력을 조정하게 하는 메서드입니다.
+    /// </summary>
+    private void SetDefenceByBulletGauge()
+    {
+        movementComponent.UpdateDefence(attackComponent.bulletGauge.ratio);
+    }
+
+    /// <summary>
+    /// 탄환 게이지 정보를 이용하고 있는 객체들에게 탄환 게이지 정보를 전달하는 메서드입니다.
+    /// </summary>
+    private void UpdateBulletGaugeInfo()
+    {
+        SetModelScaleByBulletGauge();
+        SetDefenceByBulletGauge();
     }
 
     /// <summary>
@@ -125,21 +171,18 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// <param name="direction"> 밀려날 방향</param>
     public void OnDamaged(float distance, Vector3 direction)
     {
-        // 조작하여 움직이는 것을 제한합니다. 
-        // TO DO : 이동 제한이 풀리는 작업을 애니메이션 이벤트에 추가시켜야함!!
-        //movementComponent.SetMovable(false);
-
         // 밀려나도록 movement 컴포넌트에 명령합니다.
         movementComponent.OnHit(distance, direction);
+
+        // 피격 이펙트 표시
     }
 
     /// <summary>
     /// 죽을 시 호출되는 메서드입니다.
     /// </summary>
-    /// <exception cref="System.NotImplementedException"></exception>
     public void OnDead()
     {
-        throw new System.NotImplementedException();
+        _IsDead = true;
     }
 
 #if UNITY_EDITOR

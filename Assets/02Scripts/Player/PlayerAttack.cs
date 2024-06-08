@@ -23,35 +23,35 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("---------------------------------------")]
 
-    [Header("# 스테미나 관련")]
-    [Header("발사 시 소모 스테미나")]
-    public float m_CostStamina = 1.0f;
+    [Header("# 탄환 게이지 관련")]
+    [Header("발사 시 소모 게이지")]
+    public int m_CostBulletGauge = 1;
 
-    [Header("스테미나 자연 회복 속도 /s")]
-    public float m_StaminaRecoverSpeed = 0.5f;
+    /// <summary>
+    /// 탄환 게이지 객체
+    /// </summary>
+    [SerializeField]
+    private BulletGauge _BulletGauge;
 
     /// <summary>
     /// 공격력 ( 미는 힘. 레벨에 따라 성장 )
     /// </summary>
     private float _AttackForce;
-    public float attackForce => _AttackForce;
-
-    /// <summary>
-    /// 스태미나 게이지 객체
-    /// </summary>
-    private FloatGauge _StaminaGauge;
 
     /// <summary>
     /// 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체입니다.
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
-    public FloatGauge staminaGauge => _StaminaGauge;
+    /// <summary>
+    /// 탄환 게이지 객체에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public BulletGauge bulletGauge => _BulletGauge;
 
     private void Awake()
     {
         // 스태미나 게이지를 초기화합니다.
-        _StaminaGauge = new FloatGauge(10.0f, 10.0f);
+        _BulletGauge = new BulletGauge(10, 10);
 
         // 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
         _OwnerCharacter = GetComponent<PlayerCharacter>();        
@@ -59,33 +59,57 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        // 스태미나를 자연 회복합니다.
-        RecoverStamina(m_StaminaRecoverSpeed * Time.deltaTime);
-    }
-
-    /// <summary>
-    /// 스태미나를 회복합니다.
-    /// </summary>
-    /// <param name="recover"> 회복량입니다.</param>
-    private void RecoverStamina(float recover)
-    {
-        _StaminaGauge.currentValue += recover;
-    }
+        // 탄환 게이지를 업데이트합니다.
+        _BulletGauge.UpdateBulletGauge();
+    }   
 
     /// <summary>
     /// 공격을 시도합니다.
     /// </summary>
     private void TryAttack()
     {
-        // 스태미나가 부족하면 발사하지 않고 리턴합니다.
-        if (_StaminaGauge.currentValue - m_CostStamina < _StaminaGauge.min)
-        {
-            Debug.Log("스테미나가 부족해 발사할 수 없습니다!");
+        // 공격이 불가능한 상태라면 호출을 중단합니다.
+        if (!CheckAttackable())
             return;
-        }
 
         // 발사합니다.
         Fire();
+    }
+
+    /// <summary>
+    /// 탄환이 남아있는지 체크합니다.
+    /// </summary>
+    /// <returns> 탄환이 남아있다면 참을 반환합니다.</returns>
+    private bool CheckRemainedBullet()
+    {
+        return !(_BulletGauge.currentValue - m_CostBulletGauge < _BulletGauge.min);
+    }
+
+    /// <summary>
+    /// 탄환 게이지가 과부화 상태인지 체크합니다.
+    /// </summary>
+    /// <returns> 과부화 상태라면 참을 반환합니다.</returns>
+    private bool CheckOverburden()
+    {
+        return _BulletGauge.isOverburden;
+    }
+
+    /// <summary>
+    /// 넉백 상태인지 확인합니다.
+    /// </summary>
+    /// <returns> 넉백 상태라면 참을 반환합니다.</returns>
+    private bool CheckKnockBack()
+    {
+        return _OwnerCharacter.movementComponent.isKnockBack;
+    }    
+
+    /// <summary>
+    /// 공격 가능한 상태인지 확인합니다.
+    /// </summary>
+    /// <returns> 공격 가능한 상태라면 참을 반환합니다.</returns>
+    private bool CheckAttackable()
+    {
+        return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack();
     }
 
     /// <summary>
@@ -93,20 +117,20 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void Fire()
     {
-        // 스태미나를 소모합니다.
-        CostStamina(m_CostStamina);
+        // 탄환 게이지를 소모합니다.
+        CostStamina(m_CostBulletGauge);
 
         // 투사체를 생성합니다.
         InstantiateBullet();
     }
 
     /// <summary>
-    /// 스태미나를 소모합니다.
+    /// 탄환 게이지를 소모합니다.
     /// </summary>
-    /// <param name="cost"> 소모량입니다.</param>
-    private void CostStamina(float cost)
+    /// <param name="cost"> 소모량</param>
+    private void CostStamina(int cost)
     {
-        _StaminaGauge.currentValue -= cost;
+        _BulletGauge.CostBullet(cost);
     }
 
     /// <summary>
@@ -130,26 +154,33 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 레벨에 따른 스태미나 최대량을 설정하고, 게이지를 100% 채웁니다.
+    /// 레벨에 따른 탄환 게이지 최대량을 설정하고, 게이지를 100% 채웁니다.
     /// </summary>
     /// <param name="level"> 달성 레벨</param>
-    private void SetStaminaMaxValueByLevel(int level)
+    private void SetBulletGaugeMaxValueByLevel(int level)
     {
-        _StaminaGauge.max = 10.0f + level * 2.0f;
-        _StaminaGauge.currentValue = _StaminaGauge.max;
+        // 최대량 계산 식
+        _BulletGauge.max = 10 + level * 2;
+        _BulletGauge.currentValue = _BulletGauge.max;
+    }
+
+    /// <summary>
+    /// 발사 시작위치를 찾습니다.
+    /// </summary>
+    private void FindStartPoint()
+    {
+        m_StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
     }
 
     /// <summary>
     /// 레벨업 시 호출될 메서드입니다.
     /// </summary>
     /// <param name="level"> 달성 레벨</param>
-    public void OnlevelUp(int level)
+    public void OnLevelUp(int level)
     {
         SetAttackForceByLevel(level);
-        SetStaminaMaxValueByLevel(level);
-
-        // 발사 시작위치를 찾습니다.
-        m_StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
+        SetBulletGaugeMaxValueByLevel(level);
+        FindStartPoint();
     }
 
     /// <summary>
@@ -164,10 +195,10 @@ public class PlayerAttack : MonoBehaviour
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {
-        if (_StaminaGauge == null) return;
+        if (_BulletGauge == null) return;
 
         GUIContent gUIContent = new GUIContent();
-        gUIContent.text = $"\n\n\n\n공격력 : {_AttackForce}\n스테미나 : {_StaminaGauge.currentValue} / {_StaminaGauge.max}";
+        gUIContent.text = $"\n\n\n\n\n공격력 : {_AttackForce}\n탄환 게이지 : {_BulletGauge.currentValue} / {_BulletGauge.max}";
         Handles.Label(transform.position + Vector3.down, gUIContent);
     }
 #endif
