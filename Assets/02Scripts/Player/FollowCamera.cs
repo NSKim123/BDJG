@@ -42,7 +42,7 @@ public class FollowCamera : MonoBehaviour
     {   
         // 추적 대상의 위치에 따라 다음 위치를 설정합니다.
         //transform.position = _TargetObject.transform.position + (-_TargetObject.transform.forward * m_Distance + Vector3.up * m_Height);
-        transform.position = _TargetObject.transform.position + (Vector3.forward * m_Distance + Vector3.up * m_Height);
+        transform.position = _TargetObject.transform.position + (-Vector3.forward * m_Distance + Vector3.up * m_Height);
     }
 
     /// <summary>

@@ -13,15 +13,15 @@ public class PlayerMovement : MonoBehaviour
     public float m_Speed = 5.0f;
 
     [Header("회전 속력")]
-    public float m_RotateSpeedInDegree = 30.0f;    
+    public float m_RotateSpeedInDegree = 30.0f;
 
-    [Header("----------------------------------------")]
+    [Header("------------------------------------------------------------------------------")]
 
     [Header("# 점프 관련")]
     [Header("점프력")]
     public float m_JumpForce = 5.0f;
 
-    [Header("----------------------------------------")]
+    [Header("------------------------------------------------------------------------------")]
 
     [Header("# 피격 관련")]
     [Header("넉백 계수(넉백 계산식에서 데미지값에 곱해지는 수)")]

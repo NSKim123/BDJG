@@ -18,25 +18,56 @@ public class PlayerAttack : MonoBehaviour
     [Header("밀어내는 힘 계수")]
     public float m_PushPowerMultiplier = 1.0f;
 
-    [Header("발사 시작 위치")]
-    public Transform m_StartPosition;
-
-    [Header("---------------------------------------")]
+    [Header("------------------------------------------------------------------------------")]
 
     [Header("# 탄환 게이지 관련")]
     [Header("발사 시 소모 게이지")]
     public int m_CostBulletGauge = 1;
 
-    /// <summary>
-    /// 탄환 게이지 객체
-    /// </summary>
-    [SerializeField]
-    private BulletGauge _BulletGauge;
+    [Header("1회 게이지 회복량")]
+    public int m_BulletGaugeRecoverAmount = 2;
+
+    [Header("회복 주기")]
+    public float m_BulletGaugeRecoverCycle = 1.0f;
+
+    [Header("공격 후 게이지 회복을 시작하는 시간")]
+    public float m_BulletGaugeStartRecoverTime = 1.0f;    
+    
+
+    [Header("------------------------------------------------------------------------------")]
+
+    [Header("# 타겟팅 관련")]
+    [Header("감지 최대 길이")]
+    public float m_SencerDistance = 20.0f;
+
+    [Header("감지 폭")]
+    public float m_SencerWidth = 2.0f;
+
+    [Header("감지 높이")]
+    public float m_SencerHeight = 2.0f;
+
+    [Header("감지 레이어")]
+    public LayerMask m_SenceLayer;
 
     /// <summary>
     /// 공격력 ( 미는 힘. 레벨에 따라 성장 )
     /// </summary>
     private float _AttackForce;
+
+    /// <summary>
+    /// 발사 시작 위치
+    /// </summary>
+    private Transform _StartPosition;
+
+    /// <summary>
+    /// 탄환 게이지 객체
+    /// </summary>
+    private BulletGauge _BulletGauge;
+
+    /// <summary>
+    /// 타겟팅 시스템 객체
+    /// </summary>
+    private TargetingSystem _TargetingSystem;
 
     /// <summary>
     /// 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체입니다.
@@ -50,9 +81,12 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
-        // 스태미나 게이지를 초기화합니다.
-        _BulletGauge = new BulletGauge(10, 10);
-
+        // 스태미나 게이지를 생성합니다.
+        _BulletGauge = new BulletGauge(m_BulletGaugeRecoverAmount, m_BulletGaugeRecoverCycle, m_BulletGaugeStartRecoverTime, 10);
+                
+        // 타겟팅 시스템을 생성합니다.
+        _TargetingSystem = new TargetingSystem(LayerMask.GetMask("Enemy"), m_SencerDistance, m_SencerWidth, m_SencerHeight);               
+        
         // 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
         _OwnerCharacter = GetComponent<PlayerCharacter>();        
     }
@@ -61,7 +95,13 @@ public class PlayerAttack : MonoBehaviour
     {
         // 탄환 게이지를 업데이트합니다.
         _BulletGauge.UpdateBulletGauge();
-    }   
+    }
+
+    private void FixedUpdate()
+    {
+        // 타켓팅 대상을 지정합니다.
+        _TargetingSystem.Targeting(transform);        
+    }
 
     /// <summary>
     /// 공격을 시도합니다.
@@ -139,9 +179,12 @@ public class PlayerAttack : MonoBehaviour
     private void InstantiateBullet()
     {
         Bullet bullet = Instantiate(m_Bullet);
-        bullet.transform.position = m_StartPosition.position;
+        bullet.transform.position = _StartPosition.position;
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
+
+        if(_TargetingSystem.currentTargetTransform != null)
+            bullet.SetTarget(_TargetingSystem.currentTargetTransform);
     }
 
     /// <summary>
@@ -169,7 +212,7 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void FindStartPoint()
     {
-        m_StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
+        _StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
     }
 
     /// <summary>
@@ -200,6 +243,8 @@ public class PlayerAttack : MonoBehaviour
         GUIContent gUIContent = new GUIContent();
         gUIContent.text = $"\n\n\n\n\n공격력 : {_AttackForce}\n탄환 게이지 : {_BulletGauge.currentValue} / {_BulletGauge.max}";
         Handles.Label(transform.position + Vector3.down, gUIContent);
+
+        
     }
 #endif
 }

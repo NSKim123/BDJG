@@ -8,17 +8,22 @@ using UnityEngine;
 /// <summary>
 /// 탄환 게이지를 나타내는 클래스입니다.
 /// </summary>
-[Serializable]
 public class BulletGauge : IntGauge
 {
-    [Header("1회 게이지 회복량")]
-    public int m_BulletGaugeRecoverAmount = 2;
+    /// <summary>
+    /// 1회 게이지 회복량
+    /// </summary>
+    private int _BulletGaugeRecoverAmount = 2;
 
-    [Header("회복 주기")]
-    public float m_BulletGaugeRecoverCycle = 1.0f;
+    /// <summary>
+    /// 회복 주기
+    /// </summary>
+    private float _BulletGaugeRecoverCycle = 1.0f;
 
-    [Header("공격 후 게이지 회복을 시작하는 시간")]
-    public float m_BulletGaugeStartRecoverTime = 1.0f;
+    /// <summary>
+    /// 공격 후 게이지 회복을 시작하는 시간
+    /// </summary>
+    private float _BulletGaugeStartRecoverTime = 1.0f;
 
     /// <summary>
     /// 마지막 공격 시간
@@ -41,12 +46,20 @@ public class BulletGauge : IntGauge
     public bool isOverburden => _IsOverburden;
 
     /// <summary>
-    /// 생성자 입니다.
+    /// 생성자입니다.
     /// </summary>
-    /// <param name="max"> 최대값</param>
-    /// <param name="current"> 현재값</param>
-    /// <param name="min"> 최소값</param>
-    public BulletGauge(int max, int current = 0, int min = 0) : base(max, current, min) { }
+    /// <param name="bulletGaugeRecoverAmount"> 1회 게이지 회복량</param>
+    /// <param name="bulletGaugeRecoverCycle"> 회복 주기</param>
+    /// <param name="bulletGaugeStartRecoverTime"> 공격 후 게이지 회복을 시작하는 시간</param>
+    /// <param name="max"></param>
+    public BulletGauge(int bulletGaugeRecoverAmount, float bulletGaugeRecoverCycle, float bulletGaugeStartRecoverTime, int max) : base(max)
+    {
+        _BulletGaugeRecoverAmount = bulletGaugeRecoverAmount;
+        _BulletGaugeRecoverCycle = bulletGaugeRecoverCycle;
+        _BulletGaugeStartRecoverTime = bulletGaugeStartRecoverTime;
+
+        currentValue = max;
+    }
 
     /// <summary>
     /// 탄환 게이지 회복 조건을 체크하는 메서드입니다.
@@ -55,8 +68,8 @@ public class BulletGauge : IntGauge
     private bool CheckRecoverCondition()
     {
         // 공격 버튼 상호 작용 후 1초간 상호작용이 없을 때, 1초당 한 번씩 회복하도록 설정하였습니다.
-        return Time.time - _LastAttackTime >= m_BulletGaugeStartRecoverTime
-                  && Time.time - _LastRecoverTime >= m_BulletGaugeRecoverCycle;
+        return Time.time - _LastAttackTime >= _BulletGaugeStartRecoverTime
+                  && Time.time - _LastRecoverTime >= _BulletGaugeRecoverCycle;
     }
 
     /// <summary>
@@ -65,7 +78,7 @@ public class BulletGauge : IntGauge
     private void Recover()
     {
         // 탄환 게이지를 회복합니다.
-        currentValue += m_BulletGaugeRecoverAmount;
+        currentValue += _BulletGaugeRecoverAmount;
 
         // 회복 시간을 저장합니다.
         _LastRecoverTime = Time.time;

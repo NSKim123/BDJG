@@ -12,6 +12,7 @@ public class Bullet : GuidedProjectile
     /// </summary>
     private float _AttackPower;
     
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player") return;
