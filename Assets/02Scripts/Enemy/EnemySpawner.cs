@@ -18,9 +18,6 @@ public enum WaveName
 public class EnemySpawner : MonoBehaviour
 {
 
-    [SerializeField] private GameObject _mushroomPrefab;
-    [SerializeField] private GameObject _cactusPrefab;
-    [SerializeField] private GameObject _player;
     [SerializeField] private WaveName currentWave;
     [SerializeField] private int _mushroomCount;
     [SerializeField] private int _cactusCount;

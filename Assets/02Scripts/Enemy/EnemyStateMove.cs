@@ -7,6 +7,7 @@ public class EnemyStateMove : EnemyStateBase
 
     // 플레이어 방향으로 이동
     private Vector3 _moveDirection;
+    private Vector3 _lookDirection;
 
     public EnemyStateMove(StateMachine stateMachine) : base(stateMachine)
     {
@@ -55,6 +56,7 @@ public class EnemyStateMove : EnemyStateBase
     public void MoveToPlayer(GameObject target)
     {
         _moveDirection = target.transform.position - enemyCharacter.transform.position;
+        _moveDirection.y = 0;
         enemyCharacter.transform.rotation = Quaternion.LookRotation(_moveDirection);
         rigid.velocity = _moveDirection.normalized * enemyCharacter.MoveSpeed;
     }
