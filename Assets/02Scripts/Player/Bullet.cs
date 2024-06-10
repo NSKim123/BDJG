@@ -10,7 +10,7 @@ public class Bullet : Projectile
     private void OnCollisionEnter(Collision collision)
     {
         // 이 투사체가 적에게 닿으면
-        if(collision.gameObject.TryGetComponent<EnemyCharacter>(out EnemyCharacter hitEnemy))
+        if(collision.gameObject.TryGetComponent<Enemy>(out Enemy hitEnemy))
         {
             // TO DO : 적 밀려남 처리 
 
