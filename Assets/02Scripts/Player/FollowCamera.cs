@@ -32,7 +32,7 @@ public class FollowCamera : MonoBehaviour
         FollowTarget();
 
         // 대상이 바라보고 있는 방향에 맞춰 카메라를 회전시킵니다.
-        YawRotate();
+        //YawRotate();
     }
 
     /// <summary>
@@ -41,7 +41,8 @@ public class FollowCamera : MonoBehaviour
     private void FollowTarget()
     {   
         // 추적 대상의 위치에 따라 다음 위치를 설정합니다.
-        transform.position = _TargetObject.transform.position + (-_TargetObject.transform.forward * m_Distance + Vector3.up * m_Height);
+        //transform.position = _TargetObject.transform.position + (-_TargetObject.transform.forward * m_Distance + Vector3.up * m_Height);
+        transform.position = _TargetObject.transform.position + (-Vector3.forward * m_Distance + Vector3.up * m_Height);
     }
 
     /// <summary>
