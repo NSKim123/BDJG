@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ½½¶óÀÓÀÌ ¹ß»çÇÏ´Â Åõ»çÃ¼ÀÔ´Ï´Ù.
+/// ìŠ¬ë¼ì„ì´ ë°œì‚¬í•˜ëŠ” íˆ¬ì‚¬ì²´ì…ë‹ˆë‹¤.
 /// </summary>
 public class Bullet : GuidedProjectile
 {
     /// <summary>
-    /// ÀÌ Åõ»çÃ¼°¡ °¡Áú °ø°İ·Â
+    /// ì´ íˆ¬ì‚¬ì²´ê°€ ê°€ì§ˆ ê³µê²©ë ¥
     /// </summary>
     private float _AttackPower;
     
@@ -17,21 +17,21 @@ public class Bullet : GuidedProjectile
     {
         if (collision.gameObject.tag == "Player") return;
 
-        // ÀÌ Åõ»çÃ¼°¡ Àû¿¡°Ô ´êÀ¸¸é
+        // ì´ íˆ¬ì‚¬ì²´ê°€ ì ì—ê²Œ ë‹¿ìœ¼ë©´
         if (collision.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
-            // TO DO : Àû ¹Ğ·Á³² Ã³¸® 
-            // ³ªÁß¿¡ ÇÁ·ÎÁ§Æ® Merge ÈÄ ÀÛ¾÷!
+            // TO DO : ì  ë°€ë ¤ë‚¨ ì²˜ë¦¬ 
+            // ë‚˜ì¤‘ì— í”„ë¡œì íŠ¸ Merge í›„ ì‘ì—…!
         }
 
-        // ÀÌ Åõ»çÃ¼¸¦ Á¦°ÅÇÕ´Ï´Ù.
+        // ì´ íˆ¬ì‚¬ì²´ë¥¼ ì œê±°í•©ë‹ˆë‹¤.
         Destroy(this.gameObject);
     }
 
     /// <summary>
-    /// °ø°İ·Â ¼³Á¤ ¸Ş¼­µå
+    /// ê³µê²©ë ¥ ì„¤ì • ë©”ì„œë“œ
     /// </summary>
-    /// <param name="power"> ¼³Á¤ÇÒ °ø°İ·Â</param>
+    /// <param name="power"> ì„¤ì •í•  ê³µê²©ë ¥</param>
     public void SetAttackPower(float power)
     {
         _AttackPower = power;

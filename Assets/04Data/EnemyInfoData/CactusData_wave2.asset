@@ -9,12 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 547a9947fd2468a49bce5554bc996e0c, type: 3}
-  m_Name: MushroomSpawnInfo
+  m_Script: {fileID: 11500000, guid: 57ac1d7f71f932d48a430f99e8e07ad5, type: 3}
+  m_Name: CactusData_wave2
   m_EditorClassIdentifier: 
-  _enemyType: 0
-  _enemyPrefab: {fileID: 4737009380193390080, guid: 983be5481a4418942b98c80bf54b3476,
-    type: 3}
-  _maxEnemyCount: 5
-  _spawnRadius: 5
-  _spawnTime: 2
+  _enemyType: 1
+  _enemyID: cac1
+  _attackForce: 1.5
+  _defenseForce: 1.5
+  _moveSpeed: 2
+  _isAttackTargetExist: 0
+  _attackWay: 0
+  _attackRange: 1
+  _attackSpeed: 1
+  _attackTime: 1

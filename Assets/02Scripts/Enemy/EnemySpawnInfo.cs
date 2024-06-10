@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// SpawnScriptableObject 값을 적용, 객체에 붙음
+// SpawnScriptableObject 값을 적용, 객체에 붙음 - 삭제할 수도 있습니다.
 public class EnemySpawnInfo : MonoBehaviour
 {
-    public EnemySpawnInfoScriptableObject SpawnInfo => _spawnInfo;
+    public EnemySpawnInfoData SpawnInfo => _spawnInfo;
 
-    [SerializeField] private EnemySpawnInfoScriptableObject _spawnInfo;
+    [SerializeField] private EnemySpawnInfoData _spawnInfo;
 
 }
