@@ -39,6 +39,9 @@ public class TargetingSystem
     /// </summary>
     private Transform _CurrentTargetTransform;
 
+    /// <summary>
+    /// 현재 타겟팅 중인 대상의 Transform 에 대한 읽기 전용 프로퍼티
+    /// </summary>
     public Transform currentTargetTransform => _CurrentTargetTransform;
 
     /// <summary>
@@ -180,6 +183,13 @@ public class TargetingSystem
 
         // 감지된 대상들 중 조건에 부합하는 대상을 찾습니다.
         Transform targetingResult = FindClosestTarget(SenceResults, ownerTransform);
+
+        // 자식 오브젝트에 CenterTransform 오브젝트가 있다면 이를 타겟팅 대상으로 설정합니다.
+        Transform centerTransform = targetingResult.transform.Find("CenterTransform");
+        if (centerTransform != null)
+        {
+            targetingResult = centerTransform;
+        }
 
         // 감지된 대상 조차 없는 경우
         if(targetingResult == null)

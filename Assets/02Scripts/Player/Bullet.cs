@@ -11,14 +11,13 @@ public class Bullet : GuidedProjectile
     /// 이 투사체가 가질 공격력
     /// </summary>
     private float _AttackPower;
-    
-    
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider collider)
     {
-        if (collision.gameObject.tag == "Player") return;
+        if (collider.gameObject.tag == "Player") return;
 
         // 이 투사체가 적에게 닿으면
-        if (collision.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
+        if (collider.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
             hitEnemy.OnDamaged(_AttackPower, _Direction);
         }
@@ -26,6 +25,7 @@ public class Bullet : GuidedProjectile
         // 이 투사체를 제거합니다.
         Destroy(this.gameObject);
     }
+
 
     /// <summary>
     /// 공격력 설정 메서드
