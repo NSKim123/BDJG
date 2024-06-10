@@ -36,12 +36,12 @@ public class BulletGauge : IntGauge
     private float _LastRecoverTime;
 
     /// <summary>
-    /// 과부화 상태인지 나타내는 논리형 변수
+    /// 과부하 상태인지 나타내는 논리형 변수
     /// </summary>
     private bool _IsOverburden;
     
     /// <summary>
-    /// 과부화 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
+    /// 과부하 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isOverburden => _IsOverburden;
 
@@ -85,9 +85,9 @@ public class BulletGauge : IntGauge
     }
 
     /// <summary>
-    /// 과부화 상태를 해제하는 조건을 회복하는 메서드입니다.
+    /// 과부하 상태를 해제하는 조건을 회복하는 메서드입니다.
     /// </summary>
-    /// <returns> 과부화 상태 해제 조건을 만족하면 참을 반환합니다.</returns>
+    /// <returns> 과부하 상태 해제 조건을 만족하면 참을 반환합니다.</returns>
     private bool CheckLiftOverburdenCondition()
     {
         // 탄환 게이지가 모두 차있어야함을 조건으로 설정하였습니다.
@@ -105,7 +105,7 @@ public class BulletGauge : IntGauge
             Recover();
         }    
         
-        // 과부화 상태라면, 과부화 상태 해제 조건을 체크하고 과부화 상태를 해제합니다.
+        // 과부하 상태라면, 과부하 상태 해제 조건을 체크하고 과부하 상태를 해제합니다.
         if(_IsOverburden && CheckLiftOverburdenCondition())
         {
             _IsOverburden = false;
@@ -124,7 +124,7 @@ public class BulletGauge : IntGauge
         // 공격 시간을 저장합니다.
         _LastAttackTime = Time.time;
 
-        // 탄환 게이지를 모두 소모했다면 과부화 상태로 돌입합니다.
+        // 탄환 게이지를 모두 소모했다면 과부하 상태로 돌입합니다.
         if(currentValue <= 0)
         {
             _IsOverburden = true;

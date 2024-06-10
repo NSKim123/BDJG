@@ -126,9 +126,9 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 탄환 게이지가 과부화 상태인지 체크합니다.
+    /// 탄환 게이지가 과부하 상태인지 체크합니다.
     /// </summary>
-    /// <returns> 과부화 상태라면 참을 반환합니다.</returns>
+    /// <returns> 과부하 상태라면 참을 반환합니다.</returns>
     private bool CheckOverburden()
     {
         return _BulletGauge.isOverburden;
@@ -174,7 +174,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 투사체를 발사합니다.
+    /// 탄환를 발사합니다.
     /// </summary>
     private void InstantiateBullet()
     {
