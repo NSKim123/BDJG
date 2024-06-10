@@ -190,7 +190,7 @@ public class PlayerMovement : MonoBehaviour
         _CharacterController.Move(_KnockBackVelocity * Time.fixedDeltaTime);
 
         // 대쉬 속도를 줄입니다.
-        _KnockBackVelocity = Vector3.Lerp(_KnockBackVelocity, Vector3.zero, 0.3f);
+        _KnockBackVelocity = Vector3.Lerp(_KnockBackVelocity, Vector3.zero, 0.8f);
         if (_KnockBackVelocity.magnitude < 0.1f) _KnockBackVelocity = Vector3.zero;
     }
 

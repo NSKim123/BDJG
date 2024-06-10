@@ -50,7 +50,7 @@ public class EnemyStateAttack : EnemyStateBase
                         if (enemyController.attackDetect.Length > 0)
                         {
                             // 플레이어에게 데미지 주는 함수 호출
-                            //player.OnDamaged(distance, direction);
+                            enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
                             Debug.Log("attack");
 
                         }

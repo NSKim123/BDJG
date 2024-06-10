@@ -20,8 +20,7 @@ public class Bullet : GuidedProjectile
         // 이 투사체가 적에게 닿으면
         if (collision.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
-            // TO DO : 적 밀려남 처리 
-            // 나중에 프로젝트 Merge 후 작업!
+            hitEnemy.OnDamaged(_AttackPower, _Direction);
         }
 
         // 이 투사체를 제거합니다.
