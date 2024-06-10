@@ -15,7 +15,7 @@ public abstract class Enemy : MonoBehaviour, IHit
     public abstract Vector3 Damage_Direction { get; set; }
     
     protected StateMachine stateMachine;
-    public Rigidbody rigid;
+    protected Rigidbody rigid;
 
 
     protected virtual void Start()
