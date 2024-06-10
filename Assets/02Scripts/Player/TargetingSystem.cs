@@ -185,7 +185,7 @@ public class TargetingSystem
         Transform targetingResult = FindClosestTarget(SenceResults, ownerTransform);
 
         // 자식 오브젝트에 CenterTransform 오브젝트가 있다면 이를 타겟팅 대상으로 설정합니다.
-        Transform centerTransform = targetingResult.transform.Find("CenterTransform");
+        Transform centerTransform = targetingResult?.transform.Find("CenterTransform");
         if (centerTransform != null)
         {
             targetingResult = centerTransform;
