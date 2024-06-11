@@ -34,6 +34,11 @@ public class PlayerCharacter : MonoBehaviour, IHit
     private PlayerModel _PlayerModel;
 
     /// <summary>
+    /// 애니메이터를 관리하는 컴포넌트
+    /// </summary>
+    private PlayerAnimController _PlayerAnimController;
+
+    /// <summary>
     /// 이 캐릭터가 죽었는지를 나타내는 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isDead => _IsDead;
@@ -53,14 +58,26 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// </summary>
     public PlayerModel modelComponent => _PlayerModel ?? (_PlayerModel = GetComponent<PlayerModel>());
 
+    /// <summary>
+    /// 애니메이터를 관리하는 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public PlayerAnimController animController => _PlayerAnimController ?? (_PlayerAnimController = GetComponentInChildren<PlayerAnimController>());
+
+    private void Awake()
+    {
+        // 이벤트 함수를 바인딩합니다.
+        BindEventFunction();
+    }
+
     private void Start()
     {
         // 레벨 시스템을 생성합니다.
         InitLevelSystem();
 
         // test
-        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+        //testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
     }
+
     private void Update()
     {
         // 레벨 시스템의 생존 시간을 갱신합니다.
@@ -68,6 +85,9 @@ public class PlayerCharacter : MonoBehaviour, IHit
 
         // 탄환 게이지 정보를 이용하고 있는 객체에 탄환 게이지 정보를 전달합니다. 
         UpdateBulletGaugeInfo();
+
+        // 애미네이션 파라미터를 갱신합니다.
+        UpdateAnimationParameter();
     }
 
     // test
@@ -99,10 +119,19 @@ public class PlayerCharacter : MonoBehaviour, IHit
         // 레벨업할 때 호출되어야하는 함수들을 바인딩합니다.
         _LevelSystem.onLevelUp += modelComponent.OnLevelUp;
         _LevelSystem.onLevelUp += attackComponent.OnLevelUp;
-        _LevelSystem.onLevelUp += movementComponent.OnLevelUp;
+        _LevelSystem.onLevelUp += movementComponent.OnLevelUp;        
 
         // 레벨 시스템 내부에서의 초기화를 진행합니다.
         _LevelSystem.Initailize();
+    }
+
+    /// <summary>
+    /// 이벤트 함수를 바인딩합니다.
+    /// </summary>
+    private void BindEventFunction()
+    {
+        // 모델이 변경될 때 호출되어야하는 함수들을 바인딩합니다.
+        modelComponent.OnModelChanged += ResetAnimController;
     }
     
     /// <summary>
@@ -128,6 +157,23 @@ public class PlayerCharacter : MonoBehaviour, IHit
     {
         SetModelScaleByBulletGauge();
         SetDefenceByBulletGauge();
+    }
+
+    /// <summary>
+    /// 애니메이션 파라미터를 갱신합니다.
+    /// </summary>
+    private void UpdateAnimationParameter()
+    {
+        animController.UpdateMoveParam(movementComponent.normalizedZXSpeed);
+        animController.UpdateGroundedParam(movementComponent.isGrounded);
+    }
+
+    /// <summary>
+    /// PlayerAnimController 객체를 재설정합니다.
+    /// </summary>
+    private void ResetAnimController()
+    {
+        _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
     }
 
     /// <summary>
