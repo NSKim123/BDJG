@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 [Serializable]
 
 public class Mushroom : Enemy
 {
+
     public override float MoveSpeed { get; set; }
     public override float DetectPlayerDistance { get;  set; }
 
@@ -21,14 +23,16 @@ public class Mushroom : Enemy
 
     public override void OnDamaged(float distance, Vector3 direction)
     {
-        //Debug.Log("µé¾î¿È");
         Damage_Distance = distance;
         Damage_Direction = direction;
         stateMachine.ChangeState(State.Hurt);
-        
-        //Debug.Log(stateMachine.currentStateType);
     }
 
+    public override void OnDead()
+    {
+        EnemyManager.Instance.MushroomCount--;
+        stateMachine.ChangeState(State.Die);
+    }
 
     protected override void Start()
     {
@@ -41,8 +45,5 @@ public class Mushroom : Enemy
             new EnemyStateDie(stateMachine)
         });
 
-        //Debug.Log(MoveSpeed + "¼Óµµ");
-        
-         
     }
 }

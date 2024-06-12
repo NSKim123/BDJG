@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -37,13 +35,13 @@ public class EnemyAIController : MonoBehaviour
         _enemyCharacter = GetComponent<Enemy>();
     }
 
-    IEnumerator C_WaitAttackTime()
-    {
-        yield return new WaitForSeconds(_enemyCharacter.AttackTime);
+    //IEnumerator C_WaitAttackTime()
+    //{
+    //    yield return new WaitForSeconds(_enemyCharacter.AttackTime);
 
-        _attacked = false;
+    //    _attacked = false;
 
-    }
+    //}
 
     private void Update()
     {
@@ -52,44 +50,40 @@ public class EnemyAIController : MonoBehaviour
         attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.DetectPlayerDistance, _targetLayer);
 
         // 타켓(플레이어) 감지
-        if (attackDetect.Length > 0)
+        if (attackDetect.Length > 0 && !_attacked)
         {
-            if (!_attacked)
-            {
-                _attacked = true;
-                _stateMachine.ChangeState(State.Attack);
-                StartCoroutine(C_WaitAttackTime());
-            }
+            //Debug.Log("타겟 감지");
+            _attacked = true;
+            _stateMachine.ChangeState(State.Attack);
 
         }
-        else
-        {
-            _stateMachine.ChangeState(State.Move);
-        }
-
-            
-        //if (stateMachine.currentStateType == State.move && _attacked)
+        //else
         //{
-        //    if (currentTime >= attackTime)
-        //    {
-        //        _attacked = false;
-        //        currentTime = 0;
-        //    }
-            
+        //    Debug.Log("다시 무브");
+        //    _stateMachine.ChangeState(State.Move);
         //}
+
+        if (_stateMachine.currentStateType == State.Move && _attacked)
+        {
+            _attacked = false;
+        }
+
+   
 
     }
 
     // (임시) 맵을 둘러싼 콜라이더를 빠져나가면 죽었다고 판단합니다.
+    // 맵만들면 맵 쪽 스크립트에서 Ondead 호출
     private void OnTriggerExit(Collider other)
     {
         if (other.transform.tag == "Boundary")
         {
-            _stateMachine.ChangeState(State.Die);
+            _enemyCharacter.OnDead();
         }
     }
 
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (_enemyCharacter != null)
@@ -99,4 +93,5 @@ public class EnemyAIController : MonoBehaviour
         }
 
     }
+#endif
 }

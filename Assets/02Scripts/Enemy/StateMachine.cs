@@ -37,5 +37,6 @@ public class StateMachine : MonoBehaviour
     private void Update()
     {
         ChangeState(currentState.MoveNextStep());
+        
     }
 }

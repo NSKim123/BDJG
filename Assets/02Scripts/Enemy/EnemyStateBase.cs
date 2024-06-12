@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum State
 {
@@ -33,7 +34,8 @@ public abstract class EnemyStateBase
     protected EnemyAIController enemyController;
     protected StateMachine stateMachine;
     protected Enemy enemyCharacter;
-    // player º¯¼ö
+    protected NavMeshAgent enemyAgent;
+
 
     public EnemyStateBase(StateMachine stateMachine)
     {
@@ -43,6 +45,7 @@ public abstract class EnemyStateBase
         this.rigid = stateMachine.GetComponent<Rigidbody>();
         this.enemyCharacter = stateMachine.GetComponent<Enemy>();
         this.enemyController = stateMachine.GetComponent<EnemyAIController>();
+        this.enemyAgent = stateMachine.GetComponent<NavMeshAgent>();
     }
 
     public abstract State MoveNextStep();
