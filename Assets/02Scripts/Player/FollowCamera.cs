@@ -14,6 +14,9 @@ public class FollowCamera : MonoBehaviour
     [Header("높이")]
     public float m_Height = 8.4f;
 
+    [Header("x축 회전 값")]
+    public float m_PitchRotation = 30.0f;
+
     /// <summary>
     /// 추적하는 게임 오브젝트
     /// </summary>
@@ -31,8 +34,8 @@ public class FollowCamera : MonoBehaviour
         // 대상을 추적합니다.
         FollowTarget();
 
-        // 대상이 바라보고 있는 방향에 맞춰 카메라를 회전시킵니다.
-        //YawRotate();
+        // 카메라의 Pitch 회전시킵니다.
+        PitchRotate();
     }
 
     /// <summary>
@@ -46,14 +49,14 @@ public class FollowCamera : MonoBehaviour
     }
 
     /// <summary>
-    /// 대상이 바라보고 있는 방향에 맞춰 카메라를 Yaw 회전시키는 메서드입니다.
+    /// 카메라의 Pitch 회전시키는 메서드입니다.
     /// </summary>
-    private void YawRotate()
+    private void PitchRotate()
     {
         // 현재 회전값을 가져옵니다.
         Vector3 currentEulerAngles = transform.rotation.eulerAngles;
 
         // 새롭게 설정할 회전값을 계산하여 적용합니다.
-        transform.rotation = Quaternion.Euler(currentEulerAngles.x, _TargetObject.transform.rotation.eulerAngles.y, currentEulerAngles.z);
+        transform.rotation = Quaternion.Euler(m_PitchRotation, 0.0f, 0.0f);
     }
 }
