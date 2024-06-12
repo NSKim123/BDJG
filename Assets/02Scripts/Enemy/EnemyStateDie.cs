@@ -28,7 +28,9 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    enemyCharacter.OnDead();
+                    Debug.Log("die");
+                    //enemyCharacter.myMaterial.color = 
+                    GameObject.Destroy(enemyCharacter.gameObject);
                 }
                 break;
             case StepInState.End:

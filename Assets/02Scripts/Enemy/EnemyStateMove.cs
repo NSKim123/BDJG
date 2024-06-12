@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class EnemyStateMove : EnemyStateBase
@@ -7,10 +8,10 @@ public class EnemyStateMove : EnemyStateBase
 
     // 플레이어 방향으로 이동
     private Vector3 _moveDirection;
-    private Vector3 _lookDirection;
 
     public EnemyStateMove(StateMachine stateMachine) : base(stateMachine)
     {
+        enemyAgent.speed = enemyCharacter.MoveSpeed;
     }
 
     public override bool canExecute() => stateMachine.currentStateType == State.Attack
@@ -37,8 +38,9 @@ public class EnemyStateMove : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    MoveToPlayer(enemyController.target);
-                    //Debug.Log("moving");
+                    //Debug.Log(enemyAgent.speed);
+                    enemyAgent.SetDestination(enemyController.target.transform.position);
+                    //MoveToPlayer(enemyController.target);
                 }
                 break;
             case StepInState.End:
@@ -59,5 +61,6 @@ public class EnemyStateMove : EnemyStateBase
         _moveDirection.y = 0;
         enemyCharacter.transform.rotation = Quaternion.LookRotation(_moveDirection);
         rigid.velocity = _moveDirection.normalized * enemyCharacter.MoveSpeed;
+
     }
 }

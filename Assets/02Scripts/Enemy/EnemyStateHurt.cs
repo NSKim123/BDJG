@@ -23,22 +23,27 @@ public class EnemyStateHurt : EnemyStateBase
             case StepInState.None:
             case StepInState.Start:
                 {
-                    animator.Play("hurt");
-                    Debug.Log("맞음");
+                    //enemyAgent.ResetPath();
+                    enemyAgent.isStopped = true;
+                    enemyAgent.velocity = Vector3.zero;
+                    //Debug.Log("맞음");
 
                     dis = enemyCharacter.Damage_Distance;
                     dir = enemyCharacter.Damage_Direction;
                     enemyCharacter.transform.position += dis * dir;
                     //enemyCharacter.transform.position = Vector3.Lerp(enemyCharacter.transform.position, dir * dis, 5 * Time.deltaTime);
-                    Debug.Log($"{dis}와 {dir}");
+                    //Debug.Log($"{dis}와 {dir}");
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
+                    //Debug.Log("Hurt" + _currentStep);
+                    animator.Play("hurt");
+
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
                     {
-                        Debug.Log("hurt");
+                        //Debug.Log("hurt");
                         _currentStep++;
                     }
                     
@@ -47,6 +52,8 @@ public class EnemyStateHurt : EnemyStateBase
             case StepInState.End:
                 {
                     nextState = State.Move;
+                    //enemyAgent.SetDestination(enemyController.target.transform.position);
+                    enemyAgent.isStopped = false;
                 }
                 break;
             default:

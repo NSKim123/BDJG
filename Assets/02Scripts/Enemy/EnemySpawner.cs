@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEditor.AssetImporters;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public enum WaveName
 {
@@ -19,11 +15,7 @@ public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] private WaveName currentWave;
-    [SerializeField] private int _mushroomCount;
-    [SerializeField] private int _cactusCount;
 
-    public int MushroomCount => _mushroomCount;
-    public int CactusCount => _cactusCount;
 
     // 슬라임 성장 상태 받아와서 currentWave에 넣기
 
@@ -51,6 +43,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+
         // wave2에서 선인장쿤 생성 코루틴을 호출합니다.
         if (currentWave == WaveName.Trainee && !_isCactusCorouting)
         {
@@ -75,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
             spawndata = waves[waveIndex].spawn[(int)EnemyType.Mushroom];
             enemydata = waves[waveIndex].enemydata[(int)EnemyType.Mushroom];
 
-            if (_mushroomCount < spawndata.MaxEnemyCount)
+            if (EnemyManager.Instance.MushroomCount < spawndata.MaxEnemyCount)
             {
                 Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
                 Vector3 randomPosition = GetRandomPositionOnCircleEdge(randomAxis, spawndata.SpawnRadius);
@@ -85,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
                 GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
 
                 EnemyInit(newEnemy, enemydata);
-                _mushroomCount++;
+                EnemyManager.Instance.MushroomCount++;
 
             }
             yield return null;
@@ -110,7 +103,7 @@ public class EnemySpawner : MonoBehaviour
             spawndata = waves[waveIndex].spawn[(int)EnemyType.Cactus];
             enemydata = waves[waveIndex].enemydata[(int)EnemyType.Cactus];
 
-            if (_cactusCount < spawndata.MaxEnemyCount)
+            if (EnemyManager.Instance.CactusCount < spawndata.MaxEnemyCount)
             {
                 Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
                 Vector3 randomPosition = GetRandomPositionOnCircleEdge(randomAxis, spawndata.SpawnRadius);
@@ -120,7 +113,7 @@ public class EnemySpawner : MonoBehaviour
                 GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
 
                 EnemyInit(newEnemy, enemydata);
-                _cactusCount++;
+                EnemyManager.Instance.CactusCount++;
 
             }
             yield return null;
@@ -132,6 +125,8 @@ public class EnemySpawner : MonoBehaviour
     private void EnemyInit(GameObject enemy, EnemyInfoData data)
     {
         Enemy e = enemy.GetComponent<Enemy>();
+
+        //e.agent.speed = data.MoveSpeed;   // 할당되지않았다고 에러뜸
         e.MoveSpeed = data.MoveSpeed;
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;

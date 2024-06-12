@@ -20,6 +20,12 @@ public class Cactus : Enemy
         stateMachine.ChangeState(State.Hurt);
     }
 
+    public override void OnDead()
+    {
+        EnemyManager.Instance.CactusCount--;
+        stateMachine.ChangeState(State.Die);
+    }
+
     protected override void Start()
     {
         base.Start();
