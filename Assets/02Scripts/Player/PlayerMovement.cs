@@ -79,23 +79,43 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _CharacterController;
 
     /// <summary>
+    /// 이 이동 컴포넌트를 가지고 있는 PlayerCharacter 객체입니다.
+    /// </summary>
+    private PlayerCharacter _OwnerCharacter;
+
+    /// <summary>
     /// 밀려나고 있는지에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isKnockBack => _KnockBackVelocity.sqrMagnitude > 0.0f;
+
+    /// <summary>
+    /// ZX 평면 상에서의 정규화된 속력(속력 / 최대 속력)을 나타내는 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public float normalizedZXSpeed => Mathf.Sqrt(((_TargetVelocity).x * (_TargetVelocity).x + (_TargetVelocity).z * (_TargetVelocity).z)) / m_Speed;
+
+    /// <summary>
+    /// 땅에 닿아있는지에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public bool isGrounded => _IsGrounded;
 
     /// <summary>
     /// CharacterController 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
     public CharacterController characterController => _CharacterController ?? (_CharacterController = GetComponent<CharacterController>());
 
+    private void Awake()
+    {
+        //이 이동 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
+        _OwnerCharacter = GetComponent<PlayerCharacter>();
+    }
 
     private void FixedUpdate()
     {
-        // 바라보는 방향을 설정합니다.
-        CalculateLookDirection();
-
         // XZ 평면 상의 속도를 계산합니다.
         CalculateXZVelocity();
+
+        // 목표 회전값을 계산합니다.
+        CalculateTargetYawAngle();
 
         // Y 축 상의 속도를 계산합니다.
         CalculateYVelocity();        
@@ -103,20 +123,23 @@ public class PlayerMovement : MonoBehaviour
         // 계산한 속도를 토대로 이동시킵니다.
         Move();
 
+        // 목표 회전값을 향해 회전합니다.
+        Rotation();
+
         // 넉백 속도가 있다면 넉백를 적용합니다.
         KnockBack();
     }
 
     /// <summary>
-    /// 바라보는 방향을 설정합니다.
+    /// 목표 회전값을 계산하는 메서드입니다.
     /// </summary>
-    private void CalculateLookDirection()
+    private void CalculateTargetYawAngle()
     {
-        // 목표 Yaw 회전값을 통해 쿼터니언을 생성합니다.
-        Quaternion targetLook = Quaternion.Euler(0.0f, _TargetYawAngle, 0.0f);
-
-        // 생성한 쿼터니언 값을 통해 회전시킵니다.
-        transform.rotation = targetLook;
+        // 이동하고 있는 상황이 아니라면 호출을 종료합니다.
+        if (normalizedZXSpeed == 0.0f) return;
+        
+        // 목표 회전값을 설정합니다.
+        _TargetYawAngle = Mathf.Atan2(_TargetVelocity.x, _TargetVelocity.z) * Mathf.Rad2Deg;        
     }
 
     /// <summary>
@@ -127,11 +150,14 @@ public class PlayerMovement : MonoBehaviour
         // 새로 설정할 속도 벡터
         Vector3 newTargetVelocity = Vector3.zero;
 
-        // 입력받은 이동 방향을 캐릭터의 전방 방향 기준으로 변환하여 새로 설정할 속도 벡터에 저장합니다.
-        newTargetVelocity += transform.forward * _InputDirection.y;
-        newTargetVelocity += transform.right * _InputDirection.x;
-        newTargetVelocity.Normalize();
-        newTargetVelocity *= m_Speed;
+        if (_AbleToMove)
+        {
+            // 입력받은 이동 방향을 새로 설정할 속도 벡터에 저장합니다.
+            newTargetVelocity += Vector3.forward * _InputDirection.y;
+            newTargetVelocity += Vector3.right * _InputDirection.x;
+            newTargetVelocity.Normalize();
+            newTargetVelocity *= m_Speed;
+        }            
 
         // 목표 속도 벡터에 저장합니다.
         _TargetVelocity.x = newTargetVelocity.x;
@@ -163,8 +189,7 @@ public class PlayerMovement : MonoBehaviour
         // 만약 점프 입력을 받은 상태라면 y 축 방향에 대한 속도값을 설정해 점프를 실시합니다.
         if (_IsJumpInput)
         {
-            _TargetVelocity.y = m_JumpForce;
-            _IsJumpInput = false;
+            Jump();
         }
     }
 
@@ -176,6 +201,34 @@ public class PlayerMovement : MonoBehaviour
         // 이동이 가능한 상태라면 이동시킵니다.
         if(_AbleToMove)
             characterController.Move(_TargetVelocity * Time.fixedDeltaTime);        
+    }
+
+    /// <summary>
+    /// 목표 회전값을 향해 회전하는 메서드입니다.
+    /// </summary>
+    private void Rotation()
+    {        
+        // 목표 회전값을 계산합니다.
+        Quaternion targetRotation = Quaternion.Euler(0.0f, _TargetYawAngle, 0.0f);
+
+        // 부드럽게 회전하도록 계산합니다.
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 360.0f * Time.fixedDeltaTime);
+
+        // 생성한 회전값을 통해 회전시킵니다.
+        transform.rotation = newRotation;
+    }
+
+    /// <summary>
+    /// 점프 시키는 메서드입니다.
+    /// </summary>
+    private void Jump()
+    {
+        // 점프 시킵니다.
+        _TargetVelocity.y = m_JumpForce;
+        _IsJumpInput = false;
+
+        // 점프 애니메이션을 실행합니다.
+        _OwnerCharacter.animController.TriggerJumpParam();
     }
 
     /// <summary>
@@ -210,13 +263,22 @@ public class PlayerMovement : MonoBehaviour
         float maxDistance = (characterController.height * 0.5f * transform.lossyScale.y + characterController.skinWidth);
 
         // Box cast 실행
-        return Physics.BoxCast(
+        bool result = Physics.BoxCast(
                             center,
                             half,
                             Vector3.down,
-                            Quaternion.identity,
+                            out RaycastHit hitResult,
+                            Quaternion.identity,                           
                             maxDistance,
                             1 << LayerMask.NameToLayer("Ground"));
+
+        // 땅을 감지하면 땅에 박혀있는 길이만큼 y축 방향으로 이동시켜줍니다.
+        if (result)
+        {
+            characterController.Move(Vector3.up * (maxDistance - hitResult.distance));           
+        }
+
+        return result;
     }
 
     /// <summary>
@@ -265,9 +327,12 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="direction"> 밀려날 방향</param>
     public void OnHit(float distance, Vector3 direction)
     {
+        // 데미지 및 넉백 속도 계산
         float damage = CalculateDamage(distance);
-
         _KnockBackVelocity += (damage * m_KnockBackCoefficient) * direction;
+
+        // 피격 애니메이션을 실행합니다.
+        _OwnerCharacter.animController.TriggerDamagedParam();
     }
 
     /// <summary>
@@ -287,7 +352,7 @@ public class PlayerMovement : MonoBehaviour
     /// <param name="deltaYawAngle"></param>
     public void OnTurnInput(float deltaYawAngle)
     {
-        _TargetYawAngle += deltaYawAngle * m_RotateSpeedInDegree * Time.fixedDeltaTime;
+        //_TargetYawAngle += deltaYawAngle * m_RotateSpeedInDegree * Time.fixedDeltaTime;
     }
 
     /// <summary>

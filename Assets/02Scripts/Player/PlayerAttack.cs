@@ -162,6 +162,9 @@ public class PlayerAttack : MonoBehaviour
 
         // 투사체를 생성합니다.
         InstantiateBullet();
+
+        // 공격 애니메이션을 재생합니다.
+        _OwnerCharacter.animController.TriggerAttackParam();
     }
 
     /// <summary>

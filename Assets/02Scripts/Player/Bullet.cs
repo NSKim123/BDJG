@@ -14,6 +14,7 @@ public class Bullet : GuidedProjectile
 
     private void OnTriggerEnter(Collider collider)
     {
+        // 플레이어와의 충돌은 무시합니다.
         if (collider.gameObject.tag == "Player") return;
 
         // 이 투사체가 적에게 닿으면

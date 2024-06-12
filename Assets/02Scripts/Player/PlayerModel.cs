@@ -48,6 +48,11 @@ public class PlayerModel : MonoBehaviour
     /// </summary>
     public GameObject currentModel => _CurrentModel;
 
+    /// <summary>
+    /// 모델이 변경될 때 호출되는 대리자입니다.
+    /// </summary>
+    public event System.Action OnModelChanged;
+
     private void Awake()
     {
         // 모델 스크립터블 오브젝트를 타입에 맞게 로드합니다.
@@ -74,11 +79,14 @@ public class PlayerModel : MonoBehaviour
         GameObject newCharacter = Instantiate(newModel);
         newCharacter.transform.forward = transform.forward;
         newCharacter.transform.parent = transform;
-        newCharacter.transform.localPosition = Vector3.down * 0.421f;
+        newCharacter.transform.localPosition = Vector3.down * 0.365f;
         newCharacter.transform.localScale = Vector3.one;
 
         // 현재 모델을 저장합니다.
         _CurrentModel = newCharacter;
+
+        // 모델 변경 이벤트를 호출합니다.
+        OnModelChanged?.Invoke();
     }
 
     /// <summary>
@@ -99,7 +107,7 @@ public class PlayerModel : MonoBehaviour
     private float CalculateScaleByBullets(int bullets)
     {
         return m_MinScale + 0.1f * bullets;
-    }
+    }    
 
     /// <summary>
     /// 남은 탄환 수에 따른 목표 크기를 설정하는 메서드입니다.
