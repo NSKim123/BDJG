@@ -13,7 +13,6 @@ public class EnemyStateAttack : EnemyStateBase
     public EnemyStateAttack(StateMachine stateMachine) : base(stateMachine)
     { 
         watch = new System.Diagnostics.Stopwatch();
-
     }
 
     public override bool canExecute() => stateMachine.currentStateType == State.Move;
@@ -25,6 +24,18 @@ public class EnemyStateAttack : EnemyStateBase
         target.transform.position += Vector3.back * 3;
         //_rigid.AddForce((target.transform.position - transform.position).normalized * _attackForce, ForceMode.Impulse);
     } */
+
+    public void AttackTiming()
+    {
+        if (enemyController.attackDetect.Length > 0)
+        {
+            // 플레이어에게 데미지 주는 함수 호출
+            enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
+            //Debug.Log("attack");
+        }
+        _currentStep++;
+    }
+
 
     public override State MoveNextStep()
     {
@@ -53,26 +64,34 @@ public class EnemyStateAttack : EnemyStateBase
                     enemyAgent.velocity = Vector3.zero;
                     animator.Play("attack_general");
                     _currentStep++;
-                    
+
                 }
                 break;
             case StepInState.Playing:
                 {
 
                     // 애니메이션에 이벤트 걸기
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
+                    //if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
+                    //{
+                    //    if (enemyController.attackDetect.Length > 0)
+                    //    {
+                    //        // 플레이어에게 데미지 주는 함수 호출
+                    //        enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
+                    //        //Debug.Log("attack");
+
+                    //    }
+                    //    _currentStep++;
+                    //}
+
+                    if (enemyController.attackDetect.Length > 0)
                     {
-                        if (enemyController.attackDetect.Length > 0)
-                        {
-                            // 플레이어에게 데미지 주는 함수 호출
-                            enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
-                            //Debug.Log("attack");
-
-                        }
-
-                        _currentStep++;
+                        // 플레이어에게 데미지 주는 함수 호출
+                        enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(15.0f, enemyCharacter.transform.forward);
+                        //Debug.Log("attack");
 
                     }
+                    _currentStep++;
+
 
                 }
                 break;

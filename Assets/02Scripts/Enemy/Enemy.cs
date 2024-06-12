@@ -16,17 +16,13 @@ public abstract class Enemy : MonoBehaviour, IHit
     public abstract Vector3 Damage_Direction { get; set; }
     
     protected StateMachine stateMachine;
-    //protected Rigidbody rigid;
 
     public Material myMaterial;
-    public NavMeshAgent agent;
 
 
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
-        //rigid = GetComponent<Rigidbody>();
-        agent = GetComponent<NavMeshAgent>();
     }
 
     public abstract void OnDamaged(float distance, Vector3 direction);
