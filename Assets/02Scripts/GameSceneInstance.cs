@@ -3,17 +3,36 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// 게임 알고리즘 실행하고, 게임 씬에 존재하는 객체들을 연결하는 오브젝트의 컴포넌트입니다.
+/// </summary>
 public class GameSceneInstance : SceneInstanceBase
 {
     [Header("# GameScene UI")]
     public GameSceneUI m_GameSceneUI;
 
+    /// <summary>
+    /// 생존 시간
+    /// </summary>
     private float _SurviveTime;
 
+    /// <summary>
+    /// 점수
+    /// </summary>
     private int _Score;
 
+    /// <summary>
+    /// 일시 중지되었는지
+    /// </summary>
     private bool _IsPaused = true;
 
+    // add 몬스터 스포너 객체
+
+    // add 맵 관리 객체
+
+    /// <summary>
+    /// 이 씬에 생성된 플레이어 컨트롤러 객체
+    /// </summary>
     public new GameScenePlayerController playerController => base.playerController as GameScenePlayerController;
 
     protected override void Awake()
@@ -23,20 +42,28 @@ public class GameSceneInstance : SceneInstanceBase
 
     private void Start()
     {
+        // 이벤트 함수를 바인딩합니다.
         BindEvents();
 
+        // 게임을 시작합니다.
         StartGame();
     }
 
     private void Update()
     {
+        // 생존 시간을 갱신합니다.
         UpdateSurvivalTime();
 
+        // PUI를 갱신합니다.
         UpdatePlayerUI();
     }
 
+    /// <summary>
+    /// 게임 알고리즘을 시작하는 메서드입니다.
+    /// </summary>
     private void StartGame()
     {
+        // 게임을 일시정지합니다.
         PauseGame();
 
         // 게임 정보 초기화
@@ -54,6 +81,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 입력 권한 부여
         SetUpControl(true); 
         
+        // 게임을 재개합니다.
         ContinueGame();
     }   
 
@@ -77,7 +105,6 @@ public class GameSceneInstance : SceneInstanceBase
 
     private void SetUpControl(bool ableToControl)
     {
-        // TO DO : 이동버튼도 추가할 것
         if(ableToControl)
         {
             m_GameSceneUI.m_AttackButtonUI.BindClickEvent(playerController.OnAttack);
