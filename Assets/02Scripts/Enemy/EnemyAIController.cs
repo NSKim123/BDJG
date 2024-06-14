@@ -3,19 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
 public class EnemyAIController : MonoBehaviour
 {
-
-    public enum AIStep
-    {
-        None,
-        StartFollow,
-        Follow,
-        StartAttack,
-        Attack,
-    }
-
     private StateMachine _stateMachine;
     private Enemy _enemyCharacter;
 
@@ -68,8 +57,6 @@ public class EnemyAIController : MonoBehaviour
             _attacked = false;
         }
 
-   
-
     }
 
     // (임시) 맵을 둘러싼 콜라이더를 빠져나가면 죽었다고 판단합니다.
@@ -91,7 +78,6 @@ public class EnemyAIController : MonoBehaviour
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(transform.position, _enemyCharacter.DetectPlayerDistance);
         }
-
     }
 #endif
 }

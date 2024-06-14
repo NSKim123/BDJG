@@ -27,20 +27,17 @@ public class EnemyStateHurt : EnemyStateBase
                     enemyAgent.isStopped = true;
                     enemyAgent.velocity = Vector3.zero;
                     //Debug.Log("¸ÂÀ½");
+                    animator.Play("hurt");
 
                     dis = enemyCharacter.Damage_Distance;
                     dir = enemyCharacter.Damage_Direction;
                     enemyCharacter.transform.position += dis * dir;
-                    //enemyCharacter.transform.position = Vector3.Lerp(enemyCharacter.transform.position, dir * dis, 5 * Time.deltaTime);
-                    //Debug.Log($"{dis}¿Í {dir}");
+                    
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
-                    //Debug.Log("Hurt" + _currentStep);
-                    animator.Play("hurt");
-
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
                     {
                         //Debug.Log("hurt");
