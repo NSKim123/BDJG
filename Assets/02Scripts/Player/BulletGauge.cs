@@ -45,8 +45,14 @@ public class BulletGauge : IntGauge
     /// </summary>
     public bool isOverburden => _IsOverburden;
 
-    public event System.Action onOverburden;
+    /// <summary>
+    /// 과부하 돌입 시 실행되는 이벤트
+    /// </summary>
+    public event System.Action onOverburdenEnter;
 
+    /// <summary>
+    /// 과부하 해제 시 실행되는 이벤트
+    /// </summary>
     public event System.Action onOverburdenFinished;
 
     /// <summary>
@@ -112,8 +118,10 @@ public class BulletGauge : IntGauge
         // 과부하 상태라면, 과부하 상태 해제 조건을 체크하고 과부하 상태를 해제합니다.
         if(_IsOverburden && CheckLiftOverburdenCondition())
         {
+            // 과부하 해제
             _IsOverburden = false;
 
+            // 과부하 해제 이벤트 실행
             onOverburdenFinished?.Invoke();
         }
     }
@@ -133,9 +141,11 @@ public class BulletGauge : IntGauge
         // 탄환 게이지를 모두 소모했다면 과부하 상태로 돌입합니다.
         if(currentValue <= 0)
         {
+            // 과부하 돌입
             _IsOverburden = true;
 
-            onOverburden?.Invoke();
+            // 과부하 돌입 이벤트 실행
+            onOverburdenEnter?.Invoke();
         }
     }
 }

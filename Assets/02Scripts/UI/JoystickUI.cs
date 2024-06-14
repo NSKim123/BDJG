@@ -38,4 +38,13 @@ public class JoystickUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         onDrag?.Invoke(Vector2.zero);
     }    
     
+    public void BindDragEvent(System.Action<Vector2> bindFunction)
+    {
+        onDrag += bindFunction;
+    }
+
+    public void UnbindDragEvent(System.Action<Vector2> unbindFunction)
+    {
+        onDrag += unbindFunction;
+    }
 }

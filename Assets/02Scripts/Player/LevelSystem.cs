@@ -125,6 +125,9 @@ public class LevelSystem
     /// </summary>
     public void Initailize()
     {
+        // 1 레벨로 초기화합니다.
+        _Level = 1;
+
         // 레벨 업 대리자를 호출합니다.
         onLevelUp?.Invoke(_Level);
 

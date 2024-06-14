@@ -13,6 +13,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private bool _IsDead;
 
+    /// <summary>
+    /// 행동 불가 상태인지를 나타냅니다.
+    /// </summary>
     private bool _IsStunned;
 
     /// <summary>
@@ -45,6 +48,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public bool isDead => _IsDead;
 
+    /// <summary>
+    /// 행동 불가 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
+    /// </summary>
     public bool isStunned => _IsStunned;    
 
     /// <summary>
@@ -67,8 +73,15 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public PlayerAnimController animController => _PlayerAnimController ?? (_PlayerAnimController = GetComponentInChildren<PlayerAnimController>());
 
-    public System.Action onStunned;
-    public System.Action onDead;
+    /// <summary>
+    /// 행동 불가 상태 돌입 시 호출되는 이벤트입니다.
+    /// </summary>
+    public event System.Action onStunnedEnter;
+
+    /// <summary>
+    /// 사망 시 호출되는 메서드입니다.
+    /// </summary>
+    public event System.Action onDead;
 
 
     private void Awake()
@@ -181,6 +194,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
     }    
 
+    /// <summary>
+    /// 캐릭터를 초기화하는 메서드입니다.
+    /// </summary>
     public void ResetPlayerCharacter()
     {
 

@@ -85,57 +85,83 @@ public class GameSceneInstance : SceneInstanceBase
         ContinueGame();
     }   
 
+    /// <summary>
+    /// 게임 재개 전 3초를 카운트하는 코루틴입니다.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator Count3sBeforeGameStart()
     {
-        // Ready? UI 활성화
+        // 게임 시작 전 띄우는 UI를 활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(true);
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "Ready?";
 
         // 3초 대기 코루틴
         yield return new WaitForSeconds(3.0f);
 
-        // Start로 바꾸고
+        // UI 에 Start를 띄웁니다.
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "Start!";
 
         // 1초 대기 코루틴
         yield return new WaitForSeconds(1.0f);
 
+        // 게임 시작 전 띄우는 UI를 비활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(false);
     }
 
+    /// <summary>
+    /// 플레이어에게 조작 권한을 부여할지를 설정하는 메서드입니다.
+    /// </summary>
+    /// <param name="ableToControl"> 입력 권한 부여</param>
     private void SetUpControl(bool ableToControl)
     {
         if(ableToControl)
         {
+            // 공격 버튼 이벤트 바인드
             m_GameSceneUI.m_AttackButtonUI.BindClickEvent(playerController.OnAttack);
-            m_GameSceneUI.m_JumpButtonUI.BindClickEvent(playerController.OnJump);
-            m_GameSceneUI.m_Joystick_Move.onDrag += playerController.OnMove;
+            // 점프 버튼 이벤트 바인드
+            m_GameSceneUI.m_JumpButtonUI.BindClickEvent(playerController.OnJump);            
+            // 이동 버튼 이벤트 바인드
+            m_GameSceneUI.m_Joystick_Move.BindDragEvent(playerController.OnMove);
         }
         else
         {
+            // 공격 버튼 이벤트 언바인드
             m_GameSceneUI.m_AttackButtonUI.UnbindClickEvent(playerController.OnAttack);
+            // 점프 버튼 이벤트 언바인드
             m_GameSceneUI.m_JumpButtonUI.UnbindClickEvent(playerController.OnJump);
-            m_GameSceneUI.m_Joystick_Move.onDrag -= playerController.OnMove;
+            // 이동 버튼 이벤트 언바인드
+            m_GameSceneUI.m_Joystick_Move.UnbindDragEvent(playerController.OnMove);
         }
         
     }
 
+    /// <summary>
+    /// 게임 정보를 초기화하는 메서드입니다.
+    /// </summary>
     private void InitGameInfo()
     {
+        // 생존 시간 초기화
         AddSurvivalTime(-_SurviveTime);
+
+        // 점수 초기화
         AddScore(-_Score);
     }
 
+    /// <summary>
+    /// 필요한 바인딩을 실행하는 메서드입니다.
+    /// </summary>
     private void BindEvents()
     {
+        // UI 객체들의 대리자에 함수들을 바인드시킵니다.
         BindUIEvents();
 
-        playerController.controlledCharacter.onDead += OnGameOver;
-
-        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburden += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
-        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
+        // 플레이어 객체의 대리자에 함수들을 바인드시킵니다.
+        BindPlayerEvents();
     }
 
+    /// <summary>
+    /// UI 객체들의 대리자에 함수들을 바인드시키는 메서드입니다.
+    /// </summary>
     private void BindUIEvents()
     {        
         // m_GameSceneUI 내부에서 바인드 (UI들끼리의 상호작용)
@@ -148,50 +174,100 @@ public class GameSceneInstance : SceneInstanceBase
         // --------------------------------------------------------------------------------------------------------
     }
 
+    /// <summary>
+    /// 플레이어 객체의 대리자에 함수들을 바인드시키는 메서드입니다.
+    /// </summary>
+    private void BindPlayerEvents()
+    {        
+        // 죽었을 때 실행되는 이벤트에 바인드합니다.
+        playerController.controlledCharacter.onDead += OnGameOver;
+
+        // 과부하 돌입 및 해제 시 실행되는 이벤트에 함수를 바인드합니다.
+        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenEnter += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
+        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);        
+    }
+
+    /// <summary>
+    /// 생존 시간을 갱신하는 메서드입니다.
+    /// </summary>
     private void UpdateSurvivalTime()
     {
+        // 일시정지된 상태가 아니라면
         if (!_IsPaused)
         {
+            // 생존 시간을 더합니다.
             AddSurvivalTime(Time.deltaTime * Time.timeScale);
         }
     }
 
+    /// <summary>
+    /// 생존 시간에 변화량을 더하는 메서드입니다.
+    /// </summary>
+    /// <param name="change"> 변화량( 음수를 전달할 시 생존 시간이 감소합니다. )</param>
     public void AddSurvivalTime(float change)
     {
+        // 생존 시간에 변화량을 더합니다.
         _SurviveTime += change;
+
+        // UI 갱신합니다.
         m_GameSceneUI.UpdateSurvivalTime(_SurviveTime);
+
+        // 플레이어 객체의 생존 시간을 갱신시켜줍니다.
         playerController.controlledCharacter.UpdateSurvivalTime(_SurviveTime);
     }
 
+    /// <summary>
+    /// PUI를 갱신하는 메서드입니다.
+    /// </summary>
     private void UpdatePlayerUI()
     {
         m_GameSceneUI.UpdatePlayerUI(playerController.controlledCharacter);
     }
 
+    /// <summary>
+    /// 게임 오버 시 호출될 메서드입니다.
+    /// </summary>
     private void OnGameOver()
     {
+        // 게임을 일시 정지 시킵니다.
         PauseGame();
 
+        // 게임 오버 UI를 활성화시키고, UI에 게임 정보를 전달합니다.
         m_GameSceneUI.m_GameOverUI.gameObject.SetActive(true);
         m_GameSceneUI.m_GameOverUI.OnGameOver(_SurviveTime, _Score);
     }
-    
+
+    /// <summary>
+    /// 점수에 변화량을 더하는 메서드입니다.
+    /// </summary>
+    /// <param name="change"> 변화량( 음수를 전달할 시 점수가 감소합니다. )</param>
     public void AddScore(int change)
     {
-        _Score = change;
+        // 점수에 변화량을 더합니다.
+        _Score += change;
+
+        // UI를 갱신합니다.
         m_GameSceneUI.m_Text_Score.text = _Score.ToString();
     }
 
+    /// <summary>
+    /// 게임을 재개하는 메서드입니다.
+    /// </summary>
     public void ContinueGame()
     {
+        // 시간 스케일을 되돌립니다.
         _IsPaused = false;
         Time.timeScale = 1.0f;
 
         // 적 스폰 재개 및 스폰되어있는 적들 행동 재개
     }
 
+    /// <summary>
+    /// 게임을 일시정지하는 메서드입니다.
+    /// </summary>
     public void PauseGame()
     {
+        // 시간 스케일을 0 으로 설정합니다.
         _IsPaused = true;
         Time.timeScale = 0.0f;        
 

@@ -63,7 +63,7 @@ public class PlayerAttack : MonoBehaviour
     private Transform _StartPosition;
 
     /// <summary>
-    /// 쿨타임 
+    /// 쿨타임 게이지 객체
     /// </summary>
     private FloatGauge _ReuseTimeGuage;
 
@@ -82,8 +82,14 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
+    /// <summary>
+    /// 공격 가능한 상황인지를 나타내는 읽기전용 프로퍼티입니다.
+    /// </summary>
     public bool isAttacktable => CheckAttackable();
 
+    /// <summary>
+    /// 쿨타임 게이지에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
     public FloatGauge reuseTimeGauge => _ReuseTimeGuage;
 
     /// <summary>
@@ -93,6 +99,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
+        // 쿨타임 게이지 객체를 생성합니다.
         _ReuseTimeGuage = new FloatGauge(m_AttackReuseTime);
 
         // 탄환 게이지를 생성합니다.
@@ -107,9 +114,10 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        // 쿨타임을 갱신합니다.
         UpdateResueTimeGauge();
 
-        // 탄환 게이지를 업데이트합니다.
+        // 탄환 게이지를 갱신합니다.
         _BulletGauge.UpdateBulletGauge();
     }
 
@@ -119,10 +127,15 @@ public class PlayerAttack : MonoBehaviour
         _TargetingSystem.Targeting(transform);        
     }
 
+    /// <summary>
+    /// 쿨타임 게이지를 갱신하는 메서드입니다.
+    /// </summary>
     private void UpdateResueTimeGauge()
     {
+        // 이미 쿨타임이 다 돌았다면 호출을 종료합니다.
         if (_ReuseTimeGuage.currentValue == _ReuseTimeGuage.min) return;
 
+        // 쿨타임을 감소시킵니다.
         _ReuseTimeGuage.currentValue -= Time.deltaTime;
     }
 
@@ -131,10 +144,11 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void TryAttack()
     {
-        // 공격이 불가능한 상태라면 호출을 중단합니다.
+        // 공격이 불가능한 상태라면 호출을 종료합니다.
         if (!CheckAttackable())
             return;
 
+        // 쿨타임이 남아있다면 호출을 종료합니다.
         if (_ReuseTimeGuage.currentValue > 0.0f) 
             return;
 
@@ -143,7 +157,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 탄환이 남아있는지 체크합니다.
+    /// 탄환이 남아있는지 체크하는 메서드입니다.
     /// </summary>
     /// <returns> 탄환이 남아있다면 참을 반환합니다.</returns>
     private bool CheckRemainedBullet()
@@ -152,7 +166,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 탄환 게이지가 과부하 상태인지 체크합니다.
+    /// 탄환 게이지가 과부하 상태인지 체크하는 메서드입니다.
     /// </summary>
     /// <returns> 과부하 상태라면 참을 반환합니다.</returns>
     private bool CheckOverburden()
@@ -161,7 +175,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 넉백 상태인지 확인합니다.
+    /// 넉백 상태인지 체크하는 메서드입니다.
     /// </summary>
     /// <returns> 넉백 상태라면 참을 반환합니다.</returns>
     private bool CheckKnockBack()
@@ -169,6 +183,10 @@ public class PlayerAttack : MonoBehaviour
         return _OwnerCharacter.movementComponent.isKnockBack;
     }    
 
+    /// <summary>
+    /// 행동 불가 상태인지 체크하는 메서드입니다.
+    /// </summary>
+    /// <returns> 행동 불가 상태라면 참을 반환합니다.</returns>
     private bool CheckStunned()
     {
         return _OwnerCharacter.isStunned;
@@ -197,6 +215,7 @@ public class PlayerAttack : MonoBehaviour
         // 공격 애니메이션을 재생합니다.
         _OwnerCharacter.animController.TriggerAttackParam();
 
+        // 쿨타임을 돌리기 시작합니다.
         _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
     }
 
@@ -219,6 +238,7 @@ public class PlayerAttack : MonoBehaviour
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
 
+        // 타겟팅 중인 객체가 있다면 탄환의 목표 Transform 을 설정해줍니다.
         if(_TargetingSystem.currentTargetTransform != null)
             bullet.SetTarget(_TargetingSystem.currentTargetTransform);
     }
