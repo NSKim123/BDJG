@@ -71,26 +71,26 @@ public class EnemyStateAttack : EnemyStateBase
                 {
 
                     // 애니메이션에 이벤트 걸기
-                    //if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
-                    //{
-                    //    if (enemyController.attackDetect.Length > 0)
-                    //    {
-                    //        // 플레이어에게 데미지 주는 함수 호출
-                    //        enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
-                    //        //Debug.Log("attack");
-
-                    //    }
-                    //    _currentStep++;
-                    //}
-
-                    if (enemyController.attackDetect.Length > 0)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
                     {
-                        // 플레이어에게 데미지 주는 함수 호출
-                        enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(15.0f, enemyCharacter.transform.forward);
-                        //Debug.Log("attack");
+                        if (enemyController.attackDetect.Length > 0)
+                        {
+                            // 플레이어에게 데미지 주는 함수 호출
+                            enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
+                            //Debug.Log("attack");
 
+                        }
+                        _currentStep++;
                     }
-                    _currentStep++;
+
+                    //if (enemyController.attackDetect.Length > 0)
+                    //{
+                    //    // 플레이어에게 데미지 주는 함수 호출
+                    //    enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(15.0f, enemyCharacter.transform.forward);
+                    //    //Debug.Log("attack");
+
+                    //}
+                    //_currentStep++;
 
 
                 }

@@ -13,15 +13,20 @@ public enum WaveName
 
 public class EnemySpawner : MonoBehaviour
 {
-
     [SerializeField] private WaveName currentWave;
-
 
     // 슬라임 성장 상태 받아와서 currentWave에 넣기
 
     private bool _isCactusCorouting;
 
     public Wave[] waves;
+
+    public event Action<WaveName> OnChangeWave;
+    public delegate void CoroutineStarter(WaveName wave);
+    public event CoroutineStarter OnCoroutineStart;
+    
+    [SerializeField] private Transform mushroomSpawnAxis;
+    [SerializeField] private Transform cactusSpawnAxis;
 
     // 임시 변수
     public bool isGameOver = false;
@@ -30,7 +35,8 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         currentWave = WaveName.General;
-
+        OnChangeWave += EnemyManager.Instance.ChangeMap;
+        OnCoroutineStart += EnemyManager.Instance.StartWaterCoroutine;
         //for (int i = 0; i < waves.Length; i++)
         //{
         //    waves[i].spawn.OrderBy(obj => obj.Type).ToList();
@@ -38,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
         //}
 
         StartCoroutine(C_EnemySpawn_Mushroom());
-
+        StartCoroutine(C_Test());
     }
 
     private void Update()
@@ -49,6 +55,16 @@ public class EnemySpawner : MonoBehaviour
         {
             StartCoroutine(C_EnemySpawn_Cactus());
         }
+    }
+
+    private IEnumerator C_Test()
+    {
+        yield return new WaitForSeconds(5);
+
+
+        currentWave = WaveName.Trainee;
+        //OnChangeWave?.Invoke(currentWave);
+        OnCoroutineStart?.Invoke(currentWave);
     }
 
 
@@ -70,8 +86,9 @@ public class EnemySpawner : MonoBehaviour
 
             if (EnemyManager.Instance.MushroomCount < spawndata.MaxEnemyCount)
             {
-                Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
-                Vector3 randomPosition = GetRandomPositionOnCircleEdge(randomAxis, spawndata.SpawnRadius);
+                //Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
+                
+                Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                 yield return new WaitForSeconds(spawndata.SpawnTime);
 
@@ -105,8 +122,8 @@ public class EnemySpawner : MonoBehaviour
 
             if (EnemyManager.Instance.CactusCount < spawndata.MaxEnemyCount)
             {
-                Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
-                Vector3 randomPosition = GetRandomPositionOnCircleEdge(randomAxis, spawndata.SpawnRadius);
+                //Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
+                Vector3 randomPosition = GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
 
                 yield return new WaitForSeconds(spawndata.SpawnTime);
 
