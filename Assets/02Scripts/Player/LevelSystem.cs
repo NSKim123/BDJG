@@ -103,10 +103,11 @@ public class LevelSystem
     /// <summary>
     /// 레벨 업 시 호출되는 메서드입니다.
     /// </summary>
-    private void LevelUp()
+    /// <param name="newLevel"> 달성 레벨</param>
+    private void LevelUp(int newLevel)
     {
         // 레벨을 증가시킵니다.
-        ++_Level;
+        _Level = newLevel;
 
         // 레벨 업 대리자를 호출합니다.
         onLevelUp?.Invoke(_Level);
@@ -143,18 +144,19 @@ public class LevelSystem
     }
 
     /// <summary>
-    /// 생존 시간을 증가시키는 메서드입니다.
+    /// 생존 시간을 설정하는 메서드입니다.
     /// 레벨 업 조건을 확인합니다.
     /// </summary>
-    public void UpdateSurvivalTime()
+    /// <param name="newTime"> 설정 시간</param>
+    public void UpdateSurvivalTime(float newTime)
     {
         // 생존 시간을 증가시킵니다.
-        _SurvivalTimeGauge.currentValue += Time.deltaTime * Time.timeScale;
+        _SurvivalTimeGauge.currentValue = newTime;
 
         // 레벨 업 조건을 확인하고 레벨 업 시킵니다.
         if (LevelUpCondition())
         {
-            LevelUp();
+            LevelUp(_Level + 1);
         }
     }    
 

@@ -146,6 +146,7 @@ public class TargetingSystem
                 
         Collider closestTarget = senceResults[0];
         float MinDistanceToForwardLine = 100.0f;
+        float closestTargetDistanceSqr = (ownerTransform.position - closestTarget.transform.position).sqrMagnitude;
 
         // '시작점이 소유주의 위치이고 방향 벡터가 소유주의 전방 벡터인 직선'에 가장 가까운 적을 찾습니다.
         foreach (Collider senceResult in senceResults)
@@ -159,12 +160,38 @@ public class TargetingSystem
                 Mathf.Sqrt(
                     ownerPosToSenceResultPos.sqrMagnitude -
                         Vector3.Dot(ownerPosToSenceResultPos, ownerTransform.forward) * Vector3.Dot(ownerPosToSenceResultPos, ownerTransform.forward));
-            
+
+
+
             // 최소값을 걸러내는 과정
+            bool isMinimum = false;
+
             if (distanceToForwardLine < MinDistanceToForwardLine)
+            {
+                isMinimum = true;
+            }
+            else if(distanceToForwardLine == MinDistanceToForwardLine)
+            {
+                if (ownerPosToSenceResultPos.sqrMagnitude < closestTargetDistanceSqr)
+                {
+                    isMinimum = true;
+                }
+                else if(ownerPosToSenceResultPos.sqrMagnitude == closestTargetDistanceSqr)
+                {
+                    int random = UnityEngine.Random.Range(0, 2);
+
+                    if(random == 0)
+                    {
+                        isMinimum = true;
+                    }
+                }
+            }
+
+            if(isMinimum)
             {
                 closestTarget = senceResult;
                 MinDistanceToForwardLine = distanceToForwardLine;
+                closestTargetDistanceSqr = ownerPosToSenceResultPos.sqrMagnitude;
             }
         }
 
