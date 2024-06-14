@@ -6,12 +6,14 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 캐릭터에 대한 컴포넌트입니다.
 /// </summary>
-public class PlayerCharacter : MonoBehaviour, IHit
+public class PlayerCharacter : PlayerCharacterBase, IHit
 {
     /// <summary>
     /// 이 캐릭터가 죽었는지를 나타냅니다.
     /// </summary>
     private bool _IsDead;
+
+    private bool _IsStunned;
 
     /// <summary>
     /// 이 캐릭터의 레벨 시스템
@@ -43,6 +45,8 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// </summary>
     public bool isDead => _IsDead;
 
+    public bool isStunned => _IsStunned;    
+
     /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
@@ -63,6 +67,10 @@ public class PlayerCharacter : MonoBehaviour, IHit
     /// </summary>
     public PlayerAnimController animController => _PlayerAnimController ?? (_PlayerAnimController = GetComponentInChildren<PlayerAnimController>());
 
+    public System.Action onStunned;
+    public System.Action onDead;
+
+
     private void Awake()
     {
         // 이벤트 함수를 바인딩합니다.
@@ -75,14 +83,11 @@ public class PlayerCharacter : MonoBehaviour, IHit
         InitLevelSystem();
 
         // test
-        //testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
     }
 
     private void Update()
     {
-        // 레벨 시스템의 생존 시간을 갱신합니다.
-        _LevelSystem.UpdateSurvivalTime();
-
         // 탄환 게이지 정보를 이용하고 있는 객체에 탄환 게이지 정보를 전달합니다. 
         UpdateBulletGaugeInfo();
 
@@ -174,6 +179,16 @@ public class PlayerCharacter : MonoBehaviour, IHit
     private void ResetAnimController()
     {
         _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
+    }    
+
+    public void ResetPlayerCharacter()
+    {
+
+    }
+
+    public void UpdateSurvivalTime(float newTime)
+    {
+        _LevelSystem.UpdateSurvivalTime(newTime);
     }
 
     /// <summary>
@@ -229,6 +244,8 @@ public class PlayerCharacter : MonoBehaviour, IHit
     public void OnDead()
     {
         _IsDead = true;
+
+        onDead?.Invoke();
     }
 
 #if UNITY_EDITOR

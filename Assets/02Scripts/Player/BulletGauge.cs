@@ -38,12 +38,16 @@ public class BulletGauge : IntGauge
     /// <summary>
     /// 과부하 상태인지 나타내는 논리형 변수
     /// </summary>
-    private bool _IsOverburden;
+    private bool _IsOverburden = true;
     
     /// <summary>
     /// 과부하 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isOverburden => _IsOverburden;
+
+    public event System.Action onOverburden;
+
+    public event System.Action onOverburdenFinished;
 
     /// <summary>
     /// 생성자입니다.
@@ -109,6 +113,8 @@ public class BulletGauge : IntGauge
         if(_IsOverburden && CheckLiftOverburdenCondition())
         {
             _IsOverburden = false;
+
+            onOverburdenFinished?.Invoke();
         }
     }
 
@@ -128,6 +134,8 @@ public class BulletGauge : IntGauge
         if(currentValue <= 0)
         {
             _IsOverburden = true;
+
+            onOverburden?.Invoke();
         }
     }
 }

@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletGaugeUI : MonoBehaviour
+public class BulletGaugeUI : ToggleGaugeUI
 {
-    // Start is called before the first frame update
-    void Start()
+    protected override void UpdateFillAmount()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // 부드럽게 변화시킵니다.
+        float newFillAmount = Mathf.MoveTowards(m_GaugeImage.fillAmount, _TargetRatio, 0.2f * Time.deltaTime);
+        m_GaugeImage.fillAmount = newFillAmount;
     }
 }

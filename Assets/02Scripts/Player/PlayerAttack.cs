@@ -18,6 +18,9 @@ public class PlayerAttack : MonoBehaviour
     [Header("밀어내는 힘 계수")]
     public float m_PushPowerMultiplier = 1.0f;
 
+    [Header("공격 쿨타임")]
+    public float m_AttackReuseTime = 0.75f;
+
     [Header("------------------------------------------------------------------------------")]
 
     [Header("# 탄환 게이지 관련")]
@@ -60,6 +63,11 @@ public class PlayerAttack : MonoBehaviour
     private Transform _StartPosition;
 
     /// <summary>
+    /// 쿨타임 
+    /// </summary>
+    private FloatGauge _ReuseTimeGuage;
+
+    /// <summary>
     /// 탄환 게이지 객체
     /// </summary>
     private BulletGauge _BulletGauge;
@@ -74,6 +82,10 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
+    public bool isAttacktable => CheckAttackable();
+
+    public FloatGauge reuseTimeGauge => _ReuseTimeGuage;
+
     /// <summary>
     /// 탄환 게이지 객체에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
@@ -81,7 +93,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake()
     {
-        // 스태미나 게이지를 생성합니다.
+        _ReuseTimeGuage = new FloatGauge(m_AttackReuseTime);
+
+        // 탄환 게이지를 생성합니다.
         _BulletGauge = new BulletGauge(m_BulletGaugeRecoverAmount, m_BulletGaugeRecoverCycle, m_BulletGaugeStartRecoverTime, 10);
                 
         // 타겟팅 시스템을 생성합니다.
@@ -93,6 +107,8 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        UpdateResueTimeGauge();
+
         // 탄환 게이지를 업데이트합니다.
         _BulletGauge.UpdateBulletGauge();
     }
@@ -103,6 +119,13 @@ public class PlayerAttack : MonoBehaviour
         _TargetingSystem.Targeting(transform);        
     }
 
+    private void UpdateResueTimeGauge()
+    {
+        if (_ReuseTimeGuage.currentValue == _ReuseTimeGuage.min) return;
+
+        _ReuseTimeGuage.currentValue -= Time.deltaTime;
+    }
+
     /// <summary>
     /// 공격을 시도합니다.
     /// </summary>
@@ -110,6 +133,9 @@ public class PlayerAttack : MonoBehaviour
     {
         // 공격이 불가능한 상태라면 호출을 중단합니다.
         if (!CheckAttackable())
+            return;
+
+        if (_ReuseTimeGuage.currentValue > 0.0f) 
             return;
 
         // 발사합니다.
@@ -143,13 +169,18 @@ public class PlayerAttack : MonoBehaviour
         return _OwnerCharacter.movementComponent.isKnockBack;
     }    
 
+    private bool CheckStunned()
+    {
+        return _OwnerCharacter.isStunned;
+    }
+
     /// <summary>
     /// 공격 가능한 상태인지 확인합니다.
     /// </summary>
     /// <returns> 공격 가능한 상태라면 참을 반환합니다.</returns>
     private bool CheckAttackable()
     {
-        return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack();
+        return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack() && !CheckStunned();
     }
 
     /// <summary>
@@ -165,6 +196,8 @@ public class PlayerAttack : MonoBehaviour
 
         // 공격 애니메이션을 재생합니다.
         _OwnerCharacter.animController.TriggerAttackParam();
+
+        _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
     }
 
     /// <summary>

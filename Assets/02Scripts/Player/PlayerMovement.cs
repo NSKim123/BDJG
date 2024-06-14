@@ -21,6 +21,9 @@ public class PlayerMovement : MonoBehaviour
     [Header("점프력")]
     public float m_JumpForce = 5.0f;
 
+    [Header("점프 쿨타임")]
+    public float m_JumpReuseTime = 1.0f;
+
     [Header("------------------------------------------------------------------------------")]
 
     [Header("# 피격 관련")]
@@ -73,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private Vector3 _KnockBackVelocity;
 
+    private FloatGauge _JumpReuseTimeGauge;
+
     /// <summary>
     /// CharacterController 컴포넌트 객체입니다.
     /// </summary>
@@ -88,6 +93,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public bool isKnockBack => _KnockBackVelocity.sqrMagnitude > 0.0f;
 
+    public bool isJumpable => CheckJumpable();
+
     /// <summary>
     /// ZX 평면 상에서의 정규화된 속력(속력 / 최대 속력)을 나타내는 읽기 전용 프로퍼티입니다.
     /// </summary>
@@ -98,6 +105,8 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public bool isGrounded => _IsGrounded;
 
+    public FloatGauge jumpResueTimeGauge => _JumpReuseTimeGauge;
+
     /// <summary>
     /// CharacterController 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
@@ -105,8 +114,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        _JumpReuseTimeGauge = new FloatGauge(m_JumpReuseTime);
+
         //이 이동 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
         _OwnerCharacter = GetComponent<PlayerCharacter>();
+    }
+
+    private void Update()
+    {
+        UpdateJumpReuseTimeGauge();
     }
 
     private void FixedUpdate()
@@ -128,6 +144,13 @@ public class PlayerMovement : MonoBehaviour
 
         // 넉백 속도가 있다면 넉백를 적용합니다.
         KnockBack();
+    }
+
+    private void UpdateJumpReuseTimeGauge()
+    {
+        if (_JumpReuseTimeGauge.currentValue == _JumpReuseTimeGauge.min) return;
+
+        _JumpReuseTimeGauge.currentValue -= Time.deltaTime;
     }
 
     /// <summary>
@@ -229,6 +252,8 @@ public class PlayerMovement : MonoBehaviour
 
         // 점프 애니메이션을 실행합니다.
         _OwnerCharacter.animController.TriggerJumpParam();
+
+        _JumpReuseTimeGauge.currentValue = _JumpReuseTimeGauge.max;
     }
 
     /// <summary>
@@ -260,7 +285,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y;
 
         // Box cast 최대 길이 설정
-        float maxDistance = (characterController.height * 0.5f * transform.lossyScale.y + characterController.skinWidth);
+        float maxDistance = (characterController.height * 0.5f + characterController.skinWidth) * transform.lossyScale.y;
 
         // Box cast 실행
         bool result = Physics.BoxCast(
@@ -279,6 +304,30 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return result;
+    }
+
+    private void TryJump()
+    {
+        if (!_IsGrounded || !(_JumpReuseTimeGauge.ratio == 0.0f)) return;
+
+        if (!CheckJumpable()) return;
+
+        _IsJumpInput = true;
+    }
+
+    private bool CheckStunned()
+    {
+        return _OwnerCharacter.isStunned;
+    }
+
+    private bool CheckDead()
+    {
+        return _OwnerCharacter.isDead;
+    }
+
+    private bool CheckJumpable()
+    {
+        return !isKnockBack && !CheckStunned() && !CheckDead();
     }
 
     /// <summary>
@@ -361,8 +410,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     public void OnJumpInput()
     {
-        if (_IsGrounded)
-            _IsJumpInput = true;
+        TryJump();
     }
 
 #if UNITY_EDITOR

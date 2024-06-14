@@ -8,12 +8,16 @@ public class GaugeUI : MonoBehaviour
     [Header("# 게이지 이미지")]
     public Image m_GaugeImage;    
 
-    private float _TargetRatio;
+    protected float _TargetRatio;
 
-    private void Update()
+    protected virtual void Update()
     {
-        float newRatio = Mathf.Lerp(m_GaugeImage.fillAmount, _TargetRatio, 0.5f);
-        m_GaugeImage.fillAmount = newRatio;
+        UpdateFillAmount();
+    }
+
+    protected virtual void UpdateFillAmount()
+    {        
+        m_GaugeImage.fillAmount = _TargetRatio;
     }
 
     public void SetTargetRatio(float newTargetRatio)
