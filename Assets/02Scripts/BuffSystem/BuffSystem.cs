@@ -34,10 +34,10 @@ public class BuffSystem
         {
             _BuffDictionary = new Dictionary<int, Buff>
             {
-                { 100000, new MoveSpeedBuff(100000, null, 0.2f, 10.0f) },
-                { 100001, new MoveSpeedBuff(100001, null, -0.2f, 15.0f) },
-                { 100002, new MoveSpeedBuff(100002, null, -0.3f, 5.0f) },
-                { 100003, new MoveSpeedBuff(100003, null, -0.4f, 7.0f) },
+                { 100000, new SampleSpeedChangeBuff(100000, null, 0.2f, 10.0f) },
+                { 100001, new SampleSpeedChangeBuff(100001, null, -0.2f, 15.0f) },
+                { 100002, new SampleSpeedChangeBuff(100002, null, -0.3f, 5.0f) },
+                { 100003, new SampleSpeedChangeBuff(100003, null, -0.4f, 7.0f) },
             };
 
         }     
