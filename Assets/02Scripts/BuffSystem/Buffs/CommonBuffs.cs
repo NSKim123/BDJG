@@ -6,22 +6,33 @@ public class MoveSpeedBuff : TimerBuff
 {
     private float _ChangeRate;
 
-    public MoveSpeedBuff(GameObject owner, float changeRate, float maxTime) : base(owner, maxTime)
+    public MoveSpeedBuff(int buffCode, GameObject owner, float changeRate, float maxTime, int maxStack = 1) : base(buffCode, owner, maxTime, maxStack)
     {
         this._ChangeRate = changeRate;
+        visibility = true;
     }
 
     public override Buff Clone(GameObject owner)
     {
-        return new MoveSpeedBuff(owner, _ChangeRate, maxTime);
+        return new MoveSpeedBuff(buffCode, owner, _ChangeRate, maxTime);
     }
 
-    public override void OnStartBuff()
+    protected override void onStartBuffContext()
     {
         Debug.Log($"이동 속도 {maxTime} 초 동안 {_ChangeRate * 100.0f} % 감소!");
     }
 
-    public override void OnFinishedBuff()
+    protected override void onRenewBuffContext()
+    {
+       
+    }
+
+    protected override void onUpdateBuffContext()
+    {
+        
+    }
+
+    protected override void onFinishBuffContext()
     {
         Debug.Log($"버프 해제, 이동 속도 복구");
     }
@@ -29,7 +40,7 @@ public class MoveSpeedBuff : TimerBuff
 
 
 /*
-    적이나, 플레이어 캐릭터의 기능 종류에 따른 인터페이스 분리가 필요해보임!!
+    기능 종류에 따른 인터페이스 분리가 필요해보임!!
     
 
 
@@ -68,15 +79,16 @@ public class MoveSpeedBuff : TimerBuff
                     get => stateMachine.currentState.enemyAgent.velocity.normalized;    
                     set => stateMachine.currentState.enemyAgent.velocity = value * moveSpeed;
                 }   
+
                 <-- 지금 보니까 접근제한자 때문에 접근은 못하지만, 예시일 뿐이니까 편한대로 정의하시면 됩니다.
         
 
 
 
     이런 식으로 인터페이스를 구현하면 이동속도 감소 코드는 간결해질 수 있으며, 
-    이동할 수 있는 모든 클래스에 이동속도를 버프를 이용해 조절시킬 수 있을 것이라 기대합니다.
+    이동할 수 있는 모든 클래스에 버프를 이용해 이동속도를 조절시킬 수 있을 것이라 기대합니다.
     
-    public override void OnStartBuff()
+    protected override void onStartBuffContext()
     {
         if(_Owner.TryGetComponent<IVelocity>(out IVelocity velocity)
         {
@@ -84,7 +96,7 @@ public class MoveSpeedBuff : TimerBuff
         }
     }
 
-    public override void OnFinishedBuff()
+    protected override void onFinishBuffContext()
     {
         if(_Owner.TryGetComponent<IVelocity>(out IVelocity velocity)
         {

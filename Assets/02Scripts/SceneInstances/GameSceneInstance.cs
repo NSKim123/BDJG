@@ -165,7 +165,9 @@ public class GameSceneInstance : SceneInstanceBase
     /// 게임 씬에 존재하는 객체들과 UI를 연결시킵니다.
     /// </summary>
     private void BindUIEvents()
-    {          
+    {
+        m_GameSceneUI.m_BuffSystemUI.SetTargetBuffSystem(playerController.controlledCharacter.buffSystem);
+
         // 환경설정 버튼 클릭 이벤트 <-- 바인드 -- 게임 일시 정지 함수
         m_GameSceneUI.m_Button_Configuration.onClick.AddListener(PauseGame);
 

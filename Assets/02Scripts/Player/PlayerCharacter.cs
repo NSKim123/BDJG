@@ -19,10 +19,13 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     private bool _IsStunned;
 
     /// <summary>
-    /// 이 캐릭터의 레벨 시스템
+    /// 이 캐릭터의 레벨 시스템 객체
     /// </summary>
     private LevelSystem _LevelSystem;
 
+    /// <summary>
+    /// 이 캐릭터의 버프 시스템 객체
+    /// </summary>
     private BuffSystem _BuffSystem;
 
     /// <summary>
@@ -54,6 +57,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// 행동 불가 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isStunned => _IsStunned;    
+
+    public BuffSystem buffSystem => _BuffSystem;
 
     /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
@@ -91,6 +96,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 이벤트 함수를 바인딩합니다.
         BindEventFunction();
 
+        // 버프 시스템을 생성합니다.
         _BuffSystem = new BuffSystem(this.gameObject);
     }
 
@@ -101,6 +107,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
         // test
         _BuffSystem.AddBuff(100000);
+        _BuffSystem.AddBuff(100001);
+        _BuffSystem.AddBuff(100002);
+        _BuffSystem.AddBuff(100003);
 
         // test
         testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
@@ -114,7 +123,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 애니메이션 파라미터를 갱신합니다.
         UpdateAnimationParameter();
 
-        _BuffSystem.UpdateBuffList();
+        // 버프 시스템을 갱신합니다.
+        UpdateBuffList();
     }
 
     // test
@@ -131,6 +141,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         while(true)
         {
             yield return new WaitForSeconds(5.0f);
+            _BuffSystem.AddBuff(100003);
             _LevelSystem.IncreaseKillCount();
         }
     }
@@ -153,7 +164,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// 이벤트 함수를 바인딩합니다.
+    /// 이벤트 함수를 바인딩하는 메서드입니다.
     /// </summary>
     private void BindEventFunction()
     {
@@ -187,7 +198,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// 애니메이션 파라미터를 갱신합니다.
+    /// 애니메이션 파라미터를 갱신하는 메서드입니다.
     /// </summary>
     private void UpdateAnimationParameter()
     {
@@ -196,7 +207,15 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// PlayerAnimController 객체를 재설정합니다.
+    /// 버프 시스템을 갱신하는 메서드입니다.
+    /// </summary>
+    private void UpdateBuffList()
+    {
+        _BuffSystem.UpdateBuffList();
+    }
+
+    /// <summary>
+    /// PlayerAnimController 객체를 재설정하는 메서드입니다.
     /// </summary>
     private void ResetAnimController()
     {
@@ -223,6 +242,15 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     public void UpdateSurvivalTime(float newTime)
     {
         _LevelSystem.UpdateSurvivalTime(newTime);
+    }
+
+    /// <summary>
+    /// 버프를 추가하는 메서드입니다.
+    /// </summary>
+    /// <param name="buffCode"> 부여할 버프의 코드</param>
+    public void AddBuff(int buffCode)
+    {
+        _BuffSystem.AddBuff(buffCode);
     }
 
     /// <summary>

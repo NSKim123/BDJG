@@ -15,8 +15,8 @@ public class GameSceneUI : MonoBehaviour
     [Header("# 점수 텍스트")]
     public TMP_Text m_Text_Score;
 
-    // TO DO : 추후 버프 시스템 개발 후 작업
-    //[Header("# 버프 시스템 UI")]
+    [Header("# 버프 시스템 UI")]
+    public BuffSystemUI m_BuffSystemUI;
 
     [Header("# 탄창 게이지 UI")]
     public BulletGaugeUI m_BulletGaugeUI;

@@ -255,6 +255,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MinScale: 1
   m_ScaleCoefficient: 0.1
+--- !u!114 &124692530 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5955919982209528255, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 2011261903284675309}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38a38290e84946f4c93bd8a396ba1419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1171,6 +1183,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7210571001130562489, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
         type: 3}
+      propertyPath: m_BuffSystemUI
+      value: 
+      objectReference: {fileID: 124692530}
+    - target: {fileID: 7210571001130562489, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
+        type: 3}
       propertyPath: m_Joystick_Move
       value: 
       objectReference: {fileID: 1406021185}
@@ -1182,6 +1199,11 @@ PrefabInstance:
     - target: {fileID: 8194984716632743500, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676390397194383400, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
+        type: 3}
+      propertyPath: m_ChildForceExpandHeight
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
