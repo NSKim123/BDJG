@@ -58,7 +58,7 @@ public class SampleSpeedChangeBuff : TimerBuff
 
     기능 종류에 따른 인터페이스 분리가 필요해보임!!
 
-    다만, 버프의 효과를 나타내는 코드를 작성하는 부분은 Buff 클래스 내의 OnStartBuff, OnRenewBuff, OnUpdateBuff, OnFinishedBuff 메서드들입니다.
+    버프의 효과를 나타내는 코드를 작성하는 부분은 Buff 클래스 내의 OnStartBuff, OnRenewBuff, OnUpdateBuff, OnFinishedBuff 메서드들입니다.
     즉, 이동속도 감소 코드를 SampleSpeedChangeBuff 내부에서 작성해야합니다.
 
     버프의 소유주를 나타내는 GameObject 타입의 _Owner 라는 멤버 변수가 있어 
