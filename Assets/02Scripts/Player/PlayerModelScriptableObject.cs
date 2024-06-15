@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 레벨에 따라 사용할 플레이어의 모델을 설정할 수 있는 스크립터블 오브젝트 클래스입니다.
 /// </summary>
-[CreateAssetMenu(fileName = "PlayerModelData", menuName = "ScriptableObject/PlayerModelScriptableObject")]
+[CreateAssetMenu(fileName = "PlayerModelData", menuName = "ScriptableObject/Player/PlayerModelScriptableObject")]
 public class PlayerModelScriptableObject : ScriptableObject
 {
     /// <summary>

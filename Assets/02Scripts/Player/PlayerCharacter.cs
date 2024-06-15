@@ -23,6 +23,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private LevelSystem _LevelSystem;
 
+    private BuffSystem _BuffSystem;
+
     /// <summary>
     /// 이동 컴포넌트
     /// </summary>
@@ -88,12 +90,17 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     {
         // 이벤트 함수를 바인딩합니다.
         BindEventFunction();
+
+        _BuffSystem = new BuffSystem(this.gameObject);
     }
 
     private void Start()
     {
         // 레벨 시스템을 생성합니다.
         InitLevelSystem();
+
+        // test
+        _BuffSystem.AddBuff(100000);
 
         // test
         testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
@@ -104,8 +111,10 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 탄환 게이지 정보를 이용하고 있는 객체에 탄환 게이지 정보를 전달합니다. 
         UpdateBulletGaugeInfo();
 
-        // 애미네이션 파라미터를 갱신합니다.
+        // 애니메이션 파라미터를 갱신합니다.
         UpdateAnimationParameter();
+
+        _BuffSystem.UpdateBuffList();
     }
 
     // test
@@ -127,7 +136,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// 레벨 시스템을 생성하는 메서드입니다.
+    /// 레벨 시스템을 생성하고 레벨업 이벤트를 바인딩하는 메서드입니다.
     /// </summary>
     private void InitLevelSystem()
     {
@@ -199,9 +208,18 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public void ResetPlayerCharacter()
     {
+        // 레벨 시스템 내부에서의 초기화를 진행합니다.
+        _LevelSystem.Initailize();
 
+        // 행동불가 상태, 사망 상태를 초기화합니다.
+        _IsDead = false;
+        _IsStunned = false;
     }
 
+    /// <summary>
+    /// 생존 시간을 갱신하는 메서드입니다.
+    /// </summary>
+    /// <param name="newTime"> 설정할 시간</param>
     public void UpdateSurvivalTime(float newTime)
     {
         _LevelSystem.UpdateSurvivalTime(newTime);

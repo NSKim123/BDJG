@@ -163,7 +163,7 @@ public class TargetingSystem
 
 
 
-            // 최소값을 걸러내는 과정
+            // ======================최솟값을 걸러내는 과정=======================================
             bool isMinimum = false;
 
             if (distanceToForwardLine < MinDistanceToForwardLine)
@@ -193,6 +193,7 @@ public class TargetingSystem
                 MinDistanceToForwardLine = distanceToForwardLine;
                 closestTargetDistanceSqr = ownerPosToSenceResultPos.sqrMagnitude;
             }
+            // ====================================================================================
         }
 
         // 타겟팅 조건에 부합하는 대상의 Transform을 반환합니다.

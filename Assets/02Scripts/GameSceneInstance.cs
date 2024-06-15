@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using UnityEngine;
 
@@ -46,7 +47,7 @@ public class GameSceneInstance : SceneInstanceBase
         BindEvents();
 
         // 게임을 시작합니다.
-        StartGame();
+        StartCoroutine(GameStartProcess());
     }
 
     private void Update()
@@ -61,7 +62,7 @@ public class GameSceneInstance : SceneInstanceBase
     /// <summary>
     /// 게임 알고리즘을 시작하는 메서드입니다.
     /// </summary>
-    private void StartGame()
+    private IEnumerator GameStartProcess()
     {
         // 게임을 일시정지합니다.
         PauseGame();
@@ -75,15 +76,15 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 맵 초기화
 
-        // 3초 카운트 ( 코루틴 )
-        StartCoroutine(Count3sBeforeGameStart());
+        // 3초 카운트 ( 코루틴 )        
+        yield return Count3sBeforeGameStart();
 
         // 입력 권한 부여
         SetUpControl(true); 
         
         // 게임을 재개합니다.
         ContinueGame();
-    }   
+    }       
 
     /// <summary>
     /// 게임 재개 전 3초를 카운트하는 코루틴입니다.
@@ -96,13 +97,13 @@ public class GameSceneInstance : SceneInstanceBase
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "Ready?";
 
         // 3초 대기 코루틴
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSecondsRealtime(3.0f);
 
         // UI 에 Start를 띄웁니다.
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "Start!";
 
         // 1초 대기 코루틴
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSecondsRealtime(1.0f);
 
         // 게임 시작 전 띄우는 UI를 비활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(false);
@@ -161,17 +162,18 @@ public class GameSceneInstance : SceneInstanceBase
 
     /// <summary>
     /// UI 객체들의 대리자에 함수들을 바인드시키는 메서드입니다.
+    /// 게임 씬에 존재하는 객체들과 UI를 연결시킵니다.
     /// </summary>
     private void BindUIEvents()
-    {        
-        // m_GameSceneUI 내부에서 바인드 (UI들끼리의 상호작용)
-        m_GameSceneUI.BindUIEvents();
-
-        // ---------------- m_GameSceneUI 외부에서 바인드하는 함수. (게임 씬에 있는 객체들과 연결) ----------------    
+    {          
+        // 환경설정 버튼 클릭 이벤트 <-- 바인드 -- 게임 일시 정지 함수
         m_GameSceneUI.m_Button_Configuration.onClick.AddListener(PauseGame);
+
+        // 환경설정 UI 취소버튼 클릭 이벤트 <-- 바인드 -- 게임 재개 함수
         m_GameSceneUI.m_ConfigurationUI.m_Button_Cancel.onClick.AddListener(ContinueGame);
-        m_GameSceneUI.m_GameOverUI.BindButton1Events(StartGame);
-        // --------------------------------------------------------------------------------------------------------
+
+        // 게임오버 UI 다시하기 버튼 클릭 이벤트 <-- 바인드 -- 게임 실행 함수
+        m_GameSceneUI.m_GameOverUI.BindButton1Events(() => StartCoroutine(GameStartProcess()));       
     }
 
     /// <summary>
@@ -210,7 +212,7 @@ public class GameSceneInstance : SceneInstanceBase
         _SurviveTime += change;
 
         // UI 갱신합니다.
-        m_GameSceneUI.UpdateSurvivalTime(_SurviveTime);
+        m_GameSceneUI.UpdateSurvivalTimeText(_SurviveTime);
 
         // 플레이어 객체의 생존 시간을 갱신시켜줍니다.
         playerController.controlledCharacter.UpdateSurvivalTime(_SurviveTime);
