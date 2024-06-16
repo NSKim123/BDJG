@@ -166,8 +166,6 @@ public class GameSceneInstance : SceneInstanceBase
     /// </summary>
     private void BindUIEvents()
     {
-        m_GameSceneUI.m_BuffSystemUI.SetTargetBuffSystem(playerController.controlledCharacter.buffSystem);
-
         // 환경설정 버튼 클릭 이벤트 <-- 바인드 -- 게임 일시 정지 함수
         m_GameSceneUI.m_Button_Configuration.onClick.AddListener(PauseGame);
 
@@ -182,7 +180,11 @@ public class GameSceneInstance : SceneInstanceBase
     /// 플레이어 객체의 대리자에 함수들을 바인드시키는 메서드입니다.
     /// </summary>
     private void BindPlayerEvents()
-    {        
+    {
+        // 버프 시스템 UI가 표시할 버프 시스템을 플레이어의 버프 시스템으로 설정하고, 
+        // 버프 시스템 이벤트들에 버프 시스템 UI의 함수들을 바인드합니다.
+        m_GameSceneUI.m_BuffSystemUI.SetTargetBuffSystem(playerController.controlledCharacter.buffSystem);
+
         // 죽었을 때 실행되는 이벤트에 바인드합니다.
         playerController.controlledCharacter.onDead += OnGameOver;
 

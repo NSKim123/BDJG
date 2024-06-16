@@ -58,6 +58,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public bool isStunned => _IsStunned;    
 
+    /// <summary>
+    /// 버프 시스템 객체에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
     public BuffSystem buffSystem => _BuffSystem;
 
     /// <summary>
