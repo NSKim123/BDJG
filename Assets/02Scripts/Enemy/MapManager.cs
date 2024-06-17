@@ -2,70 +2,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public enum WaveName
+public class MapManager : MonoBehaviour
 {
-    General,
-    Trainee,
-    Three,
-    Four,
-}
-
-public class EnemyManager : MonoBehaviour
-{
-    public static EnemyManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-    private static EnemyManager _instance;
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public int MushroomCount { get; set; }
-    public int CactusCount { get; set; }
-
-    public event Action<WaveName> onChangeWave;
-    public delegate void CoroutineStarter(WaveName wave);
-    public event CoroutineStarter OnCoroutineStart;
-
-    public EnemySpawner enemySpawnerObject;
-    public MapManager mapManageObject;
-
-
-
     public GameObject waterGround;
-
-
-
-    // 슬라임 성장 정보 -> 웨이브 상태
-
-
-    // ****코드 정리 필요
-    public WaveName currentWave;
-
+    public event Action OnWaveChanged;
     private Dictionary<WaveName, float> heightOfWater;
     [SerializeField] private GameObject map;
     [SerializeField] private NavMeshSurface navMeshMap;
 
     private void Start()
     {
-        currentWave = WaveName.General;
-
         // 물 y값 1단계: 0.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.1 (변동가능)
         heightOfWater = new Dictionary<WaveName, float>
         {
@@ -76,16 +24,12 @@ public class EnemyManager : MonoBehaviour
         };
 
         navMeshMap = map.GetComponent<NavMeshSurface>();
-
-        onChangeWave += mapManageObject.ChangeMap;
-
     }
-
 
     public void ChangeMap(WaveName wave)
     {
         waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
-        
+
         // 딜레이 확인 필요
         navMeshMap.BuildNavMesh();
     }
@@ -106,4 +50,14 @@ public class EnemyManager : MonoBehaviour
         navMeshMap.BuildNavMesh();
     }
 
+    // 재시작 시 호출할 맵을 초기화하는 메서드입니다.
+    public void RestartMap(WaveName wave)
+    {
+        if (wave != WaveName.General)
+        {
+            waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[WaveName.General], waterGround.transform.position.z);
+        }
+        navMeshMap.BuildNavMesh();
+
+    }
 }

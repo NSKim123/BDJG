@@ -3,13 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WaveName
-{
-    General,
-    Trainee,
-    Three,
-    Four,
-}
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -31,10 +24,15 @@ public class EnemySpawner : MonoBehaviour
     // 임시 변수
     public bool isGameOver = false;
 
+    private Coroutine mushroomCoroutine;
+    private Coroutine cactusCoroutine;
+
+
+    // **** 코드 정리 필요
 
     private void Start()
     {
-        currentWave = WaveName.General;
+        EnemyManager.Instance.currentWave = WaveName.General;
         OnChangeWave += EnemyManager.Instance.ChangeMap;
         OnCoroutineStart += EnemyManager.Instance.StartWaterCoroutine;
         //for (int i = 0; i < waves.Length; i++)
@@ -43,8 +41,8 @@ public class EnemySpawner : MonoBehaviour
         //    waves[i].enemydata.OrderBy(obj => obj.Type).ToList();
         //}
 
-        StartCoroutine(C_EnemySpawn_Mushroom());
-        StartCoroutine(C_Test());
+        mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom());
+        //StartCoroutine(C_Test());
     }
 
     private void Update()
@@ -53,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
         // wave2에서 선인장쿤 생성 코루틴을 호출합니다.
         if (currentWave == WaveName.Trainee && !_isCactusCorouting)
         {
-            StartCoroutine(C_EnemySpawn_Cactus());
+            cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus());
         }
     }
 
@@ -99,10 +97,7 @@ public class EnemySpawner : MonoBehaviour
 
             }
             yield return null;
-
         }
-        
-
     }
 
     // 선인장쿤 생성 코루틴입니다.
@@ -138,7 +133,8 @@ public class EnemySpawner : MonoBehaviour
 
         }
     }
-
+    
+    // 적 생성 후 데이터를 초기화하는 메서드입니다.
     private void EnemyInit(GameObject enemy, EnemyInfoData data)
     {
         Enemy e = enemy.GetComponent<Enemy>();
@@ -148,11 +144,59 @@ public class EnemySpawner : MonoBehaviour
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
         e.DetectPlayerDistance = data.AttackRange;
-        
+    }
+
+    // 재시작 시 호출할 적 초기화 메서드입니다.
+    public void RestartEnemy()
+    {
+        // wave 바꿔주기?
+        currentWave = WaveName.General;
+
+        // 생성 코루틴 중단
+        if (mushroomCoroutine != null)
+        {
+            StopCoroutine(mushroomCoroutine);
+            mushroomCoroutine = null;
+        }
+
+        if (cactusCoroutine != null)
+        {
+            StopCoroutine(cactusCoroutine);
+            _isCactusCorouting = false;
+            cactusCoroutine = null;
+        }
+
+        // 맵 내에 있는 적들을 모두 파괴합니다.
+        GameObject[] removeList = isEnemyExistInMap();
+        if (removeList != null)
+        {
+            foreach (var item in removeList)
+            {
+                Destroy(item);
+            }
+        }
+
+        // 생성 코루틴 재개
+        mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom());
+    }
+
+    // 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다.
+    private GameObject[] isEnemyExistInMap()
+    {
+        GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (enemys.Length > 0)
+        {
+            return enemys;
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
-
+    // 반지름을 받아서 원형 내부에서 랜덤 위치를 계산하는 메서드들입니다.
     private Vector3 GetRandomPositionInCircle(float radius)
     {
         float angle = UnityEngine.Random.Range(0, 360) * Mathf.Deg2Rad; // 각도를 라디안으로 변환
@@ -169,7 +213,6 @@ public class EnemySpawner : MonoBehaviour
         float z = center.z + radius * Mathf.Sin(angle);
         return new Vector3(x, center.y, z); // 중심의 y값을 그대로 유지
     }
-
 
     // 각 wave마다 스폰 정보와 enemy 정보를 저장해둡니다.
     [Serializable]
