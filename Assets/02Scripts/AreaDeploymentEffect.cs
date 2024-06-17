@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using System.Diagnostics;
 using UnityEngine;
 
 public class AreaDeploymentEffect : MonoBehaviour
@@ -13,6 +13,13 @@ public class AreaDeploymentEffect : MonoBehaviour
 
     public List<RectTransform> m_Characters;
 
+    Stopwatch timer;
+
+    private void Awake()
+    {
+        timer = new Stopwatch();
+        
+    }
 
     private void Update()
     {
@@ -25,7 +32,10 @@ public class AreaDeploymentEffect : MonoBehaviour
         {
             StartCoroutine(DisplayCharacters());
             _IsStartDisplayingCharacter = true;
+            timer.Start(); 
         }
+
+        
     }
 
     private IEnumerator DisplayCharacters()
@@ -99,5 +109,6 @@ public class AreaDeploymentEffect : MonoBehaviour
     private void OnDestroy()
     {
         m_AreaDeploymentEffectMaterial.SetFloat("_Boundary", 0.0f);
+        UnityEngine.Debug.Log(timer.ElapsedMilliseconds);
     }
 }
