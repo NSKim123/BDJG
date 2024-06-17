@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
         //}
 
         StartCoroutine(C_EnemySpawn_Mushroom());
-        StartCoroutine(C_Test());
+        //StartCoroutine(C_Test());
     }
 
     private void Update()

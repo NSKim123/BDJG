@@ -8,8 +8,8 @@ public class TempPlayer : MonoBehaviour
 
     private void Start()
     {
-        Invoke("FindEnemy", 3);
-        Invoke("Damage", 8);
+        //Invoke("FindEnemy", 3);
+        //Invoke("Damage", 8);
     }
 
     private void FindEnemy()
@@ -22,5 +22,17 @@ public class TempPlayer : MonoBehaviour
     {
         Debug.Log("플레이어에서 데미지");
         enemy.OnDamaged(5, -enemy.transform.forward);
+    }
+
+    private void Update()
+    {
+        Buff();
+    }
+
+    public List<int> temp = new List<int>();
+
+    public void Buff()
+    {
+        temp.Add(0);
     }
 }
