@@ -7,7 +7,7 @@ using UnityEngine;
 
 public enum WaveName
 {
-    General,
+    General = 1,
     Trainee,
     Three,
     Four,
@@ -92,18 +92,23 @@ public class EnemyManager : MonoBehaviour
 
     public void StartWaterCoroutine(WaveName wave)
     {
-        StartCoroutine(C_WaterUP(wave));
+        //StartCoroutine(C_WaterUP(wave));
     }
 
-    public IEnumerator C_WaterUP(WaveName wave)
+    public IEnumerator C_WaterUP(int wave)
     {
-        while (waterGround.transform.position.y < heightOfWater[wave])
+        while (waterGround.transform.position.y < heightOfWater[(WaveName)wave])
         {
             waterGround.transform.position += new Vector3(0, 0.1f, 0);
-
+            // 물 트리거 확인해서 닿는애들 죽기
             yield return new WaitForSeconds(0.1f);
         }
         navMeshMap.BuildNavMesh();
+    }
+
+    public void SetWaterHeightByLevel(int level)
+    {
+        StartCoroutine(C_WaterUP(level));
     }
 
 }

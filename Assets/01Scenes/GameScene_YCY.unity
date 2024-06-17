@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3699,6 +3699,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TempItem_giant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3756507485386414248, guid: f1e1993c01153414daa69c342aebd900,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4077,6 +4082,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TempItem_timestop
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141390686411205031, guid: 331684fb27e95a8409aff96e598e35af,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4560,6 +4570,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TempItem_giant
       objectReference: {fileID: 0}
+    - target: {fileID: 3756507485386414248, guid: f1e1993c01153414daa69c342aebd900,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4899,7 +4914,7 @@ GameObject:
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2058321943
 Transform:
   m_ObjectHideFlags: 0

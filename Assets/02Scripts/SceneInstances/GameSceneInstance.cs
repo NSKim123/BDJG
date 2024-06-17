@@ -28,6 +28,7 @@ public class GameSceneInstance : SceneInstanceBase
     private bool _IsPaused = true;
 
     // add 몬스터 스포너 객체
+    EnemySpawner _EnemySpawner;
 
     // add 맵 관리 객체
 
@@ -39,6 +40,9 @@ public class GameSceneInstance : SceneInstanceBase
     protected override void Awake()
     {
         base.Awake();
+
+        _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
+        _EnemySpawner.onEnemyDead += AddScore;
     }
 
     private void Start()
@@ -190,7 +194,9 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 과부하 돌입 및 해제 시 실행되는 이벤트에 함수를 바인드합니다.
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenEnter += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
-        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);        
+        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);  
+        //playerController.controlledCharacter.levelSystem.onLevelUp += e
+
     }
 
     /// <summary>

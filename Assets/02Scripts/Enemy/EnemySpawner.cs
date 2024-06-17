@@ -27,6 +27,7 @@ public class EnemySpawner : MonoBehaviour
     private Coroutine mushroomCoroutine;
     private Coroutine cactusCoroutine;
 
+    public System.Action<int> onEnemyDead;
 
     // **** 코드 정리 필요
 
@@ -144,13 +145,14 @@ public class EnemySpawner : MonoBehaviour
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
         e.DetectPlayerDistance = data.AttackRange;
+        e.onDead += () => onEnemyDead?.Invoke(1);
     }
 
     // 재시작 시 호출할 적 초기화 메서드입니다.
-    public void RestartEnemy()
+    public void RestartEnemy(WaveName wave)
     {
         // wave 바꿔주기?
-        currentWave = WaveName.General;
+        currentWave = wave;
 
         // 생성 코루틴 중단
         if (mushroomCoroutine != null)

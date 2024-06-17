@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public Material myMaterial;
 
+    public event System.Action onDead;
 
     protected virtual void Start()
     {
@@ -27,6 +28,9 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public abstract void OnDamaged(float distance, Vector3 direction);
 
-    public abstract void OnDead();
+    public virtual void OnDead()
+    {
+        onDead?.Invoke();
+    }
 }
 
