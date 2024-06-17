@@ -17,6 +17,6 @@ public abstract class Item : MonoBehaviour
         ItemDataRepository = new ItemDataRepository();
     }
 
-    // 아이템을 사용하는 함수입니다.
+    // 아이템을 사용하는 메서드입니다.
     public abstract void Use();
 }

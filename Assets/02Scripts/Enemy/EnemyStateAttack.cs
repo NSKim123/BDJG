@@ -71,7 +71,7 @@ public class EnemyStateAttack : EnemyStateBase
                 {
 
                     // 애니메이션에 이벤트 걸기
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {
                         if (enemyController.attackDetect.Length > 0)
                         {

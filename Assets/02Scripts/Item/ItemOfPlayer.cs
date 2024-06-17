@@ -24,9 +24,10 @@ public abstract class ItemOfPlayer : Item
         }
     }
 
-    // 아이템을 사용하는 함수입니다.
-    // Use함수 내에서 주석대로 호출하시면 됩니다.
+    // 아이템을 사용하는 메서드입니다.
     // 버프코드는 각각의 아이템 자식클래스에서 설정한 코드로 호출됩니다.
+
+    // Use함수 내에서 주석대로 호출하시면 됩니다.
     public override void Use()
     {
         //playerCharacter.buffSystem.AddBuff(BuffCode);
