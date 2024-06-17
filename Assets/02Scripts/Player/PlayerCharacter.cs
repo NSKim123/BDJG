@@ -13,12 +13,20 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private bool _IsDead;
 
+    /// <summary>
+    /// 행동 불가 상태인지를 나타냅니다.
+    /// </summary>
     private bool _IsStunned;
 
     /// <summary>
-    /// 이 캐릭터의 레벨 시스템
+    /// 이 캐릭터의 레벨 시스템 객체
     /// </summary>
     private LevelSystem _LevelSystem;
+
+    /// <summary>
+    /// 이 캐릭터의 버프 시스템 객체
+    /// </summary>
+    private BuffSystem _BuffSystem;
 
     /// <summary>
     /// 이동 컴포넌트
@@ -45,7 +53,15 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public bool isDead => _IsDead;
 
+    /// <summary>
+    /// 행동 불가 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
+    /// </summary>
     public bool isStunned => _IsStunned;    
+
+    /// <summary>
+    /// 버프 시스템 객체에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public BuffSystem buffSystem => _BuffSystem;
 
     /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
@@ -67,20 +83,36 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public PlayerAnimController animController => _PlayerAnimController ?? (_PlayerAnimController = GetComponentInChildren<PlayerAnimController>());
 
-    public System.Action onStunned;
-    public System.Action onDead;
+    /// <summary>
+    /// 행동 불가 상태 돌입 시 호출되는 이벤트입니다.
+    /// </summary>
+    public event System.Action onStunnedEnter;
+
+    /// <summary>
+    /// 사망 시 호출되는 메서드입니다.
+    /// </summary>
+    public event System.Action onDead;
 
 
     private void Awake()
     {
         // 이벤트 함수를 바인딩합니다.
         BindEventFunction();
+
+        // 버프 시스템을 생성합니다.
+        _BuffSystem = new BuffSystem(this.gameObject);
     }
 
     private void Start()
     {
         // 레벨 시스템을 생성합니다.
         InitLevelSystem();
+
+        // test
+        _BuffSystem.AddBuff(100000);
+        _BuffSystem.AddBuff(100001);
+        _BuffSystem.AddBuff(100002);
+        _BuffSystem.AddBuff(100003);
 
         // test
         testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
@@ -91,8 +123,11 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 탄환 게이지 정보를 이용하고 있는 객체에 탄환 게이지 정보를 전달합니다. 
         UpdateBulletGaugeInfo();
 
-        // 애미네이션 파라미터를 갱신합니다.
+        // 애니메이션 파라미터를 갱신합니다.
         UpdateAnimationParameter();
+
+        // 버프 시스템을 갱신합니다.
+        UpdateBuffList();
     }
 
     // test
@@ -109,12 +144,13 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         while(true)
         {
             yield return new WaitForSeconds(5.0f);
+            _BuffSystem.AddBuff(100003);
             _LevelSystem.IncreaseKillCount();
         }
     }
 
     /// <summary>
-    /// 레벨 시스템을 생성하는 메서드입니다.
+    /// 레벨 시스템을 생성하고 레벨업 이벤트를 바인딩하는 메서드입니다.
     /// </summary>
     private void InitLevelSystem()
     {
@@ -131,7 +167,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// 이벤트 함수를 바인딩합니다.
+    /// 이벤트 함수를 바인딩하는 메서드입니다.
     /// </summary>
     private void BindEventFunction()
     {
@@ -165,7 +201,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// 애니메이션 파라미터를 갱신합니다.
+    /// 애니메이션 파라미터를 갱신하는 메서드입니다.
     /// </summary>
     private void UpdateAnimationParameter()
     {
@@ -174,21 +210,50 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 
     /// <summary>
-    /// PlayerAnimController 객체를 재설정합니다.
+    /// 버프 시스템을 갱신하는 메서드입니다.
+    /// </summary>
+    private void UpdateBuffList()
+    {
+        _BuffSystem.UpdateBuffList();
+    }
+
+    /// <summary>
+    /// PlayerAnimController 객체를 재설정하는 메서드입니다.
     /// </summary>
     private void ResetAnimController()
     {
         _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
     }    
 
+    /// <summary>
+    /// 캐릭터를 초기화하는 메서드입니다.
+    /// </summary>
     public void ResetPlayerCharacter()
     {
+        // 레벨 시스템 내부에서의 초기화를 진행합니다.
+        _LevelSystem.Initailize();
 
+        // 행동불가 상태, 사망 상태를 초기화합니다.
+        _IsDead = false;
+        _IsStunned = false;
     }
 
+    /// <summary>
+    /// 생존 시간을 갱신하는 메서드입니다.
+    /// </summary>
+    /// <param name="newTime"> 설정할 시간</param>
     public void UpdateSurvivalTime(float newTime)
     {
         _LevelSystem.UpdateSurvivalTime(newTime);
+    }
+
+    /// <summary>
+    /// 버프를 추가하는 메서드입니다.
+    /// </summary>
+    /// <param name="buffCode"> 부여할 버프의 코드</param>
+    public void AddBuff(int buffCode)
+    {
+        _BuffSystem.AddBuff(buffCode);
     }
 
     /// <summary>

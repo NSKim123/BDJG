@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 게임 씬에서 사용되는 모든 UI를 관리하는 컴포넌트입니다.
+/// </summary>
 public class GameSceneUI : MonoBehaviour
 {
     [Header("# 생존 시간 텍스트")]
@@ -12,8 +15,8 @@ public class GameSceneUI : MonoBehaviour
     [Header("# 점수 텍스트")]
     public TMP_Text m_Text_Score;
 
-    // TO DO : 추후 버프 시스템 개발 후 작업
-    //[Header("# 버프 시스템 UI")]
+    [Header("# 버프 시스템 UI")]
+    public BuffSystemUI m_BuffSystemUI;
 
     [Header("# 탄창 게이지 UI")]
     public BulletGaugeUI m_BulletGaugeUI;
@@ -38,18 +41,27 @@ public class GameSceneUI : MonoBehaviour
 
     [Header("# 게임 시작 전 띄울 UI")]
     public GameObject m_PanelBeforeGame;
-    
-    public void BindUIEvents()
+
+    private void Awake()
     {
-        m_Button_Configuration.onClick.AddListener(() => m_ConfigurationUI.gameObject.SetActive(true));
-
-        m_ConfigurationUI.BindUIEvents();
-
-        // TO DO : 메인 화면 이동하는 함수 바인딩 해야함 
-        // m_GameOverUI.BindButton2Events();
+        // UI들의 이벤트를 바인딩합니다.
+        BindUIEvents();
     }
 
-    public void UpdateSurvivalTime(float newTime)
+    /// <summary>
+    /// UI들의 이벤트를 바인딩하는 메서드입니다.
+    /// </summary>
+    private void BindUIEvents()
+    {
+        // 환경 설정 버튼 클릭 이벤트 <-- 바인딩 -- 환경설정 창 활성화 함수
+        m_Button_Configuration.onClick.AddListener(() => m_ConfigurationUI.gameObject.SetActive(true));
+    }
+
+    /// <summary>
+    /// 생존 시간 텍스트 UI를 갱신하는 메서드입니다.
+    /// </summary>
+    /// <param name="newTime"> 갱신할 시간</param>
+    public void UpdateSurvivalTimeText(float newTime)
     {
         int minute = (int)(newTime / 60.0f);
         int second = (int)(newTime - (int)(newTime / 60.0f) * 60.0f);
@@ -57,14 +69,21 @@ public class GameSceneUI : MonoBehaviour
         m_Text_SurvivalTime.text = $"{minute} : " + (second < 10? "0" : "") + second;
     }
 
+    /// <summary>
+    /// 플레이어 캐릭터 객체의 정보를 토대로 UI를 갱신하는 메서드입니다.
+    /// </summary>
+    /// <param name="playerCharacter"> 컨트롤 중인 플레이어 캐릭터 객체</param>
     public void UpdatePlayerUI(PlayerCharacter playerCharacter)
     {
-        m_BulletGaugeUI.SetTargetRatio(playerCharacter.attackComponent.bulletGauge.ratio);
+        // 탄창 게이지 UI 갱신
+        m_BulletGaugeUI.SetRatio(playerCharacter.attackComponent.bulletGauge.ratio);
 
-        m_AttackButtonUI.SetTargetRatio(playerCharacter.attackComponent.reuseTimeGauge.ratio);
+        // 공격 버튼 갱신
+        m_AttackButtonUI.SetRatio(playerCharacter.attackComponent.reuseTimeGauge.ratio);
         m_AttackButtonUI.OnToggleChanged(playerCharacter.attackComponent.isAttacktable);
 
-        m_JumpButtonUI.SetTargetRatio(playerCharacter.movementComponent.jumpResueTimeGauge.ratio);
+        // 점프 버튼 갱신
+        m_JumpButtonUI.SetRatio(playerCharacter.movementComponent.jumpResueTimeGauge.ratio);
         m_JumpButtonUI.OnToggleChanged(playerCharacter.movementComponent.isJumpable);
     }
 }

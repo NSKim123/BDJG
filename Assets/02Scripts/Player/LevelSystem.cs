@@ -123,8 +123,12 @@ public class LevelSystem
     /// <summary>
     /// 레벨 시스템을 초기화하는 메서드입니다.
     /// </summary>
-    public void Initailize()
+    /// <param name="level"> 초기화 레벨</param>
+    public void Initailize(int level = 1)
     {
+        // 1 레벨로 초기화합니다.
+        _Level = 1;
+
         // 레벨 업 대리자를 호출합니다.
         onLevelUp?.Invoke(_Level);
 
