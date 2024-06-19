@@ -382,6 +382,8 @@ public partial class PlayerMovement
     /// </summary>
     private float _MaxDefence;
 
+    private bool _IsImmune;
+
     /// <summary>
     /// 넉백 속도
     /// </summary>
@@ -454,7 +456,12 @@ public partial class PlayerMovement
     public void UpdateDefence(float ratio)
     {
         _Defence = _MaxDefence * ratio;
-    }    
+    }
+    
+    public void SetImmuneState(bool immune)
+    {
+        _IsImmune = immune;
+    }
 
     /// <summary>
     /// 레벨업 시 호출될 메서드입니다.
@@ -472,11 +479,15 @@ public partial class PlayerMovement
     /// <param name="direction"> 밀려날 방향</param>
     public void OnHit(float distance, Vector3 direction)
     {
+        // 면역 상태일 경우 함수 종료
+        if (_IsImmune) return;
+
         // 데미지 및 넉백 속도 계산
         float damage = CalculateDamage(distance);
         _KnockBackVelocity += (damage * m_KnockBackCoefficient) * direction;
 
         // 피격 애니메이션을 실행합니다.
-        _OwnerCharacter.animController.TriggerDamagedParam();
+        if(damage > 0.0f)
+            _OwnerCharacter.animController.TriggerDamagedParam();
     }
 }

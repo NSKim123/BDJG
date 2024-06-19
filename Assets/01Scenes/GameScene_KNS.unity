@@ -253,6 +253,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3482f8b31036f1448f35bb7150a4396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
+    type: 3}
   m_MinScale: 1
   m_ScaleCoefficient: 0.1
 --- !u!114 &124692530 stripped

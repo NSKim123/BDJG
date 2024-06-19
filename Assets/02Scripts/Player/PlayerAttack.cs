@@ -57,6 +57,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private float _AttackForce;
 
+    private bool _ProhibitFire;
+
     /// <summary>
     /// 발사 시작 위치
     /// </summary>
@@ -85,7 +87,7 @@ public class PlayerAttack : MonoBehaviour
     /// <summary>
     /// 공격 가능한 상황인지를 나타내는 읽기전용 프로퍼티입니다.
     /// </summary>
-    public bool isAttacktable => CheckAttackable();
+    public bool isAttacktable => CheckFire();
 
     /// <summary>
     /// 쿨타임 게이지에 대한 읽기 전용 프로퍼티입니다.
@@ -106,7 +108,7 @@ public class PlayerAttack : MonoBehaviour
         _BulletGauge = new BulletGauge(m_BulletGaugeRecoverAmount, m_BulletGaugeRecoverCycle, m_BulletGaugeStartRecoverTime, 10);
                 
         // 타겟팅 시스템을 생성합니다.
-        _TargetingSystem = new TargetingSystem(LayerMask.GetMask("Enemy"), m_SencerDistance, m_SencerWidth, m_SencerHeight);               
+        _TargetingSystem = new TargetingSystem(m_SenceLayer, m_SencerDistance, m_SencerWidth, m_SencerHeight);               
         
         // 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
         _OwnerCharacter = GetComponent<PlayerCharacter>();        
@@ -145,7 +147,7 @@ public class PlayerAttack : MonoBehaviour
     private void TryAttack()
     {
         // 공격이 불가능한 상태라면 호출을 종료합니다.
-        if (!CheckAttackable())
+        if (!CheckFire())
             return;
 
         // 쿨타임이 남아있다면 호출을 종료합니다.
@@ -193,12 +195,12 @@ public class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// 공격 가능한 상태인지 확인합니다.
+    /// 발사 가능한 상태인지 확인합니다.
     /// </summary>
     /// <returns> 공격 가능한 상태라면 참을 반환합니다.</returns>
-    private bool CheckAttackable()
+    private bool CheckFire()
     {
-        return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack() && !CheckStunned();
+        return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack() && !CheckStunned() && !_ProhibitFire;
     }
 
     /// <summary>
@@ -269,6 +271,31 @@ public class PlayerAttack : MonoBehaviour
     private void FindStartPoint()
     {
         _StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
+    }
+
+    public void OnGiantStart()
+    {
+        SetBulletGaugeMaxValueByLevel(50);
+        FindStartPoint();
+        _ProhibitFire = true;
+    }
+
+    public void OnGiantFinish()
+    {
+        _ProhibitFire = false;
+    }
+
+    public void AttackAround()
+    {
+        Collider[] hitResult = Physics.OverlapSphere(transform.position, 0.3f * transform.lossyScale.x);
+
+        foreach (Collider collider in hitResult)
+        {
+            if (collider.TryGetComponent<IHit>(out IHit iHit))
+            {
+                iHit.OnDamaged(_AttackForce, (collider.transform.position - transform.position).normalized);
+            }
+        }
     }
 
     /// <summary>
