@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,7 +14,9 @@ public class PlayerAnimController : AnimController
     private const string PARAMNAME_GROUNDED = "_Grounded";
     private const string PARAMNAME_DAMAGED = "_Damaged";
     private const string PARAMNAME_ATTACK = "_Attack";
-        
+
+    public event System.Action onLand;
+
     /// <summary>
     /// 이동 애니메이션 파라미터를 설정하는 메서드입니다.
     /// </summary>
@@ -54,5 +57,10 @@ public class PlayerAnimController : AnimController
     public void TriggerAttackParam()
     {
         SetTrigger(PARAMNAME_ATTACK);
+    }
+
+    public void AnimEvent_LandAttack()
+    {
+        onLand?.Invoke();
     }
 }

@@ -18,6 +18,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private bool _IsStunned;
 
+    private bool _AbleToLevelUp = true;
+
     /// <summary>
     /// 이 캐릭터의 레벨 시스템 객체
     /// </summary>
@@ -109,8 +111,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         InitLevelSystem();
 
         // test
-        _BuffSystem.AddBuff(100000);
-        _BuffSystem.AddBuff(100001);
+        _BuffSystem.AddBuff(100000);        
         _BuffSystem.AddBuff(100002);
         _BuffSystem.AddBuff(100003);
 
@@ -141,11 +142,11 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     //test
     private IEnumerator Test_IncreaseKillCountPer5s()
     {
-        while(true)
+        //while(true)
         {
             yield return new WaitForSeconds(5.0f);
-            _BuffSystem.AddBuff(100003);
-            _LevelSystem.IncreaseKillCount();
+            _BuffSystem.AddBuff(100001);
+           // _LevelSystem.IncreaseKillCount();
         }
     }
 
@@ -158,12 +159,24 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         _LevelSystem = new LevelSystem();
 
         // 레벨업할 때 호출되어야하는 함수들을 바인딩합니다.
-        _LevelSystem.onLevelUp += modelComponent.OnLevelUp;
-        _LevelSystem.onLevelUp += attackComponent.OnLevelUp;
-        _LevelSystem.onLevelUp += movementComponent.OnLevelUp;        
-
+        _LevelSystem.onLevelUp += (int level) => StartCoroutine(OnLevelUpCoroutine(level));
+        
         // 레벨 시스템 내부에서의 초기화를 진행합니다.
         _LevelSystem.Initailize();
+    }
+
+    private IEnumerator OnLevelUpCoroutine(int level)
+    {
+        yield return new WaitUntil(() => _AbleToLevelUp);
+
+        OnLevelUp(level);
+    }
+
+    private void OnLevelUp(int level)
+    {
+        modelComponent.OnLevelUp(level);
+        attackComponent.OnLevelUp(level);
+        movementComponent.OnLevelUp(level);
     }
 
     /// <summary>
@@ -172,7 +185,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     private void BindEventFunction()
     {
         // 모델이 변경될 때 호출되어야하는 함수들을 바인딩합니다.
-        modelComponent.OnModelChanged += ResetAnimController;
+        modelComponent.onModelChanged += ResetAnimController;
     }
     
     /// <summary>
@@ -205,8 +218,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private void UpdateAnimationParameter()
     {
-        animController.UpdateMoveParam(movementComponent.normalizedZXSpeed);
-        animController.UpdateGroundedParam(movementComponent.isGrounded);
+        animController?.UpdateMoveParam(movementComponent.normalizedZXSpeed);
+        animController?.UpdateGroundedParam(movementComponent.isGrounded);
     }
 
     /// <summary>
@@ -254,6 +267,43 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     public void AddBuff(int buffCode)
     {
         _BuffSystem.AddBuff(buffCode);
+    }
+
+    public void OnStartGiant()
+    {
+        // 레벨업 이벤트를 일시적으로 호출을 막습니다.
+        _AbleToLevelUp = false;
+
+        // 점프 애니메이션 이벤트 바인딩
+        animController.onLand += attackComponent.AttackAround;
+
+        // 면역상태 설정
+        movementComponent.SetImmuneState(true);
+
+        // 모델 변경,
+        modelComponent.OnGiantStart();
+
+        // 탄창 게이지 초기화 및 설정
+        attackComponent.OnGiantStart();        
+    }
+
+    public void OnFinishGiant()
+    {
+        // 레벨업 이벤트 재개
+        _AbleToLevelUp = true;
+
+        // 점프 애니메이션 이벤트 언바인딩
+        animController.onLand -= attackComponent.AttackAround;
+
+        // 면역상태 원상복구
+        movementComponent.SetImmuneState(false);
+
+        // 모델 원상복구
+        modelComponent.OnLevelUp(_LevelSystem.level);
+
+        // 탄창 원상복구
+        attackComponent.OnLevelUp(_LevelSystem.level);
+        attackComponent.OnGiantFinish();
     }
 
     /// <summary>

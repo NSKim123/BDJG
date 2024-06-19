@@ -17,6 +17,9 @@ public enum SlimeModelType
 /// 모델 관련 부분
 public partial class PlayerModel : MonoBehaviour
 {
+    [Header("탄환 프래팹")]
+    public Bullet m_Bullet;
+
     /// <summary>
     /// 로드할 PlayerModelScriptableObject 객체
     /// </summary>
@@ -40,7 +43,7 @@ public partial class PlayerModel : MonoBehaviour
     /// <summary>
     /// 모델이 변경될 때 호출되는 대리자입니다.
     /// </summary>
-    public event System.Action OnModelChanged;
+    public event System.Action onModelChanged;
 
     private void Awake()
     {
@@ -68,14 +71,26 @@ public partial class PlayerModel : MonoBehaviour
         GameObject newCharacter = Instantiate(newModel);
         newCharacter.transform.forward = transform.forward;
         newCharacter.transform.parent = transform;
-        newCharacter.transform.localPosition = Vector3.down * 0.365f;
+        newCharacter.transform.localPosition = Vector3.down * 0.415f;
         newCharacter.transform.localScale = Vector3.one;
 
         // 현재 모델을 저장합니다.
         _CurrentModel = newCharacter;
 
         // 모델 변경 이벤트를 호출합니다.
-        OnModelChanged?.Invoke();
+        onModelChanged?.Invoke();
+
+        // 탄환의 머터리얼도 바꿉니다.
+        m_Bullet.GetComponentInChildren<Renderer>().material = _CurrentModel.GetComponentInChildren<Renderer>().material;
+    }
+
+    public void OnGiantStart()
+    {
+        // 새로운 모델을 불러옵니다.
+        GameObject newModel = _ModelScriptableObject.FindModelByLevel(4);
+
+        // 모델을 교체합니다.
+        ChangeModel(newModel);
     }
 
     /// <summary>
@@ -121,7 +136,7 @@ public partial class PlayerModel
     private void UpdateScale()
     {
         // 목표 크기로 부드럽게 변화시킵니다.
-        Vector3 newScale = Vector3.MoveTowards(transform.localScale, _TargetScale * Vector3.one, 1.0f * Time.fixedDeltaTime);
+        Vector3 newScale = Vector3.MoveTowards(transform.localScale, _TargetScale * Vector3.one, 50.0f * Time.fixedDeltaTime);
         transform.localScale = newScale;
     }
 
