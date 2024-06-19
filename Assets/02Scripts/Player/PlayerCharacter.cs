@@ -103,6 +103,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
     private void Awake()
     {
+        // 레벨 시스템을 생성합니다.
+        _LevelSystem = new LevelSystem();
+
         // 이벤트 함수를 바인딩합니다.
         BindEventFunction();
 
@@ -112,16 +115,10 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
     private void Start()
     {
-        // 레벨 시스템을 생성합니다.
         InitLevelSystem();
 
         // test
-        _BuffSystem.AddBuff(100000);        
-        _BuffSystem.AddBuff(100002);
-        _BuffSystem.AddBuff(100003);
-
-        // test
-        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+        //testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
     }
 
     private void Update()
@@ -147,7 +144,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     //test
     private IEnumerator Test_IncreaseKillCountPer5s()
     {
-        //while(true)
+        while(true)
         {
             yield return new WaitForSeconds(5.0f);
             _BuffSystem.AddBuff(100001);
@@ -160,9 +157,6 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     private void InitLevelSystem()
     {
-        // 레벨 시스템을 생성합니다.
-        _LevelSystem = new LevelSystem();
-
         // 레벨업할 때 호출되어야하는 함수들을 바인딩합니다.
         _LevelSystem.onLevelUp += (int level) => StartCoroutine(OnLevelUpCoroutine(level));
         

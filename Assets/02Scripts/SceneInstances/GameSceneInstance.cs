@@ -62,6 +62,7 @@ public class GameSceneInstance : SceneInstanceBase
         StartCoroutine(GameStartProcess());
     }
 
+
     private void Update()
     {
         // 생존 시간을 갱신합니다.

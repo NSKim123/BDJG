@@ -251,7 +251,7 @@ public class PlayerAttack : MonoBehaviour
     /// <param name="level"> 달성 레벨</param>
     private void SetAttackForceByLevel(int level)
     {        
-        _AttackForce = level;
+        _AttackForce = level * 10;
     }
 
     /// <summary>
