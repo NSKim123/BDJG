@@ -5,10 +5,10 @@ public class WaterGroundControl : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.TryGetComponent<IHit>(out IHit iHit))
         {
             Debug.Log("물 감지");
-            other.GetComponent<IHit>().OnDead();
+            iHit.OnDead();
         }
     }
 }

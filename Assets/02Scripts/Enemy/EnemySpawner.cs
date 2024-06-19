@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
     {
         currentWave = WaveName.General;
 
-        StartMushroomSpawn(currentWave);
+        //StartMushroomSpawn(currentWave);
         //StartCoroutine(C_Test());
 
         /*for (int i = 0; i < waves.Length; i++)
@@ -71,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave;
+            int waveIndex = (int)wave-1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -109,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave;
+            int waveIndex = (int)wave-1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
