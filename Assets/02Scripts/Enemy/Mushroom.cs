@@ -30,6 +30,7 @@ public class Mushroom : Enemy
 
     public override void OnDead()
     {
+        base.OnDead();
         EnemyManager.Instance.MushroomCount--;
         stateMachine.ChangeState(State.Die);
     }
