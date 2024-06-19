@@ -38,6 +38,8 @@ public class AreaDeploymentEffect : MonoBehaviour
         
     }
 
+   
+
     private IEnumerator DisplayCharacters()
     {
         foreach(RectTransform character in m_Characters)
@@ -69,6 +71,7 @@ public class AreaDeploymentEffect : MonoBehaviour
             yield return null;
         }
 
+        Time.timeScale = 1.0f;
 
         Destroy(gameObject, 2.0f);
     }

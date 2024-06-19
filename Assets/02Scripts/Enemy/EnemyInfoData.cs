@@ -20,6 +20,8 @@ public class EnemyInfoData : ScriptableObject
     public float AttackSpeed => _attackSpeed;
     public float AttackTime => _attackTime;
 
+
+
     [SerializeField] private EnemyType _enemyType;
     [SerializeField] private string _enemyID;
     [SerializeField] private float _attackForce;

@@ -7,7 +7,7 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     public GameObject waterGround;
-    public event Action OnWaveChanged;
+
     private Dictionary<WaveName, float> heightOfWater;
     [SerializeField] private GameObject map;
     [SerializeField] private NavMeshSurface navMeshMap;
@@ -24,6 +24,23 @@ public class MapManager : MonoBehaviour
         };
 
         navMeshMap = map.GetComponent<NavMeshSurface>();
+
+    }
+
+    public void SetWaterHeightByLevel(int level)
+    {
+        StartCoroutine(C_WaterUP((WaveName)level));
+    }
+
+    public IEnumerator C_WaterUP(WaveName wave)
+    {
+        while (waterGround.transform.position.y < heightOfWater[wave])
+        {
+            waterGround.transform.position += new Vector3(0, 0.1f, 0);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+        navMeshMap.BuildNavMesh();
     }
 
     public void ChangeMap(WaveName wave)
@@ -39,16 +56,7 @@ public class MapManager : MonoBehaviour
         StartCoroutine(C_WaterUP(wave));
     }
 
-    public IEnumerator C_WaterUP(WaveName wave)
-    {
-        while (waterGround.transform.position.y < heightOfWater[wave])
-        {
-            waterGround.transform.position += new Vector3(0, 0.1f, 0);
-
-            yield return new WaitForSeconds(0.1f);
-        }
-        navMeshMap.BuildNavMesh();
-    }
+    
 
     // 재시작 시 호출할 맵을 초기화하는 메서드입니다.
     public void RestartMap(WaveName wave)
@@ -60,4 +68,5 @@ public class MapManager : MonoBehaviour
         navMeshMap.BuildNavMesh();
 
     }
+
 }

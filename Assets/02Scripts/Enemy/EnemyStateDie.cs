@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyStateDie : EnemyStateBase
 {
+    private Coroutine fadeCoroutine;
+
     public EnemyStateDie(StateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -29,13 +31,19 @@ public class EnemyStateDie : EnemyStateBase
             case StepInState.Playing:
                 {
                     Debug.Log("die");
-                    //enemyCharacter.myMaterial.color = 
-                    GameObject.Destroy(enemyCharacter.gameObject);
+                    //애니메이션 멈추기
+                    if (fadeCoroutine == null)
+                    {
+                        _currentStep++;
+                    }
                 }
                 break;
             case StepInState.End:
                 {
-
+                    if (fadeCoroutine == null)
+                    {
+                        fadeCoroutine = enemyCharacter.StartCoroutine(FadeOut());
+                    }
                 }
                 break;
             default:
@@ -43,6 +51,22 @@ public class EnemyStateDie : EnemyStateBase
         }
 
         return nextState;
+    }
+
+    IEnumerator FadeOut()
+    {
+        Debug.Log("페이드");
+        float f = 1;
+        while (f > 0)
+        {
+            f -= 0.1f;
+            enemyCharacter.dieRenderer.material = enemyCharacter.changeMat;
+            Color ColorAlhpa = enemyCharacter.dieRenderer.material.color;
+            ColorAlhpa.a = f;
+            enemyCharacter.dieRenderer.material.color = ColorAlhpa;
+            yield return new WaitForSeconds(0.1f);
+        }
+        GameObject.Destroy(enemyCharacter.gameObject);
     }
 
 }

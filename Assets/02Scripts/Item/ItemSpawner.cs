@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    
     private float randItem;
 
     public GameObject giantPrefab;
     public GameObject timestopPrefab;
 
+    // 임시
+    public bool isGiantEnd = false;
+
     private void Start()
     {
-        Invoke("ItemSpawn", 3f);
+        //Invoke("ItemSpawn", 3f);
     }
 
     public void ItemSpawn()
@@ -39,9 +41,29 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
+    // 프로토타입용 순서대로 스폰
+    public void ItemSpawn_proto(int level)
+    {
+        StartCoroutine(C_proto_ItemSpawn());
+    }
+
+    private IEnumerator C_proto_ItemSpawn()
+    {
+        Instantiate(giantPrefab, transform.position, Quaternion.identity);
+
+        while (isGiantEnd)
+        {
+            yield return null;
+            //거대화 끝나고 이벤트 또는 플래그로 알려줌
+        }
+        Instantiate(timestopPrefab, transform.position, Quaternion.identity);
+
+    }
+
+    // 맵 내 지속시간 설정
+
     // 아이템 생성을 위한 확률 계산
     // 기획서 내용에 따라 확률 수정
-    // 프로토타입에서는 반반 확률 적용
     private float RandomResult()
     {
         randItem = Random.Range(0.0f, 1.0f);

@@ -22,6 +22,7 @@ public class Cactus : Enemy
 
     public override void OnDead()
     {
+        base.OnDead();
         EnemyManager.Instance.CactusCount--;
         stateMachine.ChangeState(State.Die);
     }

@@ -560,7 +560,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9929967b9b6cd468c6ac83db4ae1b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myMaterial: {fileID: 0}
+  dieRenderer: {fileID: 0}
+  changeMat: {fileID: 2100000, guid: c434d8c3d93524344bf2e01ff64dc04b, type: 2}
 --- !u!54 &-2067093970339422863
 Rigidbody:
   m_ObjectHideFlags: 0

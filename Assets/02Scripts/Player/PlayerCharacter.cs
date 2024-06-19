@@ -66,6 +66,11 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     public BuffSystem buffSystem => _BuffSystem;
 
     /// <summary>
+    /// 레벨 시스템 객체에 대한 읽기 전용 프로퍼티입니다.
+    /// </summary>
+    public LevelSystem levelSystem => _LevelSystem;
+
+    /// <summary>
     /// 이동 컴포넌트에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
     public PlayerMovement movementComponent => _PlayerMovement ?? (_PlayerMovement = GetComponent<PlayerMovement>());

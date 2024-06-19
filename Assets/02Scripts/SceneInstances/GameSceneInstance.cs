@@ -28,8 +28,13 @@ public class GameSceneInstance : SceneInstanceBase
     private bool _IsPaused = true;
 
     // add 몬스터 스포너 객체
+    private EnemySpawner _EnemySpawner;
 
     // add 맵 관리 객체
+    private MapManager _MapManager;
+
+    // item spawn 객체
+    private ItemSpawner _ItemSpawner;
 
     /// <summary>
     /// 이 씬에 생성된 플레이어 컨트롤러 객체
@@ -39,6 +44,13 @@ public class GameSceneInstance : SceneInstanceBase
     protected override void Awake()
     {
         base.Awake();
+
+        _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
+        _EnemySpawner.onEnemyDead += AddScore;
+
+        _MapManager = FindAnyObjectByType<MapManager>();
+
+        _ItemSpawner = FindAnyObjectByType<ItemSpawner>();
     }
 
     private void Start()
@@ -73,8 +85,10 @@ public class GameSceneInstance : SceneInstanceBase
         // 플레이어 캐릭터 초기화 및 위치 조정
 
         // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
+        _EnemySpawner.ResetForRestart();
 
         // 맵 초기화
+        _MapManager.RestartMap((WaveName)playerController.controlledCharacter.levelSystem.level);
 
         // 3초 카운트 ( 코루틴 )        
         yield return Count3sBeforeGameStart();
@@ -190,7 +204,15 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 과부하 돌입 및 해제 시 실행되는 이벤트에 함수를 바인드합니다.
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenEnter += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
-        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);        
+        playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
+
+        //레벨업 이벤트에 적 스폰과 맵 조정 메서드를 바인드합니다.
+        playerController.controlledCharacter.levelSystem.onLevelUp += _EnemySpawner.ResetForLevelUp;
+        playerController.controlledCharacter.levelSystem.onLevelUp += _MapManager.SetWaterHeightByLevel;
+
+        // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
+        playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
+
     }
 
     /// <summary>

@@ -8,57 +8,51 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private WaveName currentWave;
 
-    // 슬라임 성장 상태 받아와서 currentWave에 넣기
-
-    private bool _isCactusCorouting;
 
     public Wave[] waves;
 
-    public event Action<WaveName> OnChangeWave;
     public delegate void CoroutineStarter(WaveName wave);
     public event CoroutineStarter OnCoroutineStart;
     
     [SerializeField] private Transform mushroomSpawnAxis;
     [SerializeField] private Transform cactusSpawnAxis;
 
-    // 임시 변수
-    public bool isGameOver = false;
-
     private Coroutine mushroomCoroutine;
     private Coroutine cactusCoroutine;
 
+    public System.Action<int> onEnemyDead;
+
+    private bool isPaused = false;
 
     // **** 코드 정리 필요
 
     private void Start()
     {
-        EnemyManager.Instance.currentWave = WaveName.General;
-        OnChangeWave += EnemyManager.Instance.ChangeMap;
-        OnCoroutineStart += EnemyManager.Instance.StartWaterCoroutine;
-        //for (int i = 0; i < waves.Length; i++)
+        currentWave = WaveName.General;
+
+        StartMushroomSpawn(currentWave);
+        //StartCoroutine(C_Test());
+
+        /*for (int i = 0; i < waves.Length; i++)
         //{
         //    waves[i].spawn.OrderBy(obj => obj.Type).ToList();
         //    waves[i].enemydata.OrderBy(obj => obj.Type).ToList();
-        //}
-
-        mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom());
-        //StartCoroutine(C_Test());
+        }*/
     }
 
     private void Update()
     {
-
         // wave2에서 선인장쿤 생성 코루틴을 호출합니다.
-        if (currentWave == WaveName.Trainee && !_isCactusCorouting)
-        {
-            cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus());
-        }
+        //if (currentWave == WaveName.Trainee && cactusCoroutine == null)
+        //{
+        //    cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus(currentWave));
+        //}
     }
 
+    // 테스트
     private IEnumerator C_Test()
     {
         yield return new WaitForSeconds(5);
-
 
         currentWave = WaveName.Trainee;
         //OnChangeWave?.Invoke(currentWave);
@@ -67,14 +61,17 @@ public class EnemySpawner : MonoBehaviour
 
 
     // 버섯쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Mushroom()
+    private IEnumerator C_EnemySpawn_Mushroom(WaveName wave)
     {
-        // 스폰할 객체, 위치, 쿨타임 필요
-        // 스폰할 객체에 infoData 넣어주기
-
-        while (!isGameOver)
+        while (true)
         {
-            int waveIndex = (int)currentWave;
+            // 일시정지일 때 대기
+            while (isPaused)
+            {
+                yield return null;
+            }
+
+            int waveIndex = (int)wave;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -97,17 +94,22 @@ public class EnemySpawner : MonoBehaviour
 
             }
             yield return null;
+
+
         }
     }
 
     // 선인장쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Cactus()
+    private IEnumerator C_EnemySpawn_Cactus(WaveName wave)
     {
-        while (!isGameOver)
+        while (true)
         {
-            _isCactusCorouting = true;
+            while (isPaused)
+            {
+                yield return null;
+            }
 
-            int waveIndex = (int)currentWave;
+            int waveIndex = (int)wave;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -129,8 +131,6 @@ public class EnemySpawner : MonoBehaviour
 
             }
             yield return null;
-
-
         }
     }
     
@@ -139,34 +139,89 @@ public class EnemySpawner : MonoBehaviour
     {
         Enemy e = enemy.GetComponent<Enemy>();
 
-        //e.agent.speed = data.MoveSpeed;   // 할당되지않았다고 에러뜸
+        //e.agent.speed = data.MoveSpeed;
         e.MoveSpeed = data.MoveSpeed;
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
         e.DetectPlayerDistance = data.AttackRange;
+        e.onDead += () => onEnemyDead?.Invoke(1);
     }
 
-    // 재시작 시 호출할 적 초기화 메서드입니다.
-    public void RestartEnemy()
+    // 일시정지 먼저 -> 레벨업 메서드 호출
+
+    // 적 스폰 일시정지 껐다켰다
+    public void PauseSwitchEnemySpawn()
     {
-        // wave 바꿔주기?
-        currentWave = WaveName.General;
+        isPaused = !isPaused;
+    }
 
-        // 생성 코루틴 중단
-        if (mushroomCoroutine != null)
+    // 레벨업 시 호출할 메서드
+    public void ResetForLevelUp(int level)
+    {
+        // 일시정지하기
+        PauseSwitchEnemySpawn();
+        SpawnByWave((WaveName)level);
+    }
+
+    /// <summary>
+    /// 버섯쿤 스폰 시작 메서드입니다.
+    /// </summary>
+    /// <param name="wave">현재 레벨, WaveName으로 형변환</param>
+    private void StartMushroomSpawn(WaveName wave)
+    {
+        if (mushroomCoroutine == null)
         {
-            StopCoroutine(mushroomCoroutine);
-            mushroomCoroutine = null;
+            mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom(wave));
         }
+    }
 
-        if (cactusCoroutine != null)
+    /// <summary>
+    /// 선인장쿤 스폰 시작 메서드입니다.
+    /// </summary>
+    /// <param name="wave">현재 레벨, WaveName으로 형변환</param>
+    private void StartCactusSpawn(WaveName wave)
+    {
+        if (cactusCoroutine == null)
         {
-            StopCoroutine(cactusCoroutine);
-            _isCactusCorouting = false;
-            cactusCoroutine = null;
+            cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus(wave));
         }
+    }
 
-        // 맵 내에 있는 적들을 모두 파괴합니다.
+    // 웨이브별로 적 스폰
+    private void SpawnByWave(WaveName wave)
+    {
+        WaveName current = wave;
+
+        // 일시정지를 재개로 변경
+        PauseSwitchEnemySpawn();
+
+        switch (current)
+        {
+            case WaveName.General:
+                break;
+            case WaveName.Trainee:
+                {
+                    StartCactusSpawn(wave);
+                }
+                break;
+            case WaveName.Three:
+                break;
+            case WaveName.Four:
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// 생성 코루틴 중단 후 맵에 있는 적을 모두 파괴하고, 버섯쿤(1레벨) 스폰을 시작합니다.
+    /// </summary>
+    public void ResetForRestart()
+    {
+        // 생성 코루틴 전부 중단
+        StopAllCoroutines();
+
+        // 맵 내에 있는 적들 모두 파괴
         GameObject[] removeList = isEnemyExistInMap();
         if (removeList != null)
         {
@@ -176,9 +231,11 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        // 생성 코루틴 재개
-        mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom());
+        // 버섯쿤 스폰 시작
+        currentWave = WaveName.General;  // 삭제할 수도
+        StartMushroomSpawn(currentWave);
     }
+
 
     // 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다.
     private GameObject[] isEnemyExistInMap()

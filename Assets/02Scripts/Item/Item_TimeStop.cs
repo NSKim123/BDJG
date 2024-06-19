@@ -1,17 +1,29 @@
+using System.Collections;
 using UnityEngine;
 
 // 영역전개 아이템에 컴포넌트로 붙을 클래스
-public class Item_TimeStop : ItemOfPlayer
+public class Item_TimeStop : Item
 {
-    [SerializeField] private int _buffCode;
+    [SerializeField] private GameObject effect;
+    private Collider[] enemies;
 
-    // 아이템 데이터 클래스에서 timestop에 부여한 버프코드를 설정해줍니다.
-    // 주석대로 호출하시면 됩니다.
-    protected override void Start()
+    protected override void Use(Collider collider)
     {
-        base.Start();
-        //_buffCode = ItemDataRepository.buffInfoOfItem[ItemName.timeStop];
+        // other(pc)에서 오버랩 아주 크게, 걸린 적들 모두 죽는 디버프
+        Time.timeScale = 0.0f;
+        Instantiate(effect);
+        enemies = Physics.OverlapSphere(collider.transform.position, 40f, 1 << 8);
+
+        StartCoroutine(C_Wait());
+
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<IHit>().OnDead();
+        }
     }
 
-    public override int BuffCode { get => _buffCode; set => _buffCode = value; }
+    private IEnumerator C_Wait()
+    {
+        yield return new WaitForSecondsRealtime(2);
+    }
 }

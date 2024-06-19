@@ -17,16 +17,31 @@ public abstract class Enemy : MonoBehaviour, IHit
     
     protected StateMachine stateMachine;
 
-    public Material myMaterial;
+    public SkinnedMeshRenderer dieRenderer;
+    public Material changeMat;
 
+
+    public BuffSystem BuffSystem => _buffSystem;
+    private BuffSystem _buffSystem;
+
+    public event System.Action onDead;
 
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
+
+        dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
+
+        //_buffSystem = new BuffSystem(this.gameObject);
+        //Debug.Log(this.gameObject);
     }
 
     public abstract void OnDamaged(float distance, Vector3 direction);
 
-    public abstract void OnDead();
+    public virtual void OnDead()
+    {
+        onDead?.Invoke();
+    }
+
 }
 

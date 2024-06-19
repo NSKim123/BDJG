@@ -654,7 +654,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f133288aa8570c4449cf090aa88800fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myMaterial: {fileID: 0}
+  dieRenderer: {fileID: 0}
+  changeMat: {fileID: 2100000, guid: c434d8c3d93524344bf2e01ff64dc04b, type: 2}
 --- !u!114 &8255000937057517519
 MonoBehaviour:
   m_ObjectHideFlags: 0

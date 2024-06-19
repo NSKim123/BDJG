@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
 // 거대화 아이템에 컴포넌트 붙을 클래스
-public class Item_Giant : ItemOfPlayer
+public class Item_Giant : Item
 {
-    [SerializeField] private int _buffCode;
+    private const int GiantBuffCode = 100005;
 
-    // 아이템 데이터 클래스에서 giant에 부여한 버프코드를 설정해줍니다.
-    // 주석대로 호출하시면 됩니다.
-    protected override void Start()
+    protected override void Use(Collider collider)
     {
-        base.Start();
-        //_buffCode = ItemDataRepository.buffInfoOfItem[ItemName.giant];
+        collider.GetComponent<PlayerCharacter>().buffSystem.AddBuff(GiantBuffCode);
     }
 
-    public override int BuffCode { get => _buffCode; set => _buffCode = value; }
+
+
+
+
 }
