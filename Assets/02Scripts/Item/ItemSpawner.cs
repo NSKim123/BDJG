@@ -41,14 +41,24 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    // 프로토타입용 순서대로 스폰
+    /// <summary>
+    /// 프로토타입용 순서대로 아이템 스폰하는 메서드입니다.
+    /// 파라미터 받아서 레벨 판단 후 2레벨일 때 스폰합니다.
+    /// </summary>
+    /// <param name="level"></param>
     public void ItemSpawn_proto(int level)
     {
-        StartCoroutine(C_proto_ItemSpawn());
+        if (level == 2)
+        {
+
+            StartCoroutine(C_proto_ItemSpawn());
+        }
     }
 
     private IEnumerator C_proto_ItemSpawn()
     {
+        //yield return new WaitForSecondsRealtime(2f);
+        Debug.Log("아이템");
         Instantiate(giantPrefab, transform.position, Quaternion.identity);
 
         while (isGiantEnd)

@@ -71,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave-1;
+            int waveIndex = (int)wave - 1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -109,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave-1;
+            int waveIndex = (int)wave - 1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -133,8 +133,12 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
     }
-    
-    // 적 생성 후 데이터를 초기화하는 메서드입니다.
+
+    /// <summary>
+    /// 적 생성 후 데이터를 초기화하는 메서드입니다.
+    /// </summary>
+    /// <param name="enemy">생성된 적 객체</param>
+    /// <param name="data">적에게 넣을 데이터 scriptable object</param>
     private void EnemyInit(GameObject enemy, EnemyInfoData data)
     {
         Enemy e = enemy.GetComponent<Enemy>();
@@ -156,11 +160,35 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 레벨업 시 호출할 메서드
+    public void StartResetEnemy(int level)
+    {
+        StartCoroutine(C_ResetForLevelUp(level));
+    }
+
+    private IEnumerator C_ResetForLevelUp(int level)
+    {
+        // 일시정지하기
+        PauseSwitchEnemySpawn();
+        Debug.Log("정지");
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        Debug.Log("스폰 시작");
+
+        SpawnByWave((WaveName)level);
+
+    }
+
     public void ResetForLevelUp(int level)
     {
         // 일시정지하기
         PauseSwitchEnemySpawn();
+        Debug.Log("정지");
+
+        Debug.Log("스폰 시작");
+
         SpawnByWave((WaveName)level);
+
     }
 
     /// <summary>
@@ -237,7 +265,10 @@ public class EnemySpawner : MonoBehaviour
     }
 
 
-    // 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다.
+    /// <summary>
+    /// 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다. 
+    /// </summary>
+    /// <returns></returns>
     private GameObject[] isEnemyExistInMap()
     {
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");

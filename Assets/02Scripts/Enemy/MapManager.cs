@@ -34,13 +34,17 @@ public class MapManager : MonoBehaviour
 
     public IEnumerator C_WaterUP(WaveName wave)
     {
+        yield return new WaitForSecondsRealtime(1f);
+        Debug.Log("¹° ¿Ã¶ó¿È");
+
         while (waterGround.transform.position.y < heightOfWater[wave])
         {
-            waterGround.transform.position += new Vector3(0, 0.1f, 0);
+            waterGround.transform.position += new Vector3(0, 0.3f, 0);
 
             yield return new WaitForSeconds(0.1f);
         }
         navMeshMap.BuildNavMesh();
+        Debug.Log("¸Ê ±¸¿ò");
     }
 
     public void ChangeMap(WaveName wave)
