@@ -48,16 +48,17 @@ public class ItemSpawner : MonoBehaviour
     /// <param name="level"></param>
     public void ItemSpawn_proto(int level)
     {
-        if (level == 2)
+        if (level == 1)
         {
-
-            StartCoroutine(C_proto_ItemSpawn());
+            return;
         }
+        StartCoroutine(C_proto_ItemSpawn());
+
     }
 
     private IEnumerator C_proto_ItemSpawn()
     {
-        //yield return new WaitForSecondsRealtime(2f);
+        yield return new WaitForSecondsRealtime(2f);
         Debug.Log("æ∆¿Ã≈€");
         Instantiate(giantPrefab, transform.position, Quaternion.identity);
 

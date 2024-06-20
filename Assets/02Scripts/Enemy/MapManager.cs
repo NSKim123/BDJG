@@ -29,17 +29,29 @@ public class MapManager : MonoBehaviour
 
     public void SetWaterHeightByLevel(int level)
     {
+        if (level == 1)
+        {
+            return;
+        }
         StartCoroutine(C_WaterUP((WaveName)level));
     }
 
+    float maxHeight;
     public IEnumerator C_WaterUP(WaveName wave)
     {
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(0.5f);
         Debug.Log("¹° ¿Ã¶ó¿È");
 
         while (waterGround.transform.position.y < heightOfWater[wave])
         {
-            waterGround.transform.position += new Vector3(0, 0.3f, 0);
+
+            waterGround.transform.position += new Vector3(0, 0.5f, 0);
+
+            if (waterGround.transform.position.y > heightOfWater[wave])
+            {
+                waterGround.transform.position =
+                    new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
+            }
 
             yield return new WaitForSeconds(0.1f);
         }

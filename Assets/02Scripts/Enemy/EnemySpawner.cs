@@ -162,6 +162,10 @@ public class EnemySpawner : MonoBehaviour
     // 레벨업 시 호출할 메서드
     public void StartResetEnemy(int level)
     {
+        if (level == 1)
+        {
+            return;
+        }
         StartCoroutine(C_ResetForLevelUp(level));
     }
 
