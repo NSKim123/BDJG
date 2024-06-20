@@ -21,6 +21,9 @@ public class GameSceneUI : MonoBehaviour
     [Header("# 탄창 게이지 UI")]
     public BulletGaugeUI m_BulletGaugeUI;
 
+    [Header("# 아이템 슬롯 UI")]
+    public ItemSlotsUI m_ItemSlotsUI;
+
     [Header("# 환경 설정 버튼")]
     public Button m_Button_Configuration;
 

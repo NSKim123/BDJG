@@ -73,10 +73,10 @@ public class BuffSystem
         {
             _BuffDictionary = new Dictionary<int, Buff>
             {
-                { 100000, new SampleSpeedChangeBuff(100000, null, 0.2f, 10.0f) },
-                { 100001, new GiantBuff(100001, null, 10.0f) },
-                { 100002, new SampleSpeedChangeBuff(100002, null, -0.3f, 5.0f) },
-                { 100003, new SampleSpeedChangeBuff(100003, null, -0.4f, 7.0f) },
+                { 100000, new SampleSpeedChangeBuff(100000, null, BuffType.None, 0.2f, 10.0f) },
+                { 100001, new GiantBuff(100001, null, BuffType.Item, 10.0f, true) },
+                { 100002, new SampleSpeedChangeBuff(100002, null, BuffType.None, -0.3f, 5.0f) },
+                { 100003, new SampleSpeedChangeBuff(100003, null, BuffType.None, -0.4f, 7.0f) },
             };
         }     
     }
@@ -143,6 +143,11 @@ public class BuffSystem
         FinishBuffs(finishedBuffList);
     }
 
+    public bool IsOtherItemBuffActive()
+    {
+        return buffList.Exists((buff) => buff.buffType == BuffType.Item);
+    }
+
     /// <summary>
     /// 삭제 조건을 충족한 버프들을 삭제하는 메서드입니다.
     /// </summary>
@@ -159,6 +164,15 @@ public class BuffSystem
             _BuffList.Remove(FinishedBuff);
         }
     }
+
+   
+}
+
+
+public enum BuffType
+{
+    None,
+    Item,
 }
 
 /// <summary>
@@ -203,16 +217,20 @@ public abstract class Buff
     /// </summary>
     public bool isFinished { get; protected set; }
 
+    public BuffType buffType { get; protected set; }
+
     /// <summary>
     /// 생성자입니다.
     /// </summary>
     /// <param name="buffCode"> 설정할 버프 코드</param>
     /// <param name="owner"> 설정할 이 버프의 소유주</param>
     /// <param name="maxStack"> 설정할 이 버프의 최대 스택</param>
-    public Buff(int buffCode, GameObject owner, int maxStack = 1)
+    public Buff(int buffCode, GameObject owner, BuffType buffType, bool visibility = false, int maxStack = 1)
     {
         this.buffCode = buffCode;
         _Owner = owner;
+        this.buffType = buffType;
+        this.visibility = visibility;
         this.maxStack = maxStack;
     }
 
@@ -311,7 +329,7 @@ public abstract class TimerBuff : Buff
     /// <param name="owner"> 설정할 이 버프의 소유주</param>
     /// <param name="buffTime"> 설정할 버프 최대 시간</param>
     /// <param name="maxStack"> 설정할 이 버프의 최대 스택</param>
-    public TimerBuff(int buffCode, GameObject owner, float buffTime, int maxStack = 1) : base(buffCode, owner, maxStack)
+    public TimerBuff(int buffCode, GameObject owner, BuffType buffType, float buffTime, bool visibility = false, int maxStack = 1) : base(buffCode, owner, buffType, visibility, maxStack)
     {
         this.maxTime = buffTime;
         this.currentTime = buffTime;
