@@ -36,6 +36,7 @@ RectTransform:
   - {fileID: 1875286725792620278}
   - {fileID: 8731903116688032250}
   - {fileID: 5210181029914665957}
+  - {fileID: 121938211024988112}
   - {fileID: 626632568929294673}
   - {fileID: 3048490724885060440}
   - {fileID: 2834717435366507281}
@@ -44,7 +45,6 @@ RectTransform:
   - {fileID: 3147004908379186024}
   - {fileID: 7131238074383470283}
   - {fileID: 7286922553299472214}
-  - {fileID: 121938211024988112}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -1173,6 +1173,16 @@ PrefabInstance:
     - target: {fileID: 9199715752389151987, guid: 8ede222b7e0cac743a8ddb70331d02da,
         type: 3}
       propertyPath: m_UIOnClickMainSceneButton
+      value: 
+      objectReference: {fileID: 4180190293329977863}
+    - target: {fileID: 9199715752389151987, guid: 8ede222b7e0cac743a8ddb70331d02da,
+        type: 3}
+      propertyPath: m_PopUpOnClickQuitGameButton
+      value: 
+      objectReference: {fileID: 2087918401488215060}
+    - target: {fileID: 9199715752389151987, guid: 8ede222b7e0cac743a8ddb70331d02da,
+        type: 3}
+      propertyPath: m_PopUpOnClickMainSceneButton
       value: 
       objectReference: {fileID: 4180190293329977863}
     m_RemovedComponents: []

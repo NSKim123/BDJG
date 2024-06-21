@@ -75,7 +75,7 @@ public class BuffSystem
             {
                 { 100000, new SampleSpeedChangeBuff(100000, null, BuffType.None, 0.2f, 10.0f) },
                 { 100001, new GiantBuff(100001, null, BuffType.Item, 10.0f, true) },
-                { 100002, new SampleSpeedChangeBuff(100002, null, BuffType.None, -0.3f, 5.0f) },
+                { 100002, new AreaDeploymentBuff(100002, null, BuffType.Item, 4.0f, true) },
                 { 100003, new SampleSpeedChangeBuff(100003, null, BuffType.None, -0.4f, 7.0f) },
             };
         }     

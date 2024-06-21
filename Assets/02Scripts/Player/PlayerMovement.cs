@@ -177,7 +177,7 @@ public partial class PlayerMovement : MonoBehaviour
         Quaternion targetRotation = Quaternion.Euler(0.0f, _TargetYawAngle, 0.0f);
 
         // 부드럽게 회전하도록 계산합니다.
-        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 360.0f * Time.fixedDeltaTime);
+        Quaternion newRotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 720.0f * Time.fixedDeltaTime);
 
         // 생성한 회전값을 통해 회전시킵니다.
         transform.rotation = newRotation;
