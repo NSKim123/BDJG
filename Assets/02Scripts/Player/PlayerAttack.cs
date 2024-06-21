@@ -326,8 +326,6 @@ public class PlayerAttack : MonoBehaviour
         GUIContent gUIContent = new GUIContent();
         gUIContent.text = $"\n\n\n\n\n공격력 : {_AttackForce}\n탄환 게이지 : {_BulletGauge.currentValue} / {_BulletGauge.max}";
         Handles.Label(transform.position + Vector3.down, gUIContent);
-
-        Gizmos.DrawWireSphere(transform.position + Vector3.down * 0.35f * transform.localScale.y, 0.3f * transform.localScale.x);
     }
 #endif
 }

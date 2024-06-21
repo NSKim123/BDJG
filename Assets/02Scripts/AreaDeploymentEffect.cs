@@ -11,7 +11,6 @@ public class AreaDeploymentEffect : MonoBehaviour
 
     private void Awake()
     {
-        Destroy(gameObject, 3.5f);
         transform.parent = FindAnyObjectByType<Canvas>().transform;
         (transform as RectTransform).anchoredPosition = Vector3.zero;
     }
@@ -24,5 +23,10 @@ public class AreaDeploymentEffect : MonoBehaviour
     private void OnDestroy()
     {
         m_AreaDeploymentEffectMaterial.SetFloat("_Boundary", 0.0f);
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }

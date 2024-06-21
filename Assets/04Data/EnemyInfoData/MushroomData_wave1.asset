@@ -16,7 +16,7 @@ MonoBehaviour:
   _enemyID: mush1
   _attackForce: 1.5
   _defenseForce: 1.5
-  _moveSpeed: 1.5
+  _moveSpeed: 3.5
   _isAttackTargetExist: 0
   _attackWay: 0
   _attackRange: 1
