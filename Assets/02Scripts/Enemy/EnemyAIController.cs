@@ -16,21 +16,17 @@ public class EnemyAIController : MonoBehaviour
 
     public Collider[] attackDetect;
 
+    private MapManager _mapManager;
 
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player");
         _stateMachine = GetComponent<StateMachine>();
         _enemyCharacter = GetComponent<Enemy>();
+        _mapManager = FindAnyObjectByType<MapManager>();
+        _mapManager.OnChangeDestination += ChangeDestination;
     }
 
-    //IEnumerator C_WaitAttackTime()
-    //{
-    //    yield return new WaitForSeconds(_enemyCharacter.AttackTime);
-
-    //    _attacked = false;
-
-    //}
 
     private void Update()
     {
@@ -58,6 +54,23 @@ public class EnemyAIController : MonoBehaviour
         }
 
     }
+
+    public void ChangeDestination()
+    {
+
+        if (_stateMachine.currentStateType == State.Move)
+        {
+            Debug.Log("바꿈");
+            _stateMachine.ChangeState(State.AvoidWater);
+        }
+        else if (_stateMachine.currentStateType == State.AvoidWater)
+        {
+            Debug.Log("다시바꿈");
+            _stateMachine.ChangeState(State.Move);
+        }
+        
+    }
+
 
     // (임시) 맵을 둘러싼 콜라이더를 빠져나가면 죽었다고 판단합니다.
     // 맵만들면 맵 쪽 스크립트에서 Ondead 호출

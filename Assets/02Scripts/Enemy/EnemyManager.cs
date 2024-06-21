@@ -41,11 +41,14 @@ public class EnemyManager : MonoBehaviour
 
     public WaveName currentWave;
 
+    public Transform centerPos;
+
     // ****코드 정리 필요
 
     private void Start()
     {
         currentWave = WaveName.General;
+
     }
 
 

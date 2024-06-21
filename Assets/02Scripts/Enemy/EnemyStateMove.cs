@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyStateMove : EnemyStateBase
 {
-
     // 플레이어 방향으로 이동
     private Vector3 _moveDirection;
 
@@ -15,7 +16,8 @@ public class EnemyStateMove : EnemyStateBase
     }
 
     public override bool canExecute() => stateMachine.currentStateType == State.Attack
-                                    || stateMachine.currentStateType == State.Hurt;
+                                    || stateMachine.currentStateType == State.Hurt
+                                    || stateMachine.currentStateType == State.AvoidWater;
 
 
 
@@ -32,14 +34,16 @@ public class EnemyStateMove : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
+
                     animator.Play("move");
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
-                    //Debug.Log(enemyAgent.speed);
                     enemyAgent.SetDestination(enemyController.target.transform.position);
+
+                    //Debug.Log(enemyAgent.speed);
                     //MoveToPlayer(enemyController.target);
                 }
                 break;
