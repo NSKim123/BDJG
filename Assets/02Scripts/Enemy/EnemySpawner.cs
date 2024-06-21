@@ -24,6 +24,9 @@ public class EnemySpawner : MonoBehaviour
 
     private bool isPaused = false;
 
+    private bool mushroomTurn;
+    private bool cactusTurn;
+
     // **** 코드 정리 필요
 
     private void Start()
@@ -79,6 +82,7 @@ public class EnemySpawner : MonoBehaviour
             spawndata = waves[waveIndex].spawn[(int)EnemyType.Mushroom];
             enemydata = waves[waveIndex].enemydata[(int)EnemyType.Mushroom];
 
+
             if (EnemyManager.Instance.MushroomCount < spawndata.MaxEnemyCount)
             {
                 //Vector3 randomAxis = GetRandomPositionInCircle(20 - spawndata.SpawnRadius);
@@ -91,6 +95,7 @@ public class EnemySpawner : MonoBehaviour
 
                 EnemyInit(newEnemy, enemydata);
                 EnemyManager.Instance.MushroomCount++;
+                EnemyManager.Instance.TotalCount++;
 
             }
             yield return null;
@@ -187,6 +192,15 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
+    private IEnumerator SpawnProcess()
+    {
+        while (true)
+        {
+            yield return null;
+
+        }
+    }
+
  
     /// <summary>
     /// 버섯쿤 스폰 시작 메서드입니다.
@@ -245,6 +259,8 @@ public class EnemySpawner : MonoBehaviour
     {
         // 생성 코루틴 전부 중단
         StopAllCoroutines();
+        mushroomCoroutine = null;
+        cactusCoroutine = null;
 
         // 맵 내에 있는 적들 모두 파괴
         GameObject[] removeList = isEnemyExistInMap();
@@ -258,6 +274,7 @@ public class EnemySpawner : MonoBehaviour
 
         // 버섯쿤 스폰 시작
         currentWave = WaveName.General;  // 삭제할 수도
+        mushroomTurn = true;
         StartMushroomSpawn(currentWave);
     }
 
