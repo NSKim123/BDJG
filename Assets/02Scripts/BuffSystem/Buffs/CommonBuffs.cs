@@ -6,15 +6,15 @@ public class SampleSpeedChangeBuff : TimerBuff
 {
     private float _ChangeRate;
 
-    public SampleSpeedChangeBuff(int buffCode, GameObject owner, float changeRate, float maxTime, int maxStack = 1) : base(buffCode, owner, maxTime, maxStack)
+    public SampleSpeedChangeBuff(int buffCode, GameObject owner, BuffType buffType, float changeRate, float maxTime, bool visibility = false, int maxStack = 1) 
+        : base(buffCode, owner, buffType, maxTime, visibility, maxStack)
     {
         this._ChangeRate = changeRate;
-        visibility = true;
     }
 
     public override Buff Clone(GameObject owner)
     {
-        return new SampleSpeedChangeBuff(buffCode, owner, _ChangeRate, maxTime);
+        return new SampleSpeedChangeBuff(buffCode, owner, buffType, _ChangeRate, maxTime, visibility);
     }
 
     protected override void onStartBuffContext()
