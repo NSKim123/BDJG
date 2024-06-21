@@ -12,6 +12,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject map;
     [SerializeField] private NavMeshSurface navMeshMap;
 
+    public event Action OnChangeDestination;
+
+
     private void Start()
     {
         // ¹° y°ª 1´Ü°è: 0.5, 2´Ü°è: 3.1, 3´Ü°è: 4.7, 4´Ü°è: 6.1 (º¯µ¿°¡´É)
@@ -28,8 +31,8 @@ public class MapManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
-    /// 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
+    /// ¹° ³ôÀÌ¸¦ ¿Ã¸®´Â ÄÚ·çÆ¾ ÇÔ¼ö¸¦ ½ÃÀÛÇÕ´Ï´Ù.
+    /// 1·¹º§¿¡¼­´Â ¹° ³ôÀÌ Á¶Àý ÇÔ¼ö¸¦ È£ÃâÇÏÁö ¾Ê½À´Ï´Ù.
     /// </summary>
     /// <param name="level"></param>
     public void SetWaterHeightByLevel(int level)
@@ -41,11 +44,13 @@ public class MapManager : MonoBehaviour
         StartCoroutine(C_WaterUP((WaveName)level));
     }
 
-    float maxHeight;
+
     public IEnumerator C_WaterUP(WaveName wave)
     {
         yield return new WaitForSecondsRealtime(0.5f);
         Debug.Log("¹° ¿Ã¶ó¿È");
+
+        OnChangeDestination?.Invoke();
 
         while (waterGround.transform.position.y < heightOfWater[wave])
         {
@@ -62,6 +67,9 @@ public class MapManager : MonoBehaviour
         }
         navMeshMap.BuildNavMesh();
         Debug.Log("¸Ê ±¸¿ò");
+
+        OnChangeDestination?.Invoke();
+
     }
 
     public void ChangeMap(WaveName wave)
@@ -82,10 +90,7 @@ public class MapManager : MonoBehaviour
     // Àç½ÃÀÛ ½Ã È£ÃâÇÒ ¸ÊÀ» ÃÊ±âÈ­ÇÏ´Â ¸Þ¼­µåÀÔ´Ï´Ù.
     public void RestartMap(WaveName wave)
     {
-        if (wave != WaveName.General)
-        {
-            waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[WaveName.General], waterGround.transform.position.z);
-        }
+        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[WaveName.General], waterGround.transform.position.z);
         navMeshMap.BuildNavMesh();
 
     }

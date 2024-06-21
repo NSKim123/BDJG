@@ -6,6 +6,7 @@ public enum State
     Move,
     Attack,
     Hurt,
+    AvoidWater,
     Die,
 }
 

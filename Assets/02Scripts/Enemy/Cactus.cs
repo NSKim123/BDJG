@@ -35,6 +35,7 @@ public class Cactus : Enemy
             new EnemyStateMove(stateMachine),
             new EnemyStateAttack(stateMachine),
             new EnemyStateHurt(stateMachine),
+            new EnemyStateAvoidWater(stateMachine),
             new EnemyStateDie(stateMachine)
         });
     }
