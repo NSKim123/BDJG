@@ -27,20 +27,41 @@ public class MapManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ã¸ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+    /// 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
+    /// </summary>
+    /// <param name="level"></param>
     public void SetWaterHeightByLevel(int level)
     {
+        if (level == 1)
+        {
+            return;
+        }
         StartCoroutine(C_WaterUP((WaveName)level));
     }
 
+    float maxHeight;
     public IEnumerator C_WaterUP(WaveName wave)
     {
+        yield return new WaitForSecondsRealtime(0.5f);
+        Debug.Log("¹° ¿Ã¶ó¿È");
+
         while (waterGround.transform.position.y < heightOfWater[wave])
         {
-            waterGround.transform.position += new Vector3(0, 0.1f, 0);
+
+            waterGround.transform.position += new Vector3(0, 0.5f, 0);
+
+            if (waterGround.transform.position.y > heightOfWater[wave])
+            {
+                waterGround.transform.position =
+                    new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
+            }
 
             yield return new WaitForSeconds(0.1f);
         }
         navMeshMap.BuildNavMesh();
+        Debug.Log("¸Ê ±¸¿ò");
     }
 
     public void ChangeMap(WaveName wave)

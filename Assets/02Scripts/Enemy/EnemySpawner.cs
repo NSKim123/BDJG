@@ -71,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave-1;
+            int waveIndex = (int)wave - 1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -109,7 +109,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            int waveIndex = (int)wave-1;
+            int waveIndex = (int)wave - 1;
 
             EnemySpawnInfoData spawndata;
             EnemyInfoData enemydata;
@@ -133,8 +133,12 @@ public class EnemySpawner : MonoBehaviour
             yield return null;
         }
     }
-    
-    // 적 생성 후 데이터를 초기화하는 메서드입니다.
+
+    /// <summary>
+    /// 적 생성 후 데이터를 초기화하는 메서드입니다.
+    /// </summary>
+    /// <param name="enemy">생성된 적 객체</param>
+    /// <param name="data">적에게 넣을 데이터 scriptable object</param>
     private void EnemyInit(GameObject enemy, EnemyInfoData data)
     {
         Enemy e = enemy.GetComponent<Enemy>();
@@ -147,7 +151,6 @@ public class EnemySpawner : MonoBehaviour
         e.onDead += () => onEnemyDead?.Invoke(1);
     }
 
-    // 일시정지 먼저 -> 레벨업 메서드 호출
 
     // 적 스폰 일시정지 껐다켰다
     public void PauseSwitchEnemySpawn()
@@ -155,14 +158,36 @@ public class EnemySpawner : MonoBehaviour
         isPaused = !isPaused;
     }
 
-    // 레벨업 시 호출할 메서드
-    public void ResetForLevelUp(int level)
+
+    /// <summary>
+    /// 레벨업 시 호출할 적 스폰 메서드입니다.
+    /// 스폰을 멈췄다가 레벨에 맞게 추가 스폰합니다.
+    /// </summary>
+    /// <param name="level"></param>
+    public void StartResetEnemy(int level)
+    {
+        if (level == 1)
+        {
+            return;
+        }
+        StartCoroutine(C_ResetForLevelUp(level));
+    }
+
+    private IEnumerator C_ResetForLevelUp(int level)
     {
         // 일시정지하기
         PauseSwitchEnemySpawn();
+        Debug.Log("정지");
+
+        yield return new WaitForSecondsRealtime(2f);
+
+        Debug.Log("스폰 시작");
+
         SpawnByWave((WaveName)level);
+
     }
 
+ 
     /// <summary>
     /// 버섯쿤 스폰 시작 메서드입니다.
     /// </summary>
@@ -237,7 +262,10 @@ public class EnemySpawner : MonoBehaviour
     }
 
 
-    // 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다.
+    /// <summary>
+    /// 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다. 
+    /// </summary>
+    /// <returns></returns>
     private GameObject[] isEnemyExistInMap()
     {
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");

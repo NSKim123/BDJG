@@ -12,6 +12,14 @@ public class ItemSpawner : MonoBehaviour
     // 임시
     public bool isGiantEnd = false;
 
+    public void ToggleGiantValue()
+    {
+        if (!isGiantEnd)
+        {
+            isGiantEnd = true;
+        }
+    }
+
     private void Start()
     {
         //Invoke("ItemSpawn", 3f);
@@ -41,21 +49,32 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-    // 프로토타입용 순서대로 스폰
+    /// <summary>
+    /// 프로토타입용 순서대로 아이템 스폰하는 메서드입니다.
+    /// 파라미터 받아서 레벨 판단 후 2레벨일 때 스폰합니다.
+    /// </summary>
+    /// <param name="level"></param>
     public void ItemSpawn_proto(int level)
     {
-        StartCoroutine(C_proto_ItemSpawn());
+        if (level == 2)
+        {
+            StartCoroutine(C_proto_ItemSpawn());
+        }
+
     }
 
     private IEnumerator C_proto_ItemSpawn()
     {
+        yield return new WaitForSecondsRealtime(2f);
+        Debug.Log("아이템");
         Instantiate(giantPrefab, transform.position, Quaternion.identity);
 
-        while (isGiantEnd)
+        //거대화 끝나고 이벤트로 알려줌
+        while (!isGiantEnd)
         {
             yield return null;
-            //거대화 끝나고 이벤트 또는 플래그로 알려줌
         }
+        Debug.Log("거대화끝남");
         Instantiate(timestopPrefab, transform.position, Quaternion.identity);
 
     }
