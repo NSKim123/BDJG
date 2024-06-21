@@ -151,7 +151,6 @@ public class EnemySpawner : MonoBehaviour
         e.onDead += () => onEnemyDead?.Invoke(1);
     }
 
-    // 일시정지 먼저 -> 레벨업 메서드 호출
 
     // 적 스폰 일시정지 껐다켰다
     public void PauseSwitchEnemySpawn()
@@ -159,7 +158,12 @@ public class EnemySpawner : MonoBehaviour
         isPaused = !isPaused;
     }
 
-    // 레벨업 시 호출할 메서드
+
+    /// <summary>
+    /// 레벨업 시 호출할 적 스폰 메서드입니다.
+    /// 스폰을 멈췄다가 레벨에 맞게 추가 스폰합니다.
+    /// </summary>
+    /// <param name="level"></param>
     public void StartResetEnemy(int level)
     {
         if (level == 1)
@@ -183,18 +187,7 @@ public class EnemySpawner : MonoBehaviour
 
     }
 
-    public void ResetForLevelUp(int level)
-    {
-        // 일시정지하기
-        PauseSwitchEnemySpawn();
-        Debug.Log("정지");
-
-        Debug.Log("스폰 시작");
-
-        SpawnByWave((WaveName)level);
-
-    }
-
+ 
     /// <summary>
     /// 버섯쿤 스폰 시작 메서드입니다.
     /// </summary>

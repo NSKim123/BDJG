@@ -17,12 +17,9 @@ public abstract class Enemy : MonoBehaviour, IHit
     
     protected StateMachine stateMachine;
 
-    public SkinnedMeshRenderer dieRenderer;
+    [HideInInspector] public SkinnedMeshRenderer dieRenderer;
     public Material changeMat;
 
-
-    public BuffSystem BuffSystem => _buffSystem;
-    private BuffSystem _buffSystem;
 
     public event System.Action onDead;
 
@@ -31,9 +28,6 @@ public abstract class Enemy : MonoBehaviour, IHit
         stateMachine = GetComponent<StateMachine>();
 
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
-
-        //_buffSystem = new BuffSystem(this.gameObject);
-        //Debug.Log(this.gameObject);
     }
 
     public abstract void OnDamaged(float distance, Vector3 direction);

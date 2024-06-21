@@ -27,6 +27,11 @@ public class MapManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// �� ���̸� �ø��� �ڷ�ƾ �Լ��� �����մϴ�.
+    /// 1���������� �� ���� ���� �Լ��� ȣ������ �ʽ��ϴ�.
+    /// </summary>
+    /// <param name="level"></param>
     public void SetWaterHeightByLevel(int level)
     {
         if (level == 1)

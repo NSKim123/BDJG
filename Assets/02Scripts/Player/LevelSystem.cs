@@ -40,8 +40,8 @@ public class LevelSystem
     private bool LevelUpCondition()
     {
         // 처치 수 조건과 생존 시간 조건이 모두 만족된다면 참을 반환합니다.
-        //return _KillCountGauge.ratio >= 1.0f && _SurvivalTimeGauge.ratio >= 1.0f;
-        return _SurvivalTimeGauge.ratio >= 0.5f;
+        return _KillCountGauge.ratio >= 1.0f && _SurvivalTimeGauge.ratio >= 1.0f;
+        //return _SurvivalTimeGauge.ratio >= 0.3f;
     }
 
     /// <summary>

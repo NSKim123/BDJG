@@ -25,14 +25,15 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
+                    animator.Play("die");
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
                     Debug.Log("die");
-                    //애니메이션 멈추기
-                    if (fadeCoroutine == null)
+                    
+                    if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
                     {
                         _currentStep++;
                     }
