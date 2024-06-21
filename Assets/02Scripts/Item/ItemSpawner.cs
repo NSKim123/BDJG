@@ -59,7 +59,6 @@ public class ItemSpawner : MonoBehaviour
         if (level == 2)
         {
             StartCoroutine(C_proto_ItemSpawn());
-
         }
 
     }
