@@ -9,6 +9,13 @@ public class AreaDeploymentEffect : MonoBehaviour
 
     public Material m_AreaDeploymentEffectMaterial;
 
+    private void Awake()
+    {
+        Destroy(gameObject, 3.5f);
+        transform.parent = FindAnyObjectByType<Canvas>().transform;
+        (transform as RectTransform).anchoredPosition = Vector3.zero;
+    }
+
     private void Update()
     {   
         m_AreaDeploymentEffectMaterial.SetFloat("_Boundary", m_Time * 2.0f);

@@ -181,6 +181,11 @@ public partial class PlayerMovement : MonoBehaviour
 
         // 생성한 회전값을 통해 회전시킵니다.
         transform.rotation = newRotation;
+    }   
+    
+    public void InitPosition(Vector3 initPosition)
+    {
+        characterController.Move(initPosition - transform.position);
     }
 
     /// <summary>

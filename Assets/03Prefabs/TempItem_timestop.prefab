@@ -118,5 +118,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8daa2c27dd7aa7b4cb87d66413c26d77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerCharacter: {fileID: 0}
-  _buffCode: 0
+  effect: {fileID: 2702983129282409992, guid: 7062a4f7766b9ae4ca1b616cfa119707, type: 3}

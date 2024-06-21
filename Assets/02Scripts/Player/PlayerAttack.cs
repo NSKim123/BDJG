@@ -218,7 +218,7 @@ public class PlayerAttack : MonoBehaviour
         _OwnerCharacter.animController.TriggerAttackParam();
 
         // 쿨타임을 돌리기 시작합니다.
-        _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
+        //_ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void AttackAround()
     {
-        Collider[] hitResult = Physics.OverlapSphere(transform.position, 0.3f * transform.lossyScale.x);
+        Collider[] hitResult = Physics.OverlapSphere(transform.position + Vector3.down * 0.35f * transform.localScale.y, 0.3f * transform.localScale.x);
 
         foreach (Collider collider in hitResult)
         {
@@ -327,7 +327,7 @@ public class PlayerAttack : MonoBehaviour
         gUIContent.text = $"\n\n\n\n\n공격력 : {_AttackForce}\n탄환 게이지 : {_BulletGauge.currentValue} / {_BulletGauge.max}";
         Handles.Label(transform.position + Vector3.down, gUIContent);
 
-        
+        Gizmos.DrawWireSphere(transform.position + Vector3.down * 0.35f * transform.localScale.y, 0.3f * transform.localScale.x);
     }
 #endif
 }
