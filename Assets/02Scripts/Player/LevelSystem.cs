@@ -143,7 +143,7 @@ public class LevelSystem
     /// <summary>
     /// 처치 수를 증가시키는 메서드입니다.
     /// </summary>
-    public void IncreaseKillCount()
+    public void IncreaseKillCount(int change)
     {
         ++_KillCountGauge.currentValue;
     }

@@ -309,15 +309,16 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     {
         // 레벨업 이벤트를 일시적으로 호출을 막습니다.
         _AbleToLevelUp = false;
-
-        // 점프 애니메이션 이벤트 바인딩
-        animController.onLand += attackComponent.AttackAround;
+               
 
         // 면역상태 설정
         movementComponent.SetImmuneState(true);
 
-        // 모델 변경,
+        // 모델 변경
         modelComponent.OnGiantStart();
+
+        // 점프 애니메이션 이벤트 바인딩
+        animController.onLand += attackComponent.AttackAround;
 
         // 탄창 게이지 초기화 및 설정
         attackComponent.OnGiantStart();        

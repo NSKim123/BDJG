@@ -12,6 +12,9 @@ public class GameSceneInstance : SceneInstanceBase
     [Header("# GameScene UI")]
     public GameSceneUI m_GameSceneUI;
 
+    [Header("# 플레이어 스폰 위치")]
+    public Transform m_PlayerSpawnPosition;
+
     /// <summary>
     /// 생존 시간
     /// </summary>
@@ -53,8 +56,6 @@ public class GameSceneInstance : SceneInstanceBase
 
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
 
-        _EnemySpawner.onEnemyDead += AddScore;
-
         _MapManager = FindAnyObjectByType<MapManager>();
 
         _ItemSpawner = FindAnyObjectByType<ItemSpawner>();
@@ -92,6 +93,7 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 플레이어 캐릭터 초기화 및 위치 조정
         playerController.controlledCharacter.ResetPlayerCharacter();
+        playerController.controlledCharacter.movementComponent.InitPosition(m_PlayerSpawnPosition.transform.position);
 
         // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
         _EnemySpawner.ResetForRestart();
@@ -107,7 +109,12 @@ public class GameSceneInstance : SceneInstanceBase
         
         // 게임을 재개합니다.
         ContinueGame();
-    }       
+    }  
+    
+    private void StartGame()
+    {
+        StartCoroutine(GameStartProcess());
+    }
 
     /// <summary>
     /// 게임 재개 전 3초를 카운트하는 코루틴입니다.
@@ -183,6 +190,8 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 플레이어 객체의 대리자에 함수들을 바인드시킵니다.
         BindPlayerEvents();
+
+        BindENemyEvents();
     }
 
     /// <summary>
@@ -198,7 +207,7 @@ public class GameSceneInstance : SceneInstanceBase
         m_GameSceneUI.m_ConfigurationUI.m_Button_Cancel.onClick.AddListener(ContinueGame);
 
         // 게임오버 UI 다시하기 버튼 클릭 이벤트 <-- 바인드 -- 게임 실행 함수
-        m_GameSceneUI.m_GameOverUI.BindButton1Events(() => StartCoroutine(GameStartProcess()));
+        m_GameSceneUI.m_GameOverUI.BindButton1Events(StartGame);
 
         m_GameSceneUI.m_ItemSlotsUI.BindClickEvent(playerController.controlledCharacter.UseItem);
     }
@@ -228,8 +237,12 @@ public class GameSceneInstance : SceneInstanceBase
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
         playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
+    }
 
-
+    private void BindENemyEvents()
+    {
+        _EnemySpawner.onEnemyDead += AddScore;
+        _EnemySpawner.onEnemyDead += playerController.controlledCharacter.levelSystem.IncreaseKillCount;
     }
 
     /// <summary>

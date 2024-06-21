@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GaugeImage: {fileID: 5520441466966606821}
   m_BackgroundImage: {fileID: 8290591286592232810}
-  m_Color_On: {r: 0, g: 1, b: 0, a: 1}
+  m_Color_On: {r: 1, g: 1, b: 1, a: 1}
   m_Color_Off: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &6609572976096355171
 GameObject:

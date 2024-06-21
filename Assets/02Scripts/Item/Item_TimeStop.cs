@@ -11,19 +11,22 @@ public class Item_TimeStop : Item
     {
         // other(pc)에서 오버랩 아주 크게, 걸린 적들 모두 죽는 디버프
         Time.timeScale = 0.0f;
-        Instantiate(effect);
-        enemies = Physics.OverlapSphere(collider.transform.position, 40f, 1 << 8);
+        Instantiate(effect);        
 
         StartCoroutine(C_Wait());
 
+        enemies = Physics.OverlapSphere(collider.transform.position, 40f, 1 << 8);
+                
         foreach (var enemy in enemies)
         {
             enemy.GetComponent<IHit>().OnDead();
         }
+
+        Time.timeScale = 1.0f;
     }
 
     private IEnumerator C_Wait()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(2.4f);
     }
 }
