@@ -12,6 +12,14 @@ public class ItemSpawner : MonoBehaviour
     // 임시
     public bool isGiantEnd = false;
 
+    public void ToggleGiantValue()
+    {
+        if (!isGiantEnd)
+        {
+            isGiantEnd = true;
+        }
+    }
+
     private void Start()
     {
         //Invoke("ItemSpawn", 3f);
@@ -48,11 +56,11 @@ public class ItemSpawner : MonoBehaviour
     /// <param name="level"></param>
     public void ItemSpawn_proto(int level)
     {
-        if (level == 1)
+        if (level == 2)
         {
-            return;
+            StartCoroutine(C_proto_ItemSpawn());
+
         }
-        StartCoroutine(C_proto_ItemSpawn());
 
     }
 
@@ -62,11 +70,12 @@ public class ItemSpawner : MonoBehaviour
         Debug.Log("아이템");
         Instantiate(giantPrefab, transform.position, Quaternion.identity);
 
-        while (isGiantEnd)
+        //거대화 끝나고 이벤트로 알려줌
+        while (!isGiantEnd)
         {
             yield return null;
-            //거대화 끝나고 이벤트 또는 플래그로 알려줌
         }
+        Debug.Log("거대화끝남");
         Instantiate(timestopPrefab, transform.position, Quaternion.identity);
 
     }

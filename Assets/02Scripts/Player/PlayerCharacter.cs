@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -99,6 +100,12 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// 사망 시 호출되는 메서드입니다.
     /// </summary>
     public event System.Action onDead;
+
+    /// <summary>
+    /// 프로토타입을 위한 임시 이벤트입니다.
+    /// 거대화가 끝난 뒤 호출됩니다.
+    /// </summary>
+    public event Action onGiantEnd;
 
 
     private void Awake()
@@ -303,6 +310,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 탄창 원상복구
         attackComponent.OnLevelUp(_LevelSystem.level);
         attackComponent.OnGiantFinish();
+
+        // **임시** 거대화 끝나고 호출
+        onGiantEnd?.Invoke();
     }
 
     /// <summary>

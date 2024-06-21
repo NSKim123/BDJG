@@ -214,6 +214,7 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
+        playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
 
     }
 
