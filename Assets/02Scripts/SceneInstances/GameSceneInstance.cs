@@ -232,7 +232,7 @@ public class GameSceneInstance : SceneInstanceBase
 
         //레벨업 이벤트에 적 스폰과 맵 조정 메서드를 바인드합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _MapManager.SetWaterHeightByLevel;
-        playerController.controlledCharacter.levelSystem.onLevelUp += _EnemySpawner.StartResetEnemy;
+        //playerController.controlledCharacter.levelSystem.onLevelUp += _EnemySpawner.StartResetEnemy;
 
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;

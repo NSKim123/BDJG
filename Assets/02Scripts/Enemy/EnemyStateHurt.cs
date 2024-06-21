@@ -32,6 +32,7 @@ public class EnemyStateHurt : EnemyStateBase
                     //enemyAgent.velocity = Vector3.zero;
                     enemyAgent.enabled = false;
                     rigid.isKinematic = false;
+                    rigid.mass *= 2;
                     //enemyAgent.ResetPath();
                     //Debug.Log("¸ÂÀ½");
                     animator.Play("hurt");
@@ -68,6 +69,7 @@ public class EnemyStateHurt : EnemyStateBase
                 {
                     nextState = State.Move;
                     //enemyAgent.SetDestination(enemyController.target.transform.position);
+                    rigid.mass /= 2;
                     rigid.isKinematic = true;
                     enemyAgent.enabled = true;
                     //enemyAgent.isStopped = false;

@@ -90,7 +90,7 @@ public class MapManager : MonoBehaviour
     // 재시작 시 호출할 맵을 초기화하는 메서드입니다.
     public void RestartMap(WaveName wave)
     {
-        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[WaveName.General], waterGround.transform.position.z);
+        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
         navMeshMap.BuildNavMesh();
 
     }

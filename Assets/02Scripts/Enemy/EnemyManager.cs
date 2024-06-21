@@ -39,6 +39,8 @@ public class EnemyManager : MonoBehaviour
     public int MushroomCount { get; set; }
     public int CactusCount { get; set; }
 
+    public int TotalCount { get; set; }
+
     public WaveName currentWave;
 
     public Transform centerPos;
@@ -48,6 +50,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         currentWave = WaveName.General;
+        TotalCount = MushroomCount + CactusCount;
 
     }
 
