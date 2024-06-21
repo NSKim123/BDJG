@@ -44,10 +44,10 @@ public class PlayerAttack : MonoBehaviour
     public float m_SencerDistance = 20.0f;
 
     [Header("감지 폭")]
-    public float m_SencerWidth = 2.0f;
+    public float m_SencerWidth = 3.0f;
 
     [Header("감지 높이")]
-    public float m_SencerHeight = 2.0f;
+    public float m_SencerHeight = 3.0f;
 
     [Header("감지 레이어")]
     public LayerMask m_SenceLayer;

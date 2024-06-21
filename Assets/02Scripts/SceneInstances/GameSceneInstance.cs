@@ -27,13 +27,19 @@ public class GameSceneInstance : SceneInstanceBase
     /// </summary>
     private bool _IsPaused = true;
 
-    // add 몬스터 스포너 객체
+    /// <summary>
+    /// 몬스터 스포너 객체
+    /// </summary>
     private EnemySpawner _EnemySpawner;
 
-    // add 맵 관리 객체
+    /// <summary>
+    /// 맵 관리 객체
+    /// </summary>
     private MapManager _MapManager;
 
-    // item spawn 객체
+    /// <summary>
+    /// item spawn 객체
+    /// </summary>
     private ItemSpawner _ItemSpawner;
 
     /// <summary>
@@ -46,6 +52,7 @@ public class GameSceneInstance : SceneInstanceBase
         base.Awake();
 
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
+
         _EnemySpawner.onEnemyDead += AddScore;
 
         _MapManager = FindAnyObjectByType<MapManager>();
@@ -84,6 +91,7 @@ public class GameSceneInstance : SceneInstanceBase
         InitGameInfo();
 
         // 플레이어 캐릭터 초기화 및 위치 조정
+        playerController.controlledCharacter.ResetPlayerCharacter();
 
         // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
         _EnemySpawner.ResetForRestart();
@@ -107,6 +115,8 @@ public class GameSceneInstance : SceneInstanceBase
     /// <returns></returns>
     private IEnumerator Count3sBeforeGameStart()
     {
+        m_GameSceneUI.m_GameOverUI.gameObject.SetActive(false);
+
         // 게임 시작 전 띄우는 UI를 활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(true);
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "Ready?";
@@ -188,7 +198,9 @@ public class GameSceneInstance : SceneInstanceBase
         m_GameSceneUI.m_ConfigurationUI.m_Button_Cancel.onClick.AddListener(ContinueGame);
 
         // 게임오버 UI 다시하기 버튼 클릭 이벤트 <-- 바인드 -- 게임 실행 함수
-        m_GameSceneUI.m_GameOverUI.BindButton1Events(() => StartCoroutine(GameStartProcess()));       
+        m_GameSceneUI.m_GameOverUI.BindButton1Events(() => StartCoroutine(GameStartProcess()));
+
+        m_GameSceneUI.m_ItemSlotsUI.BindClickEvent(playerController.controlledCharacter.UseItem);
     }
 
     /// <summary>
@@ -207,6 +219,8 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenEnter += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
 
+        playerController.controlledCharacter.onItemSlotsChanged += m_GameSceneUI.m_ItemSlotsUI.OnItemSlotChanged;
+
         //레벨업 이벤트에 적 스폰과 맵 조정 메서드를 바인드합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _MapManager.SetWaterHeightByLevel;
         playerController.controlledCharacter.levelSystem.onLevelUp += _EnemySpawner.StartResetEnemy;
@@ -214,6 +228,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
         playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
+
 
     }
 
@@ -288,8 +303,6 @@ public class GameSceneInstance : SceneInstanceBase
         // 시간 스케일을 되돌립니다.
         _IsPaused = false;
         Time.timeScale = 1.0f;
-
-        // 적 스폰 재개 및 스폰되어있는 적들 행동 재개
     }
 
     /// <summary>
@@ -300,7 +313,5 @@ public class GameSceneInstance : SceneInstanceBase
         // 시간 스케일을 0 으로 설정합니다.
         _IsPaused = true;
         Time.timeScale = 0.0f;        
-
-        // 적 스폰 종료 및 스폰되어있는 적들 일시정지
     }
 }

@@ -7,13 +7,14 @@ using UnityEngine;
 
 public class GiantBuff : TimerBuff
 {
-    public GiantBuff(int buffCode, GameObject owner, float buffTime, int maxStack = 1) : base(buffCode, owner, buffTime, maxStack)
+    public GiantBuff(int buffCode, GameObject owner, BuffType buffType, float buffTime, bool visibility = false, int maxStack = 1) 
+        : base(buffCode, owner, buffType, buffTime, visibility, maxStack)
     {
     }
 
     public override Buff Clone(GameObject owner)
     {
-        return new GiantBuff(buffCode, owner, maxTime, maxStack);
+        return new GiantBuff(buffCode, owner, buffType, maxTime, visibility, maxStack);
     }
 
     protected override void onFinishBuffContext()

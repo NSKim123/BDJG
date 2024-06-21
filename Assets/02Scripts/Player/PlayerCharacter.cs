@@ -21,6 +21,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
     private bool _AbleToLevelUp = true;
 
+    private List<int> _ItemSlots;
+
     /// <summary>
     /// 이 캐릭터의 레벨 시스템 객체
     /// </summary>
@@ -91,6 +93,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public PlayerAnimController animController => _PlayerAnimController ?? (_PlayerAnimController = GetComponentInChildren<PlayerAnimController>());
 
+    public event System.Action<List<int>> onItemSlotsChanged;
+
     /// <summary>
     /// 행동 불가 상태 돌입 시 호출되는 이벤트입니다.
     /// </summary>
@@ -118,6 +122,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
         // 버프 시스템을 생성합니다.
         _BuffSystem = new BuffSystem(this.gameObject);
+
+        _ItemSlots = new List<int>();
     }
 
     private void Start()
@@ -273,6 +279,30 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     public void AddBuff(int buffCode)
     {
         _BuffSystem.AddBuff(buffCode);
+    }
+
+    public void AddItem(int itemBuffCode)
+    {
+        // 저장된 아이템이 2개 이상이라면 호출 종료
+        if (_ItemSlots.Count >= 2) return;
+
+        _ItemSlots.Add(itemBuffCode);
+
+        onItemSlotsChanged?.Invoke(_ItemSlots);
+    }
+
+    public void UseItem()
+    {
+        // 아이템이 없다면 호출 종료
+        if (_ItemSlots.Count == 0) return;
+
+        // 아이템 버프 타입의 버프가 존재한다면 호출 종료
+        if (_BuffSystem.IsOtherItemBuffActive()) return;
+        
+        _BuffSystem.AddBuff(_ItemSlots[0]);
+        _ItemSlots.RemoveAt(0);
+
+        onItemSlotsChanged?.Invoke(_ItemSlots);
     }
 
     public void OnStartGiant()
