@@ -258,8 +258,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     /// <param name="level"> 달성 레벨</param>
     private void SetAttackForceByLevel(int level)
-    {        
-        _AttackForce = level * 10;
+    {
+        _AttackForce = 10 * (level - 1) + 20.0f;
     }
 
     /// <summary>
@@ -301,7 +301,7 @@ public class PlayerAttack : MonoBehaviour
         {
             if (collider.TryGetComponent<IHit>(out IHit iHit))
             {
-                iHit.OnDamaged(_AttackForce * 2.0f, (collider.transform.position - transform.position).normalized);
+                iHit.OnDamaged(_AttackForce * 5.0f, (collider.transform.position - transform.position).normalized);
             }
         }
     }
