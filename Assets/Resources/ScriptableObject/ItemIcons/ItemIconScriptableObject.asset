@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ItemIconInfos:
   - m_ItemCode: 100001
-    m_ItemIcon: {fileID: -1545649695, guid: 5297fcdb2d8f1d4499cce667ab326ca4, type: 3}
+    m_ItemIcon: {fileID: 21300000, guid: d1082b8f08d06d347981570fe84bb618, type: 3}
   - m_ItemCode: 100002
-    m_ItemIcon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+    m_ItemIcon: {fileID: 21300000, guid: 25f75f40b5ebce1468ba88a4ddd0a13b, type: 3}
