@@ -12,6 +12,9 @@ public class PlayerAttack : MonoBehaviour
     [Header("탄환 프래팹")]
     public Bullet m_Bullet;
 
+    [Header("발사 이펙트")]
+    public GameObject m_Effect_Fire;
+
     [Header("발사 속력")]
     public float m_BulletSpeed = 20.0f;
 
@@ -216,6 +219,11 @@ public class PlayerAttack : MonoBehaviour
 
         // 공격 애니메이션을 재생합니다.
         _OwnerCharacter.animController.TriggerAttackParam();
+
+        // 발사 이펙트 생성
+        GameObject effect = Instantiate(m_Effect_Fire);
+        effect.transform.position = _StartPosition.position;
+        effect.transform.SetParent(transform);
 
         // 쿨타임을 돌리기 시작합니다.
         //_ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;

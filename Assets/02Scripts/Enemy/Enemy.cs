@@ -18,6 +18,11 @@ public abstract class Enemy : MonoBehaviour, IHit
     protected StateMachine stateMachine;
 
     [HideInInspector] public SkinnedMeshRenderer dieRenderer;
+
+    [Header("# 피격 이펙트")]
+    public GameObject Effect_Hit;
+
+    [Header("# ")]
     public Material changeMat;
 
 
@@ -30,7 +35,13 @@ public abstract class Enemy : MonoBehaviour, IHit
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
-    public abstract void OnDamaged(float distance, Vector3 direction);
+    public virtual void OnDamaged(float distance, Vector3 direction)
+    {
+        // 피격 이펙트 생성
+        GameObject effect = Instantiate(Effect_Hit);
+        effect.transform.position = transform.position + Vector3.up * GetComponent<CapsuleCollider>().height * 0.5f;
+        effect.transform.SetParent(transform);
+    }
 
     public virtual void OnDead()
     {
