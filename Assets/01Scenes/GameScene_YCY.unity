@@ -629,7 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83631291556f0fa47b261365acd06976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Distance: 6
+  m_RearDistance: 6.3
   m_Height: 4.2
   m_PitchRotation: 30
 --- !u!1001 &371852006
@@ -1950,6 +1950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_Effect_Fire: {fileID: 0}
   m_BulletSpeed: 20
   m_PushPowerMultiplier: 2
   m_AttackReuseTime: 0.75
@@ -1992,6 +1993,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336f54937b9b84f40bf6bc6b3e081dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Effect_GiantSlimeLand: {fileID: 0}
+  m_UIEffect_GiantStarted: {fileID: 0}
+  m_Effect_Hit: {fileID: 0}
 --- !u!4 &1335991391
 Transform:
   m_ObjectHideFlags: 0

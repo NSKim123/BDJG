@@ -357,7 +357,7 @@ public class EnemySpawner : MonoBehaviour
         EnemyManager.Instance.TotalCount = 0;
 
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        StartCoroutine(C_SpawnLoop());
+        spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 
     private void StartSpawnLoop()
