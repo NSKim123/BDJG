@@ -18,7 +18,7 @@ public class Cactus : Enemy
         base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
-        stateMachine.ChangeState(State.Hurt);
+        stateMachine.ChangeState_D(State.Hurt);
     }
 
     public override void OnDead()

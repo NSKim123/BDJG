@@ -14,7 +14,7 @@ public partial class PlayerMovement : MonoBehaviour
 {
     [Header("# 이동 관련")]
     [Header("이동 속력")]
-    public float m_Speed = 5.0f;
+    public float m_Speed = 3.5f;
 
     [Header("회전 속력")]
     public float m_RotateSpeedInDegree = 30.0f;
@@ -242,7 +242,7 @@ public partial class PlayerMovement
 {
     [Header("# 점프 관련")]
     [Header("점프력")]
-    public float m_JumpForce = 5.0f;
+    public float m_JumpForce = 8.0f;
 
     [Header("점프 쿨타임")]
     public float m_JumpReuseTime = 1.0f;
