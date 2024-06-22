@@ -15,6 +15,8 @@ public class MapManager : MonoBehaviour
 
     public event Action OnChangeDestination;
 
+    private Coroutine waterCoroutine;
+
 
     private void Start()
     {
@@ -54,7 +56,7 @@ public class MapManager : MonoBehaviour
 
         while ((int)wave < Enum.GetValues(typeof(WaveName)).Length)
         {
-            yield return new WaitForSeconds(45f);
+            yield return new WaitForSeconds(45.0f);
 
             wave++;
 
@@ -90,10 +92,15 @@ public class MapManager : MonoBehaviour
 
     public void StartMapSetting()
     {
-        StartCoroutine(C_WaterUP());
+        if (waterCoroutine != null)
+        {
+            StopCoroutine(waterCoroutine);
+            waterCoroutine = null;
+        }
+        waterCoroutine = StartCoroutine(C_WaterUP());
     }
 
-    
+
 
     // 재시작 시 호출할 맵을 초기화하는 메서드입니다.
     public void RestartMap(WaveName wave)
