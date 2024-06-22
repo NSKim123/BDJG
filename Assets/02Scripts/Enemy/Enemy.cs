@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour, IHit
     public abstract float AttackTime { get; set; }
     public abstract float Damage_Distance { get; set; }
     public abstract Vector3 Damage_Direction { get; set; }
-    
+
     protected StateMachine stateMachine;
 
     [HideInInspector] public SkinnedMeshRenderer dieRenderer;

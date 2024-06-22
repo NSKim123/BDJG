@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
@@ -41,35 +42,42 @@ public class MapManager : MonoBehaviour
         {
             return;
         }
-        StartCoroutine(C_WaterUP((WaveName)level));
+        //StartCoroutine(C_WaterUP((WaveName)level));
     }
 
 
-    public IEnumerator C_WaterUP(WaveName wave)
+    public IEnumerator C_WaterUP()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
-        Debug.Log("¹° ¿Ã¶ó¿È");
-
-        OnChangeDestination?.Invoke();
-
-        while (waterGround.transform.position.y < heightOfWater[wave])
-        {
-
-            waterGround.transform.position += new Vector3(0, 0.5f, 0);
-
-            if (waterGround.transform.position.y > heightOfWater[wave])
-            {
-                waterGround.transform.position =
-                    new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }
+        WaveName wave = WaveName.General;
+        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
         navMeshMap.BuildNavMesh();
-        Debug.Log("¸Ê ±¸¿ò");
 
-        OnChangeDestination?.Invoke();
+        while ((int)wave < Enum.GetValues(typeof(WaveName)).Length)
+        {
+            yield return new WaitForSeconds(45f);
 
+            wave++;
+
+            OnChangeDestination?.Invoke();
+
+            while (waterGround.transform.position.y < heightOfWater[wave])
+            {
+                waterGround.transform.position += new Vector3(0, 0.5f, 0);
+
+                if (waterGround.transform.position.y > heightOfWater[wave])
+                {
+                    waterGround.transform.position =
+                        new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
+                }
+
+                yield return new WaitForSeconds(0.1f);
+            }
+            navMeshMap.BuildNavMesh();
+            Debug.Log("¸Ê ±¸¿ò");
+
+            OnChangeDestination?.Invoke();
+        }
+ 
     }
 
     public void ChangeMap(WaveName wave)
@@ -80,9 +88,9 @@ public class MapManager : MonoBehaviour
         navMeshMap.BuildNavMesh();
     }
 
-    public void StartWaterCoroutine(WaveName wave)
+    public void StartMapSetting()
     {
-        StartCoroutine(C_WaterUP(wave));
+        StartCoroutine(C_WaterUP());
     }
 
     
