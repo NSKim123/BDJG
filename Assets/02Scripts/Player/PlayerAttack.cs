@@ -301,7 +301,7 @@ public class PlayerAttack : MonoBehaviour
         {
             if (collider.TryGetComponent<IHit>(out IHit iHit))
             {
-                iHit.OnDamaged(_AttackForce, (collider.transform.position - transform.position).normalized);
+                iHit.OnDamaged(_AttackForce * 2.0f, (collider.transform.position - transform.position).normalized);
             }
         }
     }

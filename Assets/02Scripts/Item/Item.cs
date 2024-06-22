@@ -10,7 +10,7 @@ public abstract class Item : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Destroy(this.gameObject, 7.0f);
+        //Destroy(this.gameObject, 7.0f);
     }
 
     protected virtual void OnTriggerEnter(Collider other)

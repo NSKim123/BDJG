@@ -14,7 +14,7 @@ public class BulletGaugeUI : ToggleGaugeUI
     protected override void UpdateFillAmount()
     {
         // 부드럽게 변화시킵니다.
-        float newFillAmount = Mathf.MoveTowards(m_GaugeImage.fillAmount, _CurrentRatio, 0.2f * Time.deltaTime);
+        float newFillAmount = Mathf.MoveTowards(m_GaugeImage.fillAmount, _CurrentRatio, 5.0f * Time.deltaTime);
         m_GaugeImage.fillAmount = newFillAmount;
     }
 }

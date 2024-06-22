@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -233,6 +233,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1875286725792620278, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 347.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875286725792620278, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 75.4
+      objectReference: {fileID: 0}
     - target: {fileID: 2561254979210123509, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
         type: 3}
       propertyPath: m_Camera
@@ -629,7 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83631291556f0fa47b261365acd06976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Distance: 6
+  m_RearDistance: 6.3
   m_Height: 4.2
   m_PitchRotation: 30
 --- !u!1001 &371852006
@@ -1950,6 +1960,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_Effect_Fire: {fileID: 3463157229188906966, guid: 47096eff328e11a418ace7db2d72aa97,
+    type: 3}
   m_BulletSpeed: 20
   m_PushPowerMultiplier: 2
   m_AttackReuseTime: 0.75
@@ -1977,7 +1989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Speed: 3.5
   m_RotateSpeedInDegree: 30
-  m_JumpForce: 5
+  m_JumpForce: 8
   m_JumpReuseTime: 1
   m_KnockBackCoefficient: 5
 --- !u!114 &1335991390
@@ -1992,6 +2004,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336f54937b9b84f40bf6bc6b3e081dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Effect_GiantSlimeLand: {fileID: 3868056870837121786, guid: 352dbbec2f3283a4ca1bf50aba15602c,
+    type: 3}
+  m_UIEffect_GiantStarted: {fileID: 3644070780026344229, guid: d5ffcb5312089b74b910d6ec78fd5329,
+    type: 3}
+  m_Effect_Hit: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
+    type: 3}
 --- !u!4 &1335991391
 Transform:
   m_ObjectHideFlags: 0
