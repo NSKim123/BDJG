@@ -6,11 +6,16 @@ using UnityEngine;
 /// 슬라임이 발사하는 투사체입니다.
 /// </summary>
 public class Bullet : GuidedProjectile
-{
+{   
     /// <summary>
     /// 이 투사체가 가질 공격력
     /// </summary>
     private float _AttackPower;
+
+    private void Awake()
+    {
+        Destroy(this.gameObject, 5.0f);
+    }
 
     private void OnTriggerEnter(Collider collider)
     {
@@ -20,7 +25,7 @@ public class Bullet : GuidedProjectile
         // 이 투사체가 적에게 닿으면
         if (collider.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
-            hitEnemy.OnDamaged(_AttackPower, _Direction);
+            hitEnemy.OnDamaged(_AttackPower, _Direction);            
         }
 
         // 이 투사체를 제거합니다.

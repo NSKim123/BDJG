@@ -15,6 +15,7 @@ public class Cactus : Enemy
 
     public override void OnDamaged(float distance, Vector3 direction)
     {
+        base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
         stateMachine.ChangeState(State.Hurt);

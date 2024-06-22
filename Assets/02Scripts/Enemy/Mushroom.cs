@@ -9,7 +9,6 @@ using UnityEngine.AI;
 
 public class Mushroom : Enemy
 {
-
     public override float MoveSpeed { get; set; }
     public override float DetectPlayerDistance { get;  set; }
 
@@ -23,6 +22,7 @@ public class Mushroom : Enemy
 
     public override void OnDamaged(float distance, Vector3 direction)
     {
+        base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
         stateMachine.ChangeState(State.Hurt);

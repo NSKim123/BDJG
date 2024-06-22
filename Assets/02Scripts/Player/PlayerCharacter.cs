@@ -9,6 +9,15 @@ using UnityEngine;
 /// </summary>
 public class PlayerCharacter : PlayerCharacterBase, IHit
 {
+    [Header("# 거대화 슬라임일때 착지 시 이펙트")]
+    public GameObject m_Effect_GiantSlimeLand;
+
+    [Header("# 거대화 시작 시 생성될 UI 이펙트")]
+    public GameObject m_UIEffect_GiantStarted;
+
+    [Header("# 피격 이펙트")]
+    public GameObject m_Effect_Hit;
+
     /// <summary>
     /// 이 캐릭터가 죽었는지를 나타냅니다.
     /// </summary>
@@ -131,7 +140,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         InitLevelSystem();
 
         // test
-        //testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
     }
 
     private void Update()
@@ -159,8 +168,8 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     {
         while(true)
         {
-            yield return new WaitForSeconds(5.0f);
-            _BuffSystem.AddBuff(100001);
+           yield return new WaitForSeconds(5.0f);
+           //_BuffSystem.AddBuff(100001);
            // _LevelSystem.IncreaseKillCount();
         }
     }
@@ -308,20 +317,27 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     public void OnStartGiant()
     {
         // 레벨업 이벤트를 일시적으로 호출을 막습니다.
-        _AbleToLevelUp = false;
-               
+        _AbleToLevelUp = false;               
 
         // 면역상태 설정
         movementComponent.SetImmuneState(true);
 
         // 모델 변경
-        modelComponent.OnGiantStart();
+        //modelComponent.OnGiantStart();
 
         // 점프 애니메이션 이벤트 바인딩
         animController.onLand += attackComponent.AttackAround;
+        animController.onLand += InstantiateLandEffect;
+        animController.onLand += FollowCamera.ShakeCamera;
 
         // 탄창 게이지 초기화 및 설정
-        attackComponent.OnGiantStart();        
+        attackComponent.OnGiantStart();
+
+        movementComponent.characterController.excludeLayers += LayerMask.GetMask("Enemy");
+
+        GameObject UIEffect = Instantiate(m_UIEffect_GiantStarted);
+        UIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
+        (UIEffect.transform as RectTransform).anchoredPosition = Vector2.zero;
     }
 
     public void OnFinishGiant()
@@ -331,12 +347,14 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
         // 점프 애니메이션 이벤트 언바인딩
         animController.onLand -= attackComponent.AttackAround;
+        animController.onLand -= InstantiateLandEffect;
+        animController.onLand -= FollowCamera.ShakeCamera;
 
         // 면역상태 원상복구
         movementComponent.SetImmuneState(false);
 
         // 모델 원상복구
-        modelComponent.OnLevelUp(_LevelSystem.level);
+        //modelComponent.OnLevelUp(_LevelSystem.level);
 
         // 탄창 원상복구
         attackComponent.OnLevelUp(_LevelSystem.level);
@@ -344,6 +362,15 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
 
         // **임시** 거대화 끝나고 호출
         onGiantEnd?.Invoke();
+
+        movementComponent.characterController.excludeLayers -= LayerMask.GetMask("Enemy");
+    }
+
+    private void InstantiateLandEffect()
+    {
+        GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
+
+        effect.transform.position = transform.position + Vector3.down * movementComponent.characterController.height / 2.0f * transform.lossyScale.y;
     }
 
     /// <summary>
@@ -390,7 +417,10 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 밀려나도록 movement 컴포넌트에 명령합니다.
         movementComponent.OnHit(distance, direction);
 
-        // 피격 이펙트 표시
+        // 피격 이펙트 생성
+        GameObject effect = Instantiate(m_Effect_Hit);
+        effect.transform.position = transform.position;
+        effect.transform.SetParent(transform);
     }
 
     /// <summary>
