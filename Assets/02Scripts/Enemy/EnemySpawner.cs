@@ -39,11 +39,6 @@ public class EnemySpawner : MonoBehaviour
     [Header("선인장쿤 스폰 정보")]
     public EnemySpawnInfoData[] cactusSpawnInfo;
 
-    private bool mushroomTurn;
-    private bool cactusTurn;
-
-    private bool _isFull = false;
-
     private EnemySpawnTurn _turnPivot;
 
     private int _mushroomSpawnedCount;
@@ -51,33 +46,6 @@ public class EnemySpawner : MonoBehaviour
     private int _totalCount;
 
     private Coroutine spawnLoopCoroutine;
-
-
-    private void Start()
-    {
-        _totalCount = mushroomSpawnInfo[0].MaxEnemyCount + cactusSpawnInfo[0].MaxEnemyCount;
-
-
-    }
-
-    private void Update()
-    {
-        // wave2에서 선인장쿤 생성 코루틴을 호출합니다.
-        //if (currentWave == WaveName.Trainee && cactusCoroutine == null)
-        //{
-        //    cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus(currentWave));
-        //}
-    }
-
-    // 테스트
-    private IEnumerator C_Test()
-    {
-        yield return new WaitForSeconds(5);
-
-        currentWave = WaveName.Trainee;
-        //OnChangeWave?.Invoke(currentWave);
-        OnCoroutineStart?.Invoke(currentWave);
-    }
 
 
     // 버섯쿤 생성 코루틴입니다.
@@ -382,8 +350,14 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
+        _mushroomSpawnedCount = 0;
+        _cactusSpawnedCount = 0;
+
+        _totalCount = mushroomSpawnInfo[0].MaxEnemyCount + cactusSpawnInfo[0].MaxEnemyCount;
+        EnemyManager.Instance.TotalCount = 0;
+
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        StartSpawnLoop();
+        StartCoroutine(C_SpawnLoop());
     }
 
     private void StartSpawnLoop()
