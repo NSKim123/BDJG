@@ -50,7 +50,7 @@ public class EnemyManager : MonoBehaviour
     private void Start()
     {
         currentWave = WaveName.General;
-        TotalCount = MushroomCount + CactusCount;
+        TotalCount = 0;
 
     }
 

@@ -28,6 +28,21 @@ public class StateMachine : MonoBehaviour
         return true;
     }
 
+    public bool ChangeState_D(State newStateType)
+    {
+        if (states[(int)newStateType].canExecute() == false)
+        {
+            return false;
+        }
+
+        states[(int)currentStateType].Reset();
+        currentState = states[(int)newStateType];
+        currentStateType = newStateType;
+        currentState.MoveNextStep();
+
+        return true;
+    }
+
     public void StateInit(List<EnemyStateBase> states)
     {
         this.states = states;

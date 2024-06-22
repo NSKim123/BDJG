@@ -25,15 +25,14 @@ public class Mushroom : Enemy
         base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
-        stateMachine.ChangeState(State.Hurt);
+        stateMachine.ChangeState_D(State.Hurt);
     }
 
     public override void OnDead()
     {
         base.OnDead();
-        //EnemyManager.Instance.MushroomCount--;
-        EnemyManager.Instance.TotalCount--;
         stateMachine.ChangeState(State.Die);
+        EnemyManager.Instance.TotalCount--;
     }
 
     protected override void Start()

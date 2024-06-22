@@ -45,6 +45,8 @@ public class GameSceneInstance : SceneInstanceBase
     /// </summary>
     private ItemSpawner _ItemSpawner;
 
+    public AudioSource audioSourceBGM;
+
     /// <summary>
     /// 이 씬에 생성된 플레이어 컨트롤러 객체
     /// </summary>
@@ -99,18 +101,22 @@ public class GameSceneInstance : SceneInstanceBase
         _EnemySpawner.ResetForRestart();
 
         // 맵 초기화
-        _MapManager.RestartMap((WaveName)playerController.controlledCharacter.levelSystem.level);
+        _MapManager.StartMapSetting();
 
         // 3초 카운트 ( 코루틴 )        
         yield return Count3sBeforeGameStart();
 
         // 입력 권한 부여
-        SetUpControl(true); 
-        
+        SetUpControl(true);
+
+        // 배경음악 플레이
+        audioSourceBGM.Play();
+
         // 게임을 재개합니다.
         ContinueGame();
-    }  
-    
+
+    }
+
     private void StartGame()
     {
         StartCoroutine(GameStartProcess());
@@ -229,10 +235,6 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
 
         playerController.controlledCharacter.onItemSlotsChanged += m_GameSceneUI.m_ItemSlotsUI.OnItemSlotChanged;
-
-        //레벨업 이벤트에 적 스폰과 맵 조정 메서드를 바인드합니다.
-        playerController.controlledCharacter.levelSystem.onLevelUp += _MapManager.SetWaterHeightByLevel;
-        //playerController.controlledCharacter.levelSystem.onLevelUp += _EnemySpawner.StartResetEnemy;
 
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;

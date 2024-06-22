@@ -25,6 +25,8 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
+                    enemyAgent.enabled = false;
+                    rigid.useGravity = false;
                     animator.Play("die");
                     _currentStep++;
                 }
@@ -33,7 +35,7 @@ public class EnemyStateDie : EnemyStateBase
                 {
                     Debug.Log("die");
                     
-                    if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
+                    if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
                     {
                         _currentStep++;
                     }
@@ -56,11 +58,10 @@ public class EnemyStateDie : EnemyStateBase
 
     IEnumerator FadeOut()
     {
-        Debug.Log("ÆäÀÌµå");
         float f = 1;
         while (f > 0)
         {
-            f -= 0.1f;
+            f -= 0.3f;
             enemyCharacter.dieRenderer.material = enemyCharacter.changeMat;
             Color ColorAlhpa = enemyCharacter.dieRenderer.material.color;
             ColorAlhpa.a = f;
