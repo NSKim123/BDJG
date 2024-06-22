@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -137,8 +139,10 @@ public partial class PlayerMovement : MonoBehaviour
         // 땅에 닿아있는지 체크합니다.
         _IsGrounded = CheckGrounded();
 
+        CheckAboveEnemy();
+
         // 중력값
-        float gravity = Physics.gravity.y * Time.fixedDeltaTime;
+        float gravity = Physics.gravity.y * Time.fixedDeltaTime * 2.0f;
 
         // 땅에 닿아있다면 y 축 방향에 대한 속도를 0으로 설정합니다.
         if(_IsGrounded)
@@ -307,6 +311,33 @@ public partial class PlayerMovement
         }
 
         return result;
+    }
+
+    private void CheckAboveEnemy()
+    {
+        if ( ((LayerMask.GetMask("Enemy")) & characterController.excludeLayers.value) > 0) return;
+
+        // Box cast 시작 지점 설정
+        Vector3 center = characterController.center + transform.position;
+
+        // Box cast 크기 설정
+        Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y * 0.33f;
+
+        // Box cast 최대 길이 설정
+        float maxDistance = (characterController.height * 0.5f + characterController.skinWidth) * transform.lossyScale.y;
+
+        if (Physics.BoxCast(
+                        center,
+                        half,
+                        Vector3.down,
+                        out RaycastHit hitResult,
+                        Quaternion.identity,
+                        maxDistance,
+                        1 << LayerMask.NameToLayer("Enemy")))
+        {
+            _IsJumpInput = true;
+        }
+
     }
 
     /// <summary>
