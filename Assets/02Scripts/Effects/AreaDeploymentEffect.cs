@@ -11,8 +11,10 @@ public class AreaDeploymentEffect : MonoBehaviour
 
     private void Awake()
     {
-        transform.SetParent(FindAnyObjectByType<Canvas>().transform);
-        (transform as RectTransform).anchoredPosition = Vector3.zero;
+        RectTransform gameSceneUI = FindAnyObjectByType<Canvas>().transform as RectTransform;
+        (transform as RectTransform).localScale = gameSceneUI.localScale * 2.0f;
+        transform.SetParent(gameSceneUI);
+        (transform as RectTransform).anchoredPosition = Vector3.zero;        
     }
 
     private void Update()

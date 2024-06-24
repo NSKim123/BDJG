@@ -40,12 +40,12 @@ public class ItemSpawner : MonoBehaviour
         // 거대화 스폰 / 추후 랜덤 위치 적용
         if (RandomResult() > 0.5f)
         {
-            Instantiate(giantPrefab, transform.position, Quaternion.identity);
+            Instantiate(giantPrefab, transform.position, giantPrefab.transform.rotation);
         }
         // 영역전개 스폰
         else
         {
-            Instantiate(timestopPrefab, transform.position, Quaternion.identity);
+            Instantiate(timestopPrefab, transform.position, timestopPrefab.transform.rotation);
         }
     }
 
@@ -67,7 +67,7 @@ public class ItemSpawner : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(2f);
         Debug.Log("아이템");
-        Instantiate(giantPrefab, transform.position, Quaternion.identity);
+        Instantiate(giantPrefab, transform.position, giantPrefab.transform.rotation);
 
         //거대화 끝나고 이벤트로 알려줌
         while (!isGiantEnd)
@@ -75,7 +75,7 @@ public class ItemSpawner : MonoBehaviour
             yield return null;
         }
         Debug.Log("거대화끝남");
-        Instantiate(timestopPrefab, transform.position, Quaternion.identity);
+        Instantiate(timestopPrefab, transform.position, timestopPrefab.transform.rotation);
 
     }
 
