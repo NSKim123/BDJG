@@ -118,6 +118,7 @@ public class EnemySpawner : MonoBehaviour
         e.MoveSpeed = data.MoveSpeed;
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
+        e.AttackSpeed = data.AttackSpeed;
         e.DetectPlayerDistance = data.AttackRange;
         e.onDead += () => onEnemyDead?.Invoke(1);
     }

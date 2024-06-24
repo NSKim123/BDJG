@@ -12,6 +12,7 @@ public abstract class Enemy : MonoBehaviour, IHit
     public abstract float DetectPlayerDistance { get; set; }
     public abstract float AttackForce { get; set; }
     public abstract float AttackTime { get; set; }
+    public abstract float AttackSpeed { get; set; }
     public abstract float Damage_Distance { get; set; }
     public abstract Vector3 Damage_Direction { get; set; }
 

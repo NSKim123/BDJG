@@ -45,6 +45,7 @@ public class GameSceneInstance : SceneInstanceBase
     /// </summary>
     private ItemSpawner _ItemSpawner;
 
+
     public AudioSource audioSourceBGM;
 
     /// <summary>
@@ -59,6 +60,7 @@ public class GameSceneInstance : SceneInstanceBase
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
 
         _MapManager = FindAnyObjectByType<MapManager>();
+        _MapManager.warning = m_GameSceneUI.m_WarningUI;
 
         _ItemSpawner = FindAnyObjectByType<ItemSpawner>();
     }
@@ -122,6 +124,7 @@ public class GameSceneInstance : SceneInstanceBase
         StartCoroutine(GameStartProcess());
     }
 
+
     /// <summary>
     /// 게임 재개 전 3초를 카운트하는 코루틴입니다.
     /// </summary>
@@ -129,6 +132,9 @@ public class GameSceneInstance : SceneInstanceBase
     private IEnumerator Count3sBeforeGameStart()
     {
         m_GameSceneUI.m_GameOverUI.gameObject.SetActive(false);
+
+        // 경고UI를 활성화합니다.
+        ToggleActiveWarningUI();
 
         // 게임 시작 전 띄우는 UI를 활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(true);
@@ -295,6 +301,9 @@ public class GameSceneInstance : SceneInstanceBase
         // 게임 오버 UI를 활성화시키고, UI에 게임 정보를 전달합니다.
         m_GameSceneUI.m_GameOverUI.gameObject.SetActive(true);
         m_GameSceneUI.m_GameOverUI.OnGameOver(_SurviveTime, _Score);
+
+        // 경고 UI를 비활성화합니다.
+        ToggleActiveWarningUI();
     }
 
     /// <summary>
@@ -328,5 +337,13 @@ public class GameSceneInstance : SceneInstanceBase
         // 시간 스케일을 0 으로 설정합니다.
         _IsPaused = true;
         Time.timeScale = 0.0f;        
+    }
+
+    /// <summary>
+    /// 경고UI가 활성화상태라면 비활성화하고, 비활성화상태라면 활성화하는 메서드입니다.
+    /// </summary>
+    private void ToggleActiveWarningUI()
+    {
+        m_GameSceneUI.m_WarningUI.gameObject.SetActive(m_GameSceneUI.m_WarningUI.gameObject.activeSelf ? false : true);
     }
 }

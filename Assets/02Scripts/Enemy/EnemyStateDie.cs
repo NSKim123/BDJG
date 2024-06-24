@@ -35,7 +35,7 @@ public class EnemyStateDie : EnemyStateBase
                 {
                     Debug.Log("die");
                     
-                    if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
+                    if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {
                         _currentStep++;
                     }
