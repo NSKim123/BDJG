@@ -201,7 +201,7 @@ public class EnemySpawner : MonoBehaviour
 
             while (IsFull())
             {
-                Debug.Log("²ËÂü" + _totalCount + " " + EnemyManager.Instance.TotalCount);
+                //Debug.Log("²ËÂü" + _totalCount + " " + EnemyManager.Instance.TotalCount);
                 yield return null;
             }
 
@@ -347,7 +347,7 @@ public class EnemySpawner : MonoBehaviour
         {
             foreach (var item in removeList)
             {
-                Destroy(item);
+                //Destroy(item);
             }
         }
 

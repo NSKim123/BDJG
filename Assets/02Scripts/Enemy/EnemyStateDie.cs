@@ -33,7 +33,7 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    Debug.Log("die");
+                    //Debug.Log("die");
                     
                     if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {

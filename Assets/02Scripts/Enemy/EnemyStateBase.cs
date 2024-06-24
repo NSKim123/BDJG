@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public enum State
 {
+    Idle,
     Move,
     Attack,
     Hurt,

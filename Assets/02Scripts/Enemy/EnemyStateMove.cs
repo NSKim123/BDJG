@@ -15,9 +15,7 @@ public class EnemyStateMove : EnemyStateBase
         enemyAgent.speed = enemyCharacter.MoveSpeed;
     }
 
-    public override bool canExecute() => stateMachine.currentStateType == State.Attack
-                                    || stateMachine.currentStateType == State.Hurt
-                                    || stateMachine.currentStateType == State.AvoidWater;
+    public override bool canExecute() => stateMachine.currentStateType != State.Die;
 
 
 
@@ -49,7 +47,6 @@ public class EnemyStateMove : EnemyStateBase
                 break;
             case StepInState.End:
                 {
-                    _currentStep++;
                 }
                 break;
             default:
