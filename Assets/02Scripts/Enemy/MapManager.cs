@@ -77,7 +77,7 @@ public class MapManager : MonoBehaviour
 
             while (waterGround.transform.position.y < heightOfWater[wave])
             {
-                waterGround.transform.position += new Vector3(0, 0.5f, 0);
+                waterGround.transform.position += new Vector3(0, 0.3f, 0);
 
                 if (waterGround.transform.position.y > heightOfWater[wave])
                 {
