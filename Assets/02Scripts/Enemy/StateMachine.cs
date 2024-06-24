@@ -28,7 +28,7 @@ public class StateMachine : MonoBehaviour
         return true;
     }
 
-    public bool ChangeState_D(State newStateType)
+    public bool ChangeState_AllowSameState(State newStateType)
     {
         if (states[(int)newStateType].canExecute() == false)
         {

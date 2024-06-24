@@ -45,6 +45,9 @@ public class GameSceneUI : MonoBehaviour
     [Header("# 게임 시작 전 띄울 UI")]
     public GameObject m_PanelBeforeGame;
 
+    [Header("# 수위 상승 전 경고 UI")]
+    public GameObject m_WarningUI;
+
     private void Awake()
     {
         // UI들의 이벤트를 바인딩합니다.

@@ -11,19 +11,24 @@ public class MapManager : MonoBehaviour
 
     private Dictionary<WaveName, float> heightOfWater;
     [SerializeField] private GameObject map;
-    [SerializeField] private NavMeshSurface navMeshMap;
+    private NavMeshSurface navMeshMap;
 
     public event Action OnChangeDestination;
 
     private Coroutine waterCoroutine;
 
+    public GameObject warning;
+
+    private Animation warninganim;
 
     private void Start()
     {
+        warninganim = warning.GetComponent<Animation>();
+
         // 물 y값 1단계: 0.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.1 (변동가능)
         heightOfWater = new Dictionary<WaveName, float>
         {
-            {WaveName.General, 0.5f },
+            {WaveName.General, 1.5f },
             {WaveName.Trainee, 3.1f },
             {WaveName.Three, 4.7f },
             {WaveName.Four, 6.1f }
@@ -48,6 +53,7 @@ public class MapManager : MonoBehaviour
     }
 
 
+
     public IEnumerator C_WaterUP()
     {
         WaveName wave = WaveName.General;
@@ -57,6 +63,13 @@ public class MapManager : MonoBehaviour
         while ((int)wave < Enum.GetValues(typeof(WaveName)).Length)
         {
             yield return new WaitForSeconds(45.0f);
+
+            warninganim.Play();
+
+            while (warninganim.isPlaying)
+            {
+                yield return null;
+            }
 
             wave++;
 

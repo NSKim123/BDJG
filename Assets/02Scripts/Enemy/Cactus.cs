@@ -9,7 +9,7 @@ public class Cactus : Enemy
     public override float Damage_Distance { get; set; }
     public override Vector3 Damage_Direction { get; set; }
     public override float AttackForce { get; set; }
-
+    public override float AttackSpeed { get; set ; }
     public override float AttackTime { get; set; }
 
 
@@ -18,7 +18,7 @@ public class Cactus : Enemy
         base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
-        stateMachine.ChangeState_D(State.Hurt);
+        stateMachine.ChangeState_AllowSameState(State.Hurt);
     }
 
     public override void OnDead()

@@ -18,8 +18,6 @@ public class EnemyStateAvoidWater : EnemyStateBase
     {
         State nextState = State.AvoidWater;
 
-        Debug.Log(_currentStep);
-
         switch (_currentStep)
         {
             case StepInState.None:
