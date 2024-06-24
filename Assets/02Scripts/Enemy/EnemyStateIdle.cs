@@ -27,6 +27,7 @@ public class EnemyStateIdle : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
+                    animator.Play("idle");
                     //Debug.Log("idle");
                 }
                 break;

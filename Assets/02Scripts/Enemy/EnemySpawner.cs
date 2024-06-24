@@ -357,7 +357,7 @@ public class EnemySpawner : MonoBehaviour
         _totalCount = mushroomSpawnInfo[0].MaxEnemyCount + cactusSpawnInfo[0].MaxEnemyCount;
         EnemyManager.Instance.TotalCount = 0;
 
-        _turnPivot = EnemySpawnTurn.cactusTurn;
+        _turnPivot = EnemySpawnTurn.mushroomTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 
