@@ -1,22 +1,16 @@
-﻿
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
-public class EnemyStateAvoidWater : EnemyStateBase
-{ 
-
-    public EnemyStateAvoidWater(StateMachine stateMachine) : base(stateMachine)
+public class EnemyStateIdle : EnemyStateBase
+{
+    public EnemyStateIdle(StateMachine stateMachine) : base(stateMachine)
     {
-
-
     }
 
-    public override bool canExecute() => true;
+    public override bool canExecute() => stateMachine.currentStateType != State.Die;
 
     public override State MoveNextStep()
     {
-        State nextState = State.AvoidWater;
+        State nextState = State.Idle;
 
         switch (_currentStep)
         {
@@ -27,21 +21,25 @@ public class EnemyStateAvoidWater : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
-                    enemyAgent.SetDestination(EnemyManager.Instance.centerPos.position);
                     _currentStep++;
+                    
                 }
                 break;
             case StepInState.Playing:
                 {
-                    //Debug.Log("물 피함");
+                    //Debug.Log("idle");
                 }
                 break;
             case StepInState.End:
+                {
+                    
+                }
                 break;
             default:
                 break;
         }
 
         return nextState;
+
     }
 }

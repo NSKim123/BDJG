@@ -347,7 +347,7 @@ public class EnemySpawner : MonoBehaviour
         {
             foreach (var item in removeList)
             {
-                Destroy(item);
+                //Destroy(item);
             }
         }
 
@@ -357,7 +357,7 @@ public class EnemySpawner : MonoBehaviour
         _totalCount = mushroomSpawnInfo[0].MaxEnemyCount + cactusSpawnInfo[0].MaxEnemyCount;
         EnemyManager.Instance.TotalCount = 0;
 
-        _turnPivot = EnemySpawnTurn.mushroomTurn;
+        _turnPivot = EnemySpawnTurn.cactusTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 

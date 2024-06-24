@@ -62,7 +62,7 @@ public class MapManager : MonoBehaviour
 
         while ((int)wave < Enum.GetValues(typeof(WaveName)).Length)
         {
-            yield return new WaitForSeconds(45.0f);
+            yield return new WaitForSeconds(2.0f);
 
             warninganim.Play();
 
@@ -88,7 +88,7 @@ public class MapManager : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
             navMeshMap.BuildNavMesh();
-            Debug.Log("¸Ê ±¸¿ò");
+           // Debug.Log("¸Ê ±¸¿ò");
 
             OnChangeDestination?.Invoke();
         }

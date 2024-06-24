@@ -33,6 +33,7 @@ public class Cactus : Enemy
         base.Start();
         stateMachine.StateInit(new List<EnemyStateBase>()
         {
+            new EnemyStateIdle(stateMachine),
             new EnemyStateMove(stateMachine),
             new EnemyStateAttack(stateMachine),
             new EnemyStateHurt(stateMachine),
