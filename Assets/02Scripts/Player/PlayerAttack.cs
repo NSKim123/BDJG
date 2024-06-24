@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -301,7 +302,11 @@ public class PlayerAttack : MonoBehaviour
         {
             if (collider.TryGetComponent<IHit>(out IHit iHit))
             {
-                iHit.OnDamaged(_AttackForce * 5.0f, (collider.transform.position - transform.position).normalized);
+                Vector3 direction = collider.transform.position - transform.position;
+                direction.y = 5.0f;
+                direction.Normalize();
+
+                iHit.OnDamaged(_AttackForce * 5.0f, direction);
             }
         }
     }

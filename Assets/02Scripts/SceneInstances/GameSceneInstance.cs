@@ -138,13 +138,13 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 게임 시작 전 띄우는 UI를 활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(true);
-        m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "READY?";
+        m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "준비";
 
         // 3초 대기 코루틴
         yield return new WaitForSecondsRealtime(3.0f);
 
         // UI 에 Start를 띄웁니다.
-        m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "START!";
+        m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "시작!";
 
         // 1초 대기 코루틴
         yield return new WaitForSecondsRealtime(1.0f);
