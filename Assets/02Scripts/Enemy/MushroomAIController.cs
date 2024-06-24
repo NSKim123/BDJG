@@ -35,12 +35,12 @@ public class MushroomAIController : EnemyAIController
     {
         if (_stateMachine.currentStateType == State.Move)
         {
-            Debug.Log("바꿈");
+            //Debug.Log("바꿈");
             _stateMachine.ChangeState(State.AvoidWater);
         }
         else if (_stateMachine.currentStateType == State.AvoidWater)
         {
-            Debug.Log("다시바꿈");
+            //Debug.Log("다시바꿈");
             _stateMachine.ChangeState(State.Move);
         }
 

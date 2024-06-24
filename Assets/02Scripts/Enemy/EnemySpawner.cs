@@ -201,7 +201,7 @@ public class EnemySpawner : MonoBehaviour
 
             while (IsFull())
             {
-                Debug.Log("²ËÂü" + _totalCount + " " + EnemyManager.Instance.TotalCount);
+                //Debug.Log("²ËÂü" + _totalCount + " " + EnemyManager.Instance.TotalCount);
                 yield return null;
             }
 
