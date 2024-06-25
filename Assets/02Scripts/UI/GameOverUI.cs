@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 게임 오버 시 활성화 될 UI 컴포넌트입니다.
@@ -22,7 +23,7 @@ public class GameOverUI : PanelWithTwoButtonsUI
     protected override void BindButtonsEvents()
     {
         // 메인 화면 버튼 클릭 이벤트 바인딩
-        //BindButton2Events(() => Debug.Log("바인딩~"));
+        BindButton2Events(() => SceneManager.LoadScene(0));
     }
 
     /// <summary>

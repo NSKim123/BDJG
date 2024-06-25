@@ -189,7 +189,11 @@ public partial class PlayerMovement : MonoBehaviour
     
     public void InitPosition(Vector3 initPosition)
     {
-        characterController.Move(initPosition - transform.position);
+        _KnockBackVelocity = Vector3.zero;
+        for(int i = 0; i < 5; ++i)
+        {
+            characterController.Move(initPosition - transform.position);
+        }
     }
 
     /// <summary>
