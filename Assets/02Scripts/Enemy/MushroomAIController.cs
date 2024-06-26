@@ -14,7 +14,7 @@ public class MushroomAIController : EnemyAIController
             _stateMachine.ChangeState(State.Move);
         }
 
-        _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.DetectPlayerDistance, _targetLayer);
+        _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.AttackRange, _targetLayer);
 
         // 타켓(플레이어) 감지
         if (_attackDetect.Length > 0 && !_attacked)
@@ -52,7 +52,7 @@ public class MushroomAIController : EnemyAIController
         if (_enemyCharacter != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position, _enemyCharacter.DetectPlayerDistance);
+            Gizmos.DrawSphere(transform.position, _enemyCharacter.AttackRange);
         }
     }
 #endif

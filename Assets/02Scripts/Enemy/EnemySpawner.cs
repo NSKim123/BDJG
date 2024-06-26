@@ -11,14 +11,7 @@ public enum EnemySpawnTurn
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private WaveName currentWave;
-
-
-    public Wave[] waves;
-
-    public delegate void CoroutineStarter(WaveName wave);
-    public event CoroutineStarter OnCoroutineStart;
-    
+    // 스폰될 반경의 중심점
     [SerializeField] private Transform mushroomSpawnAxis;
     [SerializeField] private Transform cactusSpawnAxis;
 
@@ -41,69 +34,13 @@ public class EnemySpawner : MonoBehaviour
 
     private EnemySpawnTurn _turnPivot;
 
+    // 적 개수/총 개수 세기
     private int _mushroomSpawnedCount;
     private int _cactusSpawnedCount;
     private int _totalCount;
 
     private Coroutine spawnLoopCoroutine;
 
-
-    // 버섯쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Mushroom()
-    {
-        while (true)
-        {
-            //int waveIndex = (int)wave - 1;
-
-            EnemyInfoData enemydata;
-            EnemySpawnInfoData spawndata;
-
-            enemydata = mushroomData[0];
-            spawndata = mushroomSpawnInfo[0];
-
-            Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
-
-            yield return new WaitForSeconds(spawndata.SpawnTime);
-
-            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-            EnemyInit(newEnemy, enemydata);
-            _mushroomSpawnedCount++;
-            EnemyManager.Instance.TotalCount++;
-
-            yield return null;
-        }
-    }
-
-    // 선인장쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Cactus()
-    {
-        while (true)
-        {
-            //while (isPaused)
-            //{
-            //    yield return null;
-            //}
-
-            EnemySpawnInfoData spawndata;
-            EnemyInfoData enemydata;
-
-            enemydata = cactusData[0];
-            spawndata = cactusSpawnInfo[0];
-
-            Vector3 randomPosition = GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
-
-            yield return new WaitForSeconds(spawndata.SpawnTime);
-
-            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-            EnemyInit(newEnemy, enemydata);
-            _cactusSpawnedCount++;
-            EnemyManager.Instance.TotalCount++;
-
-            yield return null;
-        }
-    }
 
     /// <summary>
     /// 적 생성 후 데이터를 초기화하는 메서드입니다.
@@ -119,45 +56,10 @@ public class EnemySpawner : MonoBehaviour
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
         e.AttackSpeed = data.AttackSpeed;
-        e.DetectPlayerDistance = data.AttackRange;
+        e.AttackRange = data.AttackRange;
         e.onDead += () => onEnemyDead?.Invoke(1);
     }
 
-
-    // 적 스폰 일시정지 껐다켰다
-    public void PauseSwitchEnemySpawn()
-    {
-        isPaused = !isPaused;
-    }
-
-
-    /// <summary>
-    /// 레벨업 시 호출할 적 스폰 메서드입니다.
-    /// 스폰을 멈췄다가 레벨에 맞게 추가 스폰합니다.
-    /// </summary>
-    /// <param name="level"></param>
-    public void StartResetEnemy(int level)
-    {
-        if (level == 1)
-        {
-            return;
-        }
-        StartCoroutine(C_ResetForLevelUp(level));
-    }
-
-    private IEnumerator C_ResetForLevelUp(int level)
-    {
-        // 일시정지하기
-        PauseSwitchEnemySpawn();
-        Debug.Log("정지");
-
-        yield return new WaitForSecondsRealtime(2f);
-
-        Debug.Log("스폰 시작");
-
-        SpawnByWave((WaveName)level);
-
-    }
 
     private bool IsFull()
     {
@@ -177,21 +79,13 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void StopMushroomSpawn()
-    {
-        StopCoroutine(mushroomCoroutine);
-        mushroomCoroutine = null;
-    }
 
-    private void StopCactusSpawn()
-    {
-        StopCoroutine(cactusCoroutine);
-        cactusCoroutine = null;
-    }
-
+    /// <summary>
+    /// 적 스폰 루프를 도는 코루틴입니다. 순서에 맞춰 차례대로 스폰합니다.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator C_SpawnLoop()
     {
-
         while (true)
         {
             while (Time.timeScale == 0)
@@ -240,7 +134,6 @@ public class EnemySpawner : MonoBehaviour
                         EnemyInit(newEnemy, enemydata);
                         ++_mushroomSpawnedCount;
                         ++EnemyManager.Instance.TotalCount;
-                        //Debug.Log(EnemyManager.Instance.TotalCount + " 총");
 
                         //Debug.Log("버섯 스폰");
 
@@ -258,80 +151,25 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
+                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
 
                         EnemyInit(newEnemy, enemydata);
                         ++_cactusSpawnedCount;
                         ++EnemyManager.Instance.TotalCount;
 
-                        //Debug.Log(EnemyManager.Instance.TotalCount + " 총");
-
                         //Debug.Log("선인장");
-
                     }
                     break;
                 default:
                     break;
             }
-
             yield return null;
-
-
-        }
-    }
-
- 
-    /// <summary>
-    /// 버섯쿤 스폰 시작 메서드입니다.
-    /// </summary>
-    /// <param name="wave">현재 레벨, WaveName으로 형변환</param>
-    private void StartMushroomSpawn()
-    {
-        if (mushroomCoroutine == null)
-        {
-            mushroomCoroutine = StartCoroutine(C_EnemySpawn_Mushroom());
         }
     }
 
     /// <summary>
-    /// 선인장쿤 스폰 시작 메서드입니다.
-    /// </summary>
-    private void StartCactusSpawn()
-    {
-        if (cactusCoroutine == null)
-        {
-            cactusCoroutine = StartCoroutine(C_EnemySpawn_Cactus());
-        }
-    }
-
-    // 웨이브별로 적 스폰
-    private void SpawnByWave(WaveName wave)
-    {
-        WaveName current = wave;
-
-        // 일시정지를 재개로 변경
-        PauseSwitchEnemySpawn();
-
-        switch (current)
-        {
-            case WaveName.General:
-                break;
-            case WaveName.Trainee:
-                {
-                    StartCactusSpawn();
-                }
-                break;
-            case WaveName.Three:
-                break;
-            case WaveName.Four:
-                break;
-            default:
-                break;
-        }
-    }
-
-    /// <summary>
-    /// 생성 코루틴 중단 후 맵에 있는 적을 모두 파괴하고, 버섯쿤(1레벨) 스폰을 시작합니다.
+    /// 생성 코루틴 중단 후 맵에 있는 적을 모두 파괴하고, 처음부터 다시 스폰을 시작합니다.
     /// </summary>
     public void ResetForRestart()
     {
@@ -347,7 +185,7 @@ public class EnemySpawner : MonoBehaviour
         {
             foreach (var item in removeList)
             {
-                //Destroy(item);
+                Destroy(item);
             }
         }
 
@@ -357,18 +195,10 @@ public class EnemySpawner : MonoBehaviour
         _totalCount = mushroomSpawnInfo[0].MaxEnemyCount + cactusSpawnInfo[0].MaxEnemyCount;
         EnemyManager.Instance.TotalCount = 0;
 
+        // 버섯부터 스폰 시작
         _turnPivot = EnemySpawnTurn.mushroomTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
-
-    private void StartSpawnLoop()
-    {
-        if (spawnLoopCoroutine == null)
-        {
-            StartCoroutine(C_SpawnLoop());
-        }
-    }
-
 
     /// <summary>
     /// 맵 내에 적들이 있다면 배열로 받아오는 메서드입니다. 
@@ -407,11 +237,86 @@ public class EnemySpawner : MonoBehaviour
         return new Vector3(x, center.y, z); // 중심의 y값을 그대로 유지
     }
 
-    // 각 wave마다 스폰 정보와 enemy 정보를 저장해둡니다.
-    [Serializable]
-    public class Wave
+    // 웨이브별로 적 스폰
+    private void SpawnByWave(WaveName wave)
     {
-        public List<EnemySpawnInfoData> spawn;
-        public List<EnemyInfoData> enemydata;
+        WaveName current = wave;
+
+        // 일시정지를 재개로 변경
+        PauseSwitchEnemySpawn();
+
+        switch (current)
+        {
+            case WaveName.General:
+                break;
+            case WaveName.Trainee:
+                {
+                    //StartCactusSpawn();
+                }
+                break;
+            case WaveName.Three:
+                break;
+            case WaveName.Four:
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    // 적 스폰 일시정지 껐다켰다
+    public void PauseSwitchEnemySpawn()
+    {
+        isPaused = !isPaused;
+    }
+
+    // 버섯쿤 생성 코루틴입니다.
+    private IEnumerator C_EnemySpawn_Mushroom()
+    {
+        while (true)
+        {
+            EnemyInfoData enemydata;
+            EnemySpawnInfoData spawndata;
+
+            enemydata = mushroomData[0];
+            spawndata = mushroomSpawnInfo[0];
+
+            Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+
+            yield return new WaitForSeconds(spawndata.SpawnTime);
+
+            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+
+            EnemyInit(newEnemy, enemydata);
+            _mushroomSpawnedCount++;
+            EnemyManager.Instance.TotalCount++;
+
+            yield return null;
+        }
+    }
+
+    // 선인장쿤 생성 코루틴입니다.
+    private IEnumerator C_EnemySpawn_Cactus()
+    {
+        while (true)
+        {
+            EnemySpawnInfoData spawndata;
+            EnemyInfoData enemydata;
+
+            enemydata = cactusData[0];
+            spawndata = cactusSpawnInfo[0];
+
+            Vector3 randomPosition = GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
+
+            yield return new WaitForSeconds(spawndata.SpawnTime);
+
+            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+
+            EnemyInit(newEnemy, enemydata);
+            _cactusSpawnedCount++;
+            EnemyManager.Instance.TotalCount++;
+
+            yield return null;
+        }
     }
 }

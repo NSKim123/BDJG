@@ -9,7 +9,7 @@ using UnityEngine.AI;
 public abstract class Enemy : MonoBehaviour, IHit
 {
     public abstract float MoveSpeed { get; set; }
-    public abstract float DetectPlayerDistance { get; set; }
+    public abstract float AttackRange { get; set; }
     public abstract float AttackForce { get; set; }
     public abstract float AttackTime { get; set; }
     public abstract float AttackSpeed { get; set; }

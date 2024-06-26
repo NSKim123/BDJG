@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cactus : Enemy
 {
     public override float MoveSpeed { get; set; }
-    public override float DetectPlayerDistance { get; set; }
+    public override float AttackRange { get; set; }
     public override float Damage_Distance { get; set; }
     public override Vector3 Damage_Direction { get; set; }
     public override float AttackForce { get; set; }
