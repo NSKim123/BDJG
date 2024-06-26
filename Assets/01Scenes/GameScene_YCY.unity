@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22276047, g: 0.34945214, b: 0.54595894, a: 1}
+  m_IndirectSpecularColor: {r: 0.22276042, g: 0.3494519, b: 0.5459574, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -164,18 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3cf9c654db5942aa8ab50cbb55483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentWave: 1
-  waves:
-  - spawn:
-    - {fileID: 11400000, guid: ae96916c4bb3c6b4fa2918e43a5243e9, type: 2}
-    enemydata:
-    - {fileID: 11400000, guid: e7a0001652bd7394bbe053b3378d023f, type: 2}
-  - spawn:
-    - {fileID: 11400000, guid: ae96916c4bb3c6b4fa2918e43a5243e9, type: 2}
-    - {fileID: 11400000, guid: fb2520e342e3c4048a1bf807fde8c9c2, type: 2}
-    enemydata:
-    - {fileID: 11400000, guid: e7a0001652bd7394bbe053b3378d023f, type: 2}
-    - {fileID: 11400000, guid: 5317809767f1bb547805690b56ad4c2a, type: 2}
   mushroomSpawnAxis: {fileID: 878436948}
   cactusSpawnAxis: {fileID: 1899784337}
   mushroomData:
@@ -1383,8 +1371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a3f13469408da64c8a81986f4d60318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterGround: {fileID: 2097778241}
-  map: {fileID: 1164451482}
+  _waterGround: {fileID: 2097778241}
+  _map: {fileID: 1164451482}
   warning: {fileID: 0}
 --- !u!4 &843712206
 Transform:

@@ -14,7 +14,9 @@ public abstract class EnemyAIController : MonoBehaviour
     [SerializeField] protected bool _attacked = false;
 
 
-    public abstract Collider[] AttackDetect { get;}
+    public abstract Collider[] AttackDetect { get; }
+
+    //public int AttackDetected { get; set; }
 
     private MapManager _mapManager;
 

@@ -8,17 +8,18 @@ public class CactusAIController : EnemyAIController
     bool isDetected = false;
 
     public override Collider[] AttackDetect { get { return _attackDetect; } }
-
     private Collider[] _attackDetect;
+
 
 
     void Update()
     {
         dis = Vector3.Distance(transform.position, target.transform.position);
 
-        _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.DetectPlayerDistance, _targetLayer);
+        // 수정하기
+        _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.AttackRange, _targetLayer);
 
-
+        //AttackDetected = Physics.OverlapSphereNonAlloc(transform.position, _enemyCharacter.AttackRange, AttackDetect);
 
         if (dis <= maxdis && !isDetected)
         {
@@ -58,7 +59,7 @@ public class CactusAIController : EnemyAIController
         if (_enemyCharacter != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position, _enemyCharacter.DetectPlayerDistance);
+            Gizmos.DrawSphere(transform.position, _enemyCharacter.AttackRange);
         }
     }
 #endif

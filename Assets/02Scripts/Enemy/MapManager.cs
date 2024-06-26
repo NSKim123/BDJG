@@ -7,120 +7,105 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    public GameObject waterGround;
+    // 물 객체
+    [SerializeField] private GameObject _waterGround;
+    // 맵 객체
+    [SerializeField] private GameObject _map;
+    private NavMeshSurface _navMeshMap;
 
-    private Dictionary<WaveName, float> heightOfWater;
-    [SerializeField] private GameObject map;
-    private NavMeshSurface navMeshMap;
+    //물 높이를 단계별로 저장한 배열
+    private float[] _heightOfWater;
 
+    // 물이 높아질 때 호출할 이벤트
+    // 적의 이동방향을 중앙으로 변경
     public event Action OnChangeDestination;
 
-    private Coroutine waterCoroutine;
+    private Coroutine _waterCoroutine;
+    private WaitForSeconds _waitSecForWaterUp;
 
+    // 경고 UI
     public GameObject warning;
+    private Animation _warningAnim;
 
-    private Animation warninganim;
 
     private void Start()
     {
-        warninganim = warning.GetComponent<Animation>();
+        _navMeshMap = _map.GetComponent<NavMeshSurface>();
+        _warningAnim = warning.GetComponent<Animation>();
+        _waitSecForWaterUp = new WaitForSeconds(45.0f);
 
-        // 물 y값 1단계: 0.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.1 (변동가능)
-        heightOfWater = new Dictionary<WaveName, float>
+        // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
+        _heightOfWater = new float[]
         {
-            {WaveName.General, 1.5f },
-            {WaveName.Trainee, 3.1f },
-            {WaveName.Three, 4.7f },
-            {WaveName.Four, 6.1f }
+            1.5f,
+            3.1f,
+            4.7f,
+            6.4f
         };
-
-        navMeshMap = map.GetComponent<NavMeshSurface>();
-
     }
 
     /// <summary>
-    /// 물 높이를 올리는 코루틴 함수를 시작합니다.
-    /// 1레벨에서는 물 높이 조절 함수를 호출하지 않습니다.
+    /// 시간에 따라 물 높이를 조절하는 코루틴입니다.
     /// </summary>
-    /// <param name="level"></param>
-    public void SetWaterHeightByLevel(int level)
-    {
-        if (level == 1)
-        {
-            return;
-        }
-        //StartCoroutine(C_WaterUP((WaveName)level));
-    }
-
-
-
+    /// <returns></returns>
     public IEnumerator C_WaterUP()
     {
-        WaveName wave = WaveName.General;
-        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
-        navMeshMap.BuildNavMesh();
+        int waterIndex = 0;
 
-        while ((int)wave < Enum.GetValues(typeof(WaveName)).Length)
+        _waterGround.transform.position = new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
+        _navMeshMap.BuildNavMesh();
+
+        while (waterIndex < _heightOfWater.Length - 1)
         {
-            yield return new WaitForSeconds(45.0f);
+            // time for water rising
+            yield return _waitSecForWaterUp;
 
-            warninganim.Play();
+            // Show warning UI
+            _warningAnim.Play();
 
-            while (warninganim.isPlaying)
+            while (_warningAnim.isPlaying)
             {
                 yield return null;
             }
 
-            wave++;
+            waterIndex++;
 
+            // 적의 이동방향 변경 (중심으로)
             OnChangeDestination?.Invoke();
 
-            while (waterGround.transform.position.y < heightOfWater[wave])
+            while (_waterGround.transform.position.y < _heightOfWater[waterIndex])
             {
-                waterGround.transform.position += new Vector3(0, 0.3f, 0);
+                _waterGround.transform.position += new Vector3(0, 0.3f, 0);
 
-                if (waterGround.transform.position.y > heightOfWater[wave])
+                if (_waterGround.transform.position.y > _heightOfWater[waterIndex])
                 {
-                    waterGround.transform.position =
-                        new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
+                    _waterGround.transform.position =
+                        new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
                 }
 
                 yield return new WaitForSeconds(0.1f);
             }
-            navMeshMap.BuildNavMesh();
-           // Debug.Log("맵 구움");
+            _navMeshMap.BuildNavMesh();
+            // Debug.Log("맵 구움");
 
+            // 적의 이동방향 변경 (플레이어쪽으로)
             OnChangeDestination?.Invoke();
         }
  
     }
 
-    public void ChangeMap(WaveName wave)
-    {
-        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
-
-        // 딜레이 확인 필요
-        navMeshMap.BuildNavMesh();
-    }
-
+    /// <summary>
+    /// 코루틴을 중단하고 다시 시작하는 메서드입니다.
+    /// 게임 시작 시 호출합니다.
+    /// </summary>
     public void StartMapSetting()
     {
-        if (waterCoroutine != null)
+        if (_waterCoroutine != null)
         {
-            StopCoroutine(waterCoroutine);
-            waterCoroutine = null;
+            StopCoroutine(_waterCoroutine);
+            _waterCoroutine = null;
         }
-        waterCoroutine = StartCoroutine(C_WaterUP());
-    }
-
-
-
-    // 재시작 시 호출할 맵을 초기화하는 메서드입니다.
-    public void RestartMap(WaveName wave)
-    {
-        waterGround.transform.position = new Vector3(waterGround.transform.position.x, heightOfWater[wave], waterGround.transform.position.z);
-        navMeshMap.BuildNavMesh();
-
+        _waterCoroutine = StartCoroutine(C_WaterUP());
     }
 
 }

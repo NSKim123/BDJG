@@ -80,6 +80,7 @@ public class EnemyStateAttack : EnemyStateBase
                             //Debug.Log("attack");
 
                         }
+
                         _currentStep++;
                     }
 
