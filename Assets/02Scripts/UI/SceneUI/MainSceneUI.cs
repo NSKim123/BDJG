@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ public class MainSceneUI : MonoBehaviour
     [Header("# 게임 시작 UI")]
     public BeforeGameStartUI m_BeforeGameStartUI;
 
+    [Header("# 터치 안내 텍스트")]
+    public TMP_Text m_TouchHere;
+
     private void Awake()
     {
         BindUIEvents();
@@ -18,9 +22,15 @@ public class MainSceneUI : MonoBehaviour
 
     private void BindUIEvents()
     {
-        m_Button_OpenGameStartUI.onClick.AddListener(() => m_BeforeGameStartUI.gameObject.SetActive(true));
-        m_Button_OpenGameStartUI.onClick.AddListener(() => m_Button_OpenGameStartUI.gameObject.SetActive(false));
+        m_Button_OpenGameStartUI.onClick.AddListener(ActiveBeforeGameStartUI);
+        
 
-        m_BeforeGameStartUI.m_Button_Cancel.onClick.AddListener(() => m_Button_OpenGameStartUI.gameObject.SetActive(false));
+        m_BeforeGameStartUI.m_Button_Cancel.onClick.AddListener(() => m_TouchHere.gameObject.SetActive(true));
+    }
+
+    private void ActiveBeforeGameStartUI()
+    {
+        m_BeforeGameStartUI.gameObject.SetActive(true);
+        m_TouchHere.gameObject.SetActive(false);
     }
 }

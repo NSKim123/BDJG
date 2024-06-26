@@ -267,6 +267,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         // 레벨 시스템 내부에서의 초기화를 진행합니다.
         _LevelSystem.Initailize();
 
+        _ItemSlots.Clear();
+        onItemSlotsChanged?.Invoke(_ItemSlots);
+
         // 행동불가 상태, 사망 상태를 초기화합니다.
         _IsDead = false;
         _IsStunned = false;
@@ -382,13 +385,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         movementComponent.OnMoveInput(inputDirection);
     }
 
-    /// <summary>
-    /// 회전 입력을 받았을 때 호출되는 메서드입니다.
-    /// </summary>
-    /// <param name="inputDelta"> 입력받은 회전 값입니다.</param>
-    public void OnTurnInput(Vector2 inputDelta)
+    public void OnUseItemInput()
     {
-        movementComponent.OnTurnInput(inputDelta.x);
+        UseItem();
     }
 
     /// <summary>

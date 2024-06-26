@@ -203,7 +203,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 플레이어 객체의 대리자에 함수들을 바인드시킵니다.
         BindPlayerEvents();
 
-        BindENemyEvents();
+        BindEnemyEvents();
     }
 
     /// <summary>
@@ -222,7 +222,7 @@ public class GameSceneInstance : SceneInstanceBase
         m_GameSceneUI.m_GameOverUI.BindButton1Events(StartGame);
 
         // 아이템 슬롯 UI 클릭 이벤트 <-- 바인드 -- 아이템 사용 함수
-        m_GameSceneUI.m_ItemSlotsUI.BindClickEvent(playerController.controlledCharacter.UseItem);
+        m_GameSceneUI.m_ItemSlotsUI.BindClickEvent(playerController.OnUseItem);
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
     }
 
-    private void BindENemyEvents()
+    private void BindEnemyEvents()
     {
         _EnemySpawner.onEnemyDead += AddScore;
         _EnemySpawner.onEnemyDead += playerController.controlledCharacter.levelSystem.IncreaseKillCount;
