@@ -13,9 +13,9 @@ public class GameScenePlayerController : PlayerControllerBase
     /// </summary>
     public new PlayerCharacter controlledCharacter => base.controlledCharacter as PlayerCharacter;
 
-    public void OnTurn(InputValue inputValue)
+    public void OnUseItem()
     {
-        controlledCharacter?.OnTurnInput(inputValue.Get<Vector2>());
+        controlledCharacter?.OnUseItemInput();
     }
 
     public void OnMove(InputValue inputValue)

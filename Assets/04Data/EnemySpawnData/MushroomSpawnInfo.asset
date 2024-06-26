@@ -16,5 +16,5 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 4737009380193390080, guid: 983be5481a4418942b98c80bf54b3476,
     type: 3}
   _maxEnemyCount: 10
-  _spawnRadius: 5
+  _spawnRadius: 8
   _spawnTime: 2

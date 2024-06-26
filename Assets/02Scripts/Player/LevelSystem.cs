@@ -163,14 +163,16 @@ public class LevelSystem
         {
             LevelUp(_Level + 1);
         }
-    }    
+    }
 
+#if UNITY_EDITOR
     public void OnDrawGizmos(Vector3 pos)
     {
         GUIContent gUIContent = new GUIContent();
         gUIContent.text = $"레벨 : {level}\n처치 수 / 레벨업 목표 처치수 : {_KillCountGauge.currentValue} / {_KillCountGauge.max}\n생존 시간 / 레벨업 목표 생존시간 : {_SurvivalTimeGauge.currentValue} / {_SurvivalTimeGauge.max}";
         Handles.Label(pos + Vector3.down, gUIContent);
     }
+#endif
 }
 
 /// <summary>
