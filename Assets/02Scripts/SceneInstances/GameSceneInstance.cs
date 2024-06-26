@@ -221,6 +221,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 게임오버 UI 다시하기 버튼 클릭 이벤트 <-- 바인드 -- 게임 실행 함수
         m_GameSceneUI.m_GameOverUI.BindButton1Events(StartGame);
 
+        // 아이템 슬롯 UI 클릭 이벤트 <-- 바인드 -- 아이템 사용 함수
         m_GameSceneUI.m_ItemSlotsUI.BindClickEvent(playerController.controlledCharacter.UseItem);
     }
 

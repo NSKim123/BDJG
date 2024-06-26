@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -49,8 +50,8 @@ public class ConfigurationUI : MonoBehaviour
     /// </summary>
     private void BindPopUpOnClickMainSceneEvents()
     {
-        // TO DO : 메인 화면으로 돌아가는 이벤트 바인딩
-        // m_UIOnClickMainSceneButton.BindButton1Events();
+        // 메인 화면으로 돌아가는 이벤트 바인딩
+        m_PopUpOnClickMainSceneButton.BindButton1Events(() => SceneManager.LoadScene(0));
 
         // 취소 버튼
         m_PopUpOnClickMainSceneButton.BindButton2Events(() => m_PopUpOnClickMainSceneButton.gameObject.SetActive(false));
