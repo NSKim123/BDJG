@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ItemIconScriptableObject", menuName = "ScriptableObject/Item/ItemScriptableObject")]
+[CreateAssetMenu(fileName = "ItemIconScriptableObject", menuName = "ScriptableObject/Item/ItemIconScriptableObject")]
 public class ItemIconScriptableObject : ScriptableObject
 {
     public List<ItemIconInfo> m_ItemIconInfos = new();

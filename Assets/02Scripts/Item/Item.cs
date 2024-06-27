@@ -17,10 +17,10 @@ public abstract class Item : MonoBehaviour
     {
         if (other.transform.CompareTag("Player"))
         {
-            Use(other);
+            GetItem(other);
             Destroy(gameObject);
         }
     }
     // 아이템을 사용하는 메서드입니다.
-    protected abstract void Use(Collider collider);
+    protected abstract void GetItem(Collider collider);
 }
