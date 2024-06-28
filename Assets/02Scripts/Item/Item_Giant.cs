@@ -5,7 +5,7 @@ public class Item_Giant : Item
 {
     private const int GiantBuffCode = 100001;
 
-    protected override void Use(Collider collider)
+    protected override void GetItem(Collider collider)
     {
         collider.GetComponent<PlayerCharacter>().AddItem(GiantBuffCode);
     }
