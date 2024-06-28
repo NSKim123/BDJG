@@ -25,13 +25,18 @@ public class MapManager : MonoBehaviour
 
     // 경고 UI
     public GameObject warning;
-    private Animation _warningAnim;
+    private Animation _warningUIAnim;
+
+    // 위험 예정 지역 경고
+    [SerializeField] private GameObject warningArea;
+    private Animation _warningAreaAnim;
 
 
     private void Start()
     {
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
-        _warningAnim = warning.GetComponent<Animation>();
+        _warningUIAnim = warning.GetComponent<Animation>();
+        _warningAreaAnim = warningArea.GetComponent<Animation>();
         _waitSecForWaterUp = new WaitForSeconds(45.0f);
 
         // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
@@ -57,25 +62,30 @@ public class MapManager : MonoBehaviour
 
         while (waterIndex < _heightOfWater.Length - 1)
         {
+            warningArea.transform.position =
+                new Vector3(warningArea.transform.position.x, _heightOfWater[waterIndex], warningArea.transform.position.z);
+
             // time for water rising
             yield return _waitSecForWaterUp;
 
             // Show warning UI
-            _warningAnim.Play();
+            _warningUIAnim.Play();
+            _warningAreaAnim.Play();
 
-            while (_warningAnim.isPlaying)
+            while (_warningUIAnim.isPlaying || _warningAreaAnim.isPlaying)
             {
                 yield return null;
             }
-
+            
             waterIndex++;
+
 
             // 적의 이동방향 변경 (중심으로)
             OnChangeDestination?.Invoke();
 
             while (_waterGround.transform.position.y < _heightOfWater[waterIndex])
             {
-                _waterGround.transform.position += new Vector3(0, 0.3f, 0);
+                _waterGround.transform.position += new Vector3(0, 0.1f, 0);
 
                 if (_waterGround.transform.position.y > _heightOfWater[waterIndex])
                 {
@@ -107,5 +117,7 @@ public class MapManager : MonoBehaviour
         }
         _waterCoroutine = StartCoroutine(C_WaterUP());
     }
+
+
 
 }
