@@ -303,10 +303,10 @@ public class PlayerAttack : MonoBehaviour
             if (collider.TryGetComponent<IHit>(out IHit iHit))
             {
                 Vector3 direction = collider.transform.position - transform.position;
-                direction.y = 5.0f;
+                direction.y = 1.0f;
                 direction.Normalize();
 
-                iHit.OnDamaged(_AttackForce * 5.0f, direction);
+                iHit.OnDamaged(_AttackForce * 3.0f, direction);
             }
         }
     }

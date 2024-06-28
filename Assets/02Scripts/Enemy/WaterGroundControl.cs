@@ -7,7 +7,7 @@ public class WaterGroundControl : MonoBehaviour
     {
         if (other.TryGetComponent<IHit>(out IHit iHit))
         {
-            Debug.Log("물 감지" + gameObject.name);
+            //Debug.Log("물 감지" + gameObject.name);
             iHit.OnDead();
         }
     }

@@ -76,7 +76,7 @@ public class EnemyStateAttack : EnemyStateBase
                         if (enemyController.AttackDetect.Length > 0)
                         {
                             // 플레이어에게 데미지 주는 함수 호출
-                            enemyController.AttackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, enemyCharacter.transform.forward);
+                            enemyController.AttackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, (enemyCharacter.transform.forward + Vector3.up).normalized);
                             //Debug.Log("attack");
 
                         }
