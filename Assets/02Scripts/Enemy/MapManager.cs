@@ -37,7 +37,7 @@ public class MapManager : MonoBehaviour
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
         _warningUIAnim = warning.GetComponent<Animation>();
         _warningAreaAnim = warningArea.GetComponent<Animation>();
-        _waitSecForWaterUp = new WaitForSeconds(3.0f);
+        _waitSecForWaterUp = new WaitForSeconds(45.0f);
 
         // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
         _heightOfWater = new float[]
@@ -85,7 +85,7 @@ public class MapManager : MonoBehaviour
 
             while (_waterGround.transform.position.y < _heightOfWater[waterIndex])
             {
-                _waterGround.transform.position += new Vector3(0, 0.3f, 0);
+                _waterGround.transform.position += new Vector3(0, 0.1f, 0);
 
                 if (_waterGround.transform.position.y > _heightOfWater[waterIndex])
                 {
