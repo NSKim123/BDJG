@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22276042, g: 0.3494519, b: 0.5459574, a: 1}
+  m_IndirectSpecularColor: {r: 0.22276047, g: 0.34945214, b: 0.54595894, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1216,7 +1216,6 @@ GameObject:
   - component: {fileID: 660913715}
   - component: {fileID: 660913714}
   - component: {fileID: 660913713}
-  - component: {fileID: 660913712}
   - component: {fileID: 660913711}
   m_Layer: 0
   m_Name: WarningAreaCube
@@ -1241,27 +1240,6 @@ Animation:
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!65 &660913712
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 660913710}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &660913713
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1379,7 +1357,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 100, y: 40, z: 1}
+  m_Size: {x: 100, y: 40, z: 25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &716497004
 MonoBehaviour:
@@ -2044,7 +2022,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 40, z: 100}
+  m_Size: {x: 25, y: 40, z: 100}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1132819069
 MonoBehaviour:
@@ -2562,7 +2540,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 100, y: 40, z: 1}
+  m_Size: {x: 100, y: 40, z: 25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1835747359
 MonoBehaviour:
@@ -2665,7 +2643,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 40, z: 100}
+  m_Size: {x: 25, y: 40, z: 100}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1900393180
 MonoBehaviour:
@@ -3076,6 +3054,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SlopeLimit
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358734073248725393, guid: 4e5884f8b6b9f044e8ce42a11349412d,
+        type: 3}
+      propertyPath: m_JumpForce
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4263078721585241230, guid: 4e5884f8b6b9f044e8ce42a11349412d,
         type: 3}

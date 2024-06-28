@@ -22,7 +22,7 @@ public class EnemyStateHurt : EnemyStateBase
     public override State MoveNextStep()
     {
         State nextState = State.Hurt;
-
+        Debug.Log(_currentStep);
         switch (_currentStep)
         {
             case StepInState.None:
@@ -38,9 +38,7 @@ public class EnemyStateHurt : EnemyStateBase
                     animator.Play("hurt");
 
                     dis = enemyCharacter.Damage_Distance;
-                    dir = enemyCharacter.Damage_Direction;
-                    dir.y = 0.0f;
-                    dir.Normalize();
+                    dir = enemyCharacter.Damage_Direction;                    
                     knockBackVelocity = dis * dir;
 
                     _StunedTime = 1.0f;
@@ -62,16 +60,22 @@ public class EnemyStateHurt : EnemyStateBase
                     else
                     {
                         _currentStep++;
+                        enemyAgent.enabled = true;
                     }
                 }
                 break;
             case StepInState.End:
                 {
                     nextState = State.Move;
+                    if (!enemyAgent.isOnNavMesh)
+                    {
+                        enemyCharacter.OnDead();
+                    }
+                    
                     //enemyAgent.SetDestination(enemyController.target.transform.position);
                     rigid.mass /= 2;
                     rigid.isKinematic = true;
-                    enemyAgent.enabled = true;
+                    
                     //enemyAgent.isStopped = false;
                 }
                 break;

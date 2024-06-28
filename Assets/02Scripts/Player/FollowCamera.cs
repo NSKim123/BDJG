@@ -66,7 +66,7 @@ public class FollowCamera : MonoBehaviour
 
     private float AdjustDistanceByTargetScale()
     {
-        _Distance = Mathf.Lerp(_Distance, (_TargetObject.transform.lossyScale.y - 1.0f) * 0.3f + 1.0f, 0.1f);
+        _Distance = Mathf.Lerp(_Distance, (_TargetObject.transform.lossyScale.y - 1.0f) * 0.1f + 0.75f, 0.1f);
         return _Distance;
     }
 
