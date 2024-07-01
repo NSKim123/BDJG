@@ -79,6 +79,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// </summary>
     /// <param name="audioName">사운드의 파일명입니다.</param>
     /// <param name="type">사운드의 종류입니다.</param>
+    /// <param name="pitch">사운드의 빠르기입니다.</param>
     public void PlaySound(string audioName, SoundType type, float pitch = 1)
     {
         AudioClip clip = GetOrLoadAudioClip(audioName, type);

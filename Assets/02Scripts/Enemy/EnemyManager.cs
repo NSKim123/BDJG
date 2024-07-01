@@ -13,28 +13,9 @@ public enum WaveName
     Four,
 }
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : SingletonBase<EnemyManager>
 {
-    public static EnemyManager Instance
-    {
-        get
-        {
-            return _instance;
-        }
-    }
-    private static EnemyManager _instance;
-
-    private void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    public EnemySpawner spawner;
 
     public int MushroomCount { get; set; }
     public int CactusCount { get; set; }

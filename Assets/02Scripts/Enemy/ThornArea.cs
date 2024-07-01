@@ -25,6 +25,7 @@ public class ThornArea : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            //other.GetComponent<PlayerCharacter>().attackComponent.bulletGauge.Switch~~~~
             //탄환 회복 막고 함정 없애기
             //other.GetComponent<BulletGauge>().
             //Destroy(gameObject);
