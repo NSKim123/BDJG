@@ -132,7 +132,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1074269694396344173
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 384775046, guid: 5297fcdb2d8f1d4499cce667ab326ca4, type: 3}
+  m_Sprite: {fileID: 455232242, guid: b58270842f975f1459613b1f1e7d7989, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
