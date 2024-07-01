@@ -57,10 +57,6 @@ public class EnemySpawner : MonoBehaviour
 
     private Coroutine spawnLoopCoroutine;
 
-    private void Update()
-    {
-        
-    }
     /// <summary>
     /// 적 생성 후 데이터를 초기화하는 메서드입니다.
     /// </summary>
@@ -131,6 +127,8 @@ public class EnemySpawner : MonoBehaviour
 
         while (true)
         {
+            yield return new WaitUntil(() => isPaused == false);
+
             while (Time.timeScale == 0)
             {
                 yield return null;
@@ -360,86 +358,12 @@ public class EnemySpawner : MonoBehaviour
         return new Vector3(x, center.y, z); // 중심의 y값을 그대로 유지
     }
 
-    // 웨이브별로 적 스폰
-    private void SpawnByWave(WaveName wave)
-    {
-        WaveName current = wave;
-
-        // 일시정지를 재개로 변경
-        PauseSwitchEnemySpawn();
-
-        switch (current)
-        {
-            case WaveName.General:
-                break;
-            case WaveName.Trainee:
-                {
-                    //StartCactusSpawn();
-                }
-                break;
-            case WaveName.Three:
-                break;
-            case WaveName.Four:
-                break;
-            default:
-                break;
-        }
-    }
-
 
     // 적 스폰 일시정지 껐다켰다
-    public void PauseSwitchEnemySpawn()
+    public void PauseSwitchEnemySpawn(bool isPaused)
     {
-        isPaused = !isPaused;
+        this.isPaused = isPaused;
     }
 
-    // 버섯쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Mushroom()
-    {
-        while (true)
-        {
-            EnemyInfoData enemydata;
-            EnemySpawnInfoData spawndata;
-
-            enemydata = mushroomData[0];
-            spawndata = mushroomSpawnInfo[0];
-
-            Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
-
-            yield return new WaitForSeconds(spawndata.SpawnTime);
-
-            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-            EnemyInit(newEnemy, enemydata);
-            _mushroomSpawnedCount++;
-            EnemyManager.Instance.TotalCount++;
-
-            yield return null;
-        }
-    }
-
-    // 선인장쿤 생성 코루틴입니다.
-    private IEnumerator C_EnemySpawn_Cactus()
-    {
-        while (true)
-        {
-            EnemySpawnInfoData spawndata;
-            EnemyInfoData enemydata;
-
-            enemydata = cactusData[0];
-            spawndata = cactusSpawnInfo[0];
-
-            Vector3 randomPosition = GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
-
-            yield return new WaitForSeconds(spawndata.SpawnTime);
-
-            GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-            EnemyInit(newEnemy, enemydata);
-            _cactusSpawnedCount++;
-            EnemyManager.Instance.TotalCount++;
-
-            yield return null;
-        }
-    }
+  
 }

@@ -21,7 +21,8 @@ public class MapManager : MonoBehaviour
     public event Action OnChangeDestination;
 
     private Coroutine _waterCoroutine;
-    private WaitForSeconds _waitSecForWaterUp;
+    private float _waterDownDefaultSecond;
+    private float _waterDownDelta;
 
     // 경고 UI
     public GameObject warning;
@@ -32,7 +33,8 @@ public class MapManager : MonoBehaviour
     {
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
         _warningUIAnim = warning.GetComponent<Animation>();
-        _waitSecForWaterUp = new WaitForSeconds(45.0f);
+        _waterDownDefaultSecond = 40f;
+        _waterDownDelta = 10f;
 
         // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
         _heightOfWater = new float[]
@@ -59,7 +61,7 @@ public class MapManager : MonoBehaviour
         {
             
             // time for water rising
-            yield return _waitSecForWaterUp;
+            yield return new WaitForSeconds(_waterDownDefaultSecond + waterIndex * _waterDownDelta);
 
             // Show warning UI
             _warningUIAnim.Play();

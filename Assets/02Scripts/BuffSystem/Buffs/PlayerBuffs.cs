@@ -273,6 +273,7 @@ public class WindBuff : TimerBuff
 
         // 이펙트 생성
         // 적 스폰 일시정지
+        EnemyManager.Instance.spawner.PauseSwitchEnemySpawn(true);
     }
 
     protected override void onRenewBuffContext()
@@ -293,6 +294,8 @@ public class WindBuff : TimerBuff
 
         // 이펙트 제거
         // 적 스폰 재개
+        EnemyManager.Instance.spawner.PauseSwitchEnemySpawn(false);
+
     }
 
 }
