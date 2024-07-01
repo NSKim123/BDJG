@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57ac1d7f71f932d48a430f99e8e07ad5, type: 3}
-  m_Name: MushroomData_wave1
+  m_Name: Mushroom_SpecialData
   m_EditorClassIdentifier: 
-  _enemyType: 0
-  _enemyID: mush1
-  _attackForce: 1.5
-  _defenseForce: 1.5
+  _enemyType: 2
+  _enemyID: mush2
+  _attackForce: 20
+  _defenseForce: 10
   _moveSpeed: 3.5
-  _isAttackTargetExist: 0
-  _attackWay: 0
   _attackRange: 1
   _attackSpeed: 1
   _attackTime: 1
+  _specialAttackCoolTime: 10
+  _specialAttackRange: 3
+  _specialAttackTime: 2

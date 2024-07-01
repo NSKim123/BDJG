@@ -55,6 +55,7 @@ public class BulletGauge : IntGauge
     /// </summary>
     public event System.Action onOverburdenFinished;
 
+
     /// <summary>
     /// 생성자입니다.
     /// </summary>
@@ -70,6 +71,7 @@ public class BulletGauge : IntGauge
 
         currentValue = max;
     }
+
 
     /// <summary>
     /// 탄환 게이지 회복 조건을 체크하는 메서드입니다.

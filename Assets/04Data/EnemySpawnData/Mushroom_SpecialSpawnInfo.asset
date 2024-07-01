@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547a9947fd2468a49bce5554bc996e0c, type: 3}
+  m_Name: Mushroom_SpecialSpawnInfo
+  m_EditorClassIdentifier: 
+  _enemyType: 2
+  _enemyPrefab: {fileID: 4737009380193390080, guid: aa7c155c6e49276408d65f3e3abdbc18,
+    type: 3}
+  _maxEnemyCount: 1
+  _spawnRadius: 8
+  _spawnTime: 5

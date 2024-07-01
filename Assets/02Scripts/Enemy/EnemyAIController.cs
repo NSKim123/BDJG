@@ -13,7 +13,6 @@ public abstract class EnemyAIController : MonoBehaviour
     [SerializeField] protected LayerMask _targetLayer;
     [SerializeField] protected bool _attacked = false;
 
-
     public abstract Collider[] AttackDetect { get; }
 
     //public int AttackDetected { get; set; }
@@ -26,11 +25,8 @@ public abstract class EnemyAIController : MonoBehaviour
         _stateMachine = GetComponent<StateMachine>();
         _enemyCharacter = GetComponent<Enemy>();
         _mapManager = FindAnyObjectByType<MapManager>();
-        _mapManager.OnChangeDestination += ChangeDestination;
-
+        //_mapManager.OnChangeDestination += ChangeDestination;
     }
-
-
 
 
     public abstract void ChangeDestination();

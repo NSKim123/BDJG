@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    public List<EnemyStateBase> states;
+    public Dictionary<State, EnemyStateBase> states;
 
     public State currentStateType;
     public EnemyStateBase currentState;
@@ -15,13 +15,13 @@ public class StateMachine : MonoBehaviour
             return false;
         }
 
-        if (states[(int)newStateType].canExecute() == false)
+        if (states[newStateType].canExecute() == false)
         {
             return false;
         }
 
-        states[(int)currentStateType].Reset();
-        currentState = states[(int)newStateType];
+        states[currentStateType].Reset();
+        currentState = states[newStateType];
         currentStateType = newStateType;
         currentState.MoveNextStep();
 
@@ -30,23 +30,23 @@ public class StateMachine : MonoBehaviour
 
     public bool ChangeState_AllowSameState(State newStateType)
     {
-        if (states[(int)newStateType].canExecute() == false)
+        if (states[newStateType].canExecute() == false)
         {
             return false;
         }
 
-        states[(int)currentStateType].Reset();
-        currentState = states[(int)newStateType];
+        states[currentStateType].Reset();
+        currentState = states[newStateType];
         currentStateType = newStateType;
         currentState.MoveNextStep();
 
         return true;
     }
 
-    public void StateInit(List<EnemyStateBase> states)
+    public void StateInit(Dictionary<State, EnemyStateBase> states)
     {
         this.states = states;
-        currentState = states[(int)currentStateType];
+        currentState = this.states[currentStateType];
     }
 
     private void Update()

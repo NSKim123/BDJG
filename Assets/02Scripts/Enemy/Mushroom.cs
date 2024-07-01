@@ -5,8 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-[Serializable]
-
 public class Mushroom : Enemy
 {
     public override float MoveSpeed { get; set; }
@@ -21,6 +19,12 @@ public class Mushroom : Enemy
     public override float AttackTime { get; set; }
     public override float AttackSpeed { get; set; }
 
+    #region 특수개체의 특수공격용, 일반개체 사용X
+    public override float SpecialAttackCoolTime { get; set; }
+    public override float SpecialAttackRange { get; set; }
+    public override float SpecialAttackTime { get; set; }
+    #endregion
+
     public override void OnDamaged(float distance, Vector3 direction)
     {
         base.OnDamaged(distance, direction);
@@ -33,20 +37,29 @@ public class Mushroom : Enemy
     {
         base.OnDead();
         stateMachine.ChangeState(State.Die);
-        EnemyManager.Instance.TotalCount--;
+        EnemySpawner.TotalEnemyCount--;
     }
 
     protected override void Start()
     {
         base.Start();
-        stateMachine.StateInit(new List<EnemyStateBase>()
+        //stateMachine.StateInit(new List<EnemyStateBase>()
+        //{
+        //    new EnemyStateIdle(stateMachine),
+        //    new EnemyStateMove(stateMachine),
+        //    new EnemyStateAttack(stateMachine),
+        //    new EnemyStateHurt(stateMachine),
+        //    new EnemyStateAvoidWater(stateMachine),
+        //    new EnemyStateDie(stateMachine)
+        //});
+        stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
         {
-            new EnemyStateIdle(stateMachine),
-            new EnemyStateMove(stateMachine),
-            new EnemyStateAttack(stateMachine),
-            new EnemyStateHurt(stateMachine),
-            new EnemyStateAvoidWater(stateMachine),
-            new EnemyStateDie(stateMachine)
+            {State.Idle, new EnemyStateIdle(stateMachine) },
+            {State.Move, new EnemyStateMove(stateMachine)},
+            {State.Attack, new EnemyStateAttack(stateMachine)},
+            {State.Hurt, new EnemyStateHurt(stateMachine)},
+            {State.AvoidWater, new EnemyStateAvoidWater(stateMachine)},
+            {State.Die, new EnemyStateDie(stateMachine)},
         });
 
     }

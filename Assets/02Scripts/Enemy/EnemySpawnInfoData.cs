@@ -6,6 +6,8 @@ public enum EnemyType
 {
     Mushroom,
     Cactus,
+    MushroomSpecial,
+    CactusSpecial,
 }
 
 // 스폰할 때 필요한 정보

@@ -46,8 +46,6 @@ public class GameSceneInstance : SceneInstanceBase
     private ItemSpawner _ItemSpawner;
 
 
-    public AudioSource audioSourceBGM;
-
     /// <summary>
     /// 이 씬에 생성된 플레이어 컨트롤러 객체
     /// </summary>
@@ -112,7 +110,7 @@ public class GameSceneInstance : SceneInstanceBase
         SetUpControl(true);
 
         // 배경음악 플레이
-        audioSourceBGM.Play();
+        SoundManager.Instance.PlaySound("bgm", SoundType.Bgm);
 
         // 게임을 재개합니다.
         ContinueGame();
@@ -246,6 +244,8 @@ public class GameSceneInstance : SceneInstanceBase
         // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
         playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
         playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
+
+
     }
 
     private void BindEnemyEvents()

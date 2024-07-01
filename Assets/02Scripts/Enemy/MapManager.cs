@@ -27,25 +27,20 @@ public class MapManager : MonoBehaviour
     public GameObject warning;
     private Animation _warningUIAnim;
 
-    // 위험 예정 지역 경고
-    [SerializeField] private GameObject warningArea;
-    private Animation _warningAreaAnim;
-
 
     private void Start()
     {
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
         _warningUIAnim = warning.GetComponent<Animation>();
-        _warningAreaAnim = warningArea.GetComponent<Animation>();
         _waitSecForWaterUp = new WaitForSeconds(45.0f);
 
         // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
         _heightOfWater = new float[]
         {
-            1.5f,
-            3.1f,
+            6.4f,
             4.7f,
-            6.4f
+            3.1f,
+            1.5f,
         };
     }
 
@@ -62,17 +57,14 @@ public class MapManager : MonoBehaviour
 
         while (waterIndex < _heightOfWater.Length - 1)
         {
-            warningArea.transform.position =
-                new Vector3(warningArea.transform.position.x, _heightOfWater[waterIndex], warningArea.transform.position.z);
-
+            
             // time for water rising
             yield return _waitSecForWaterUp;
 
             // Show warning UI
             _warningUIAnim.Play();
-            _warningAreaAnim.Play();
 
-            while (_warningUIAnim.isPlaying || _warningAreaAnim.isPlaying)
+            while (_warningUIAnim.isPlaying)
             {
                 yield return null;
             }
@@ -81,13 +73,13 @@ public class MapManager : MonoBehaviour
 
 
             // 적의 이동방향 변경 (중심으로)
-            OnChangeDestination?.Invoke();
+            //OnChangeDestination?.Invoke();
 
-            while (_waterGround.transform.position.y < _heightOfWater[waterIndex])
+            while (_waterGround.transform.position.y > _heightOfWater[waterIndex])
             {
-                _waterGround.transform.position += new Vector3(0, 0.1f, 0);
+                _waterGround.transform.position -= new Vector3(0, 0.1f, 0);
 
-                if (_waterGround.transform.position.y > _heightOfWater[waterIndex])
+                if (_waterGround.transform.position.y < _heightOfWater[waterIndex])
                 {
                     _waterGround.transform.position =
                         new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
@@ -99,7 +91,7 @@ public class MapManager : MonoBehaviour
             // Debug.Log("맵 구움");
 
             // 적의 이동방향 변경 (플레이어쪽으로)
-            OnChangeDestination?.Invoke();
+            //OnChangeDestination?.Invoke();
         }
  
     }
