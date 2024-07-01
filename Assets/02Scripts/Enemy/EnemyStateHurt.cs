@@ -16,7 +16,7 @@ public class EnemyStateHurt : EnemyStateBase
         
     }
 
-    public override bool canExecute() => true;
+    public override bool canExecute() => stateMachine.currentStateType != State.Die;
 
 
     public override State MoveNextStep()
