@@ -39,6 +39,8 @@ public class BulletGauge : IntGauge
     /// 과부하 상태인지 나타내는 논리형 변수
     /// </summary>
     private bool _IsOverburden = true;
+
+    private bool _ProhibitRecover = false;
     
     /// <summary>
     /// 과부하 상태인지를 나타내는 읽기 전용 프로퍼티입니다.
@@ -81,7 +83,8 @@ public class BulletGauge : IntGauge
     {
         // 공격 버튼 상호 작용 후 1초간 상호작용이 없을 때, 1초당 한 번씩 회복하도록 설정하였습니다.
         return Time.time - _LastAttackTime >= _BulletGaugeStartRecoverTime
-                  && Time.time - _LastRecoverTime >= _BulletGaugeRecoverCycle;
+                  && Time.time - _LastRecoverTime >= _BulletGaugeRecoverCycle
+                  && !_ProhibitRecover;
     }
 
     /// <summary>
@@ -149,6 +152,11 @@ public class BulletGauge : IntGauge
             // 과부하 돌입 이벤트 실행
             onOverburdenEnter?.Invoke();
         }
+    }
+
+    public void SwitchProhibitRecover(bool prohibitRecover)
+    {
+        _ProhibitRecover = prohibitRecover;
     }
 }
 

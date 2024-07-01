@@ -43,10 +43,7 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.End:
                 {
-                    if (fadeCoroutine == null)
-                    {
-                        fadeCoroutine = enemyCharacter.StartCoroutine(FadeOut());
-                    }
+                    fadeCoroutine = enemyCharacter.StartCoroutine(FadeOut());
                 }
                 break;
             default:

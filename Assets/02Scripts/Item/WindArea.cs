@@ -21,7 +21,12 @@ public class WindArea : MonoBehaviour
 
     private void Update()
     {
-        if(_LastAttackTime + _AttackPeriod < Time.time)
+        
+    }
+
+    private void FixedUpdate()
+    {
+        if (_LastAttackTime + _AttackPeriod < Time.time)
         {
             Push();
         }
