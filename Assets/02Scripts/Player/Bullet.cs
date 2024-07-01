@@ -10,14 +10,14 @@ public class Bullet : GuidedProjectile
     /// <summary>
     /// 이 투사체가 가질 공격력
     /// </summary>
-    private float _AttackPower;
+    protected float _AttackPower;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         Destroy(this.gameObject, 5.0f);
     }
 
-    private void OnTriggerEnter(Collider collider)
+    protected virtual void OnTriggerEnter(Collider collider)
     {
         // 플레이어와의 충돌은 무시합니다.
         if (collider.gameObject.tag == "Player") return;
@@ -25,6 +25,8 @@ public class Bullet : GuidedProjectile
         // 이 투사체가 적에게 닿으면
         if (collider.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
+            _Direction.y = 0.0f;
+            _Direction.Normalize();
             hitEnemy.OnDamaged(_AttackPower, _Direction);            
         }
 

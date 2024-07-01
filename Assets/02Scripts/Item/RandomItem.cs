@@ -15,7 +15,7 @@ public class RandomItem : MonoBehaviour
 
             Item choosedItem;
 
-            switch(choosedItemType)
+            switch (choosedItemType)
             {
                 case ItemType.Giant:
                     choosedItem = new Item_Giant();
@@ -23,9 +23,25 @@ public class RandomItem : MonoBehaviour
                 case ItemType.AreaDeployment:
                     choosedItem = new Item_AreaDeployment();
                     break;
+                case ItemType.MachineGun:
+                    choosedItem = new Item_MachineGun();
+                    break;
+                case ItemType.Shell:
+                    choosedItem = new Item_Shell();
+                    break;
+                case ItemType.Scarecrow:
+                    choosedItem = new Item_Scarecrow();
+                    break;
+                case ItemType.Wind:
+                    choosedItem = new Item_Wind();
+                    break;
+                default:
+                    choosedItem = null;
+                    break;
             }
 
-            //choosedItem.GetItem(other);
+            choosedItem?.GetItem(other);
+
             Destroy(gameObject);
         }
     }

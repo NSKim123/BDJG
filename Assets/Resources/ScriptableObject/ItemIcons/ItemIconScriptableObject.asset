@@ -17,3 +17,11 @@ MonoBehaviour:
     m_ItemIcon: {fileID: 21300000, guid: d1082b8f08d06d347981570fe84bb618, type: 3}
   - m_ItemCode: 100002
     m_ItemIcon: {fileID: 21300000, guid: 25f75f40b5ebce1468ba88a4ddd0a13b, type: 3}
+  - m_ItemCode: 100003
+    m_ItemIcon: {fileID: 21300000, guid: e01bae7d529ac854e9bd070d04f8686e, type: 3}
+  - m_ItemCode: 100004
+    m_ItemIcon: {fileID: 1125522957, guid: 22efda2121e48a745b162bcc38d4bafa, type: 3}
+  - m_ItemCode: 100005
+    m_ItemIcon: {fileID: 1896107619, guid: 22efda2121e48a745b162bcc38d4bafa, type: 3}
+  - m_ItemCode: 100006
+    m_ItemIcon: {fileID: -1655345930, guid: b2ce8cfffef867a488070e713e45f103, type: 3}

@@ -2524,6 +2524,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 1396383833091446142, guid: 4e5884f8b6b9f044e8ce42a11349412d,
+        type: 3}
+      propertyPath: m_Bullet
+      value: 
+      objectReference: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
+        type: 3}
     - target: {fileID: 1658636450394371182, guid: 4e5884f8b6b9f044e8ce42a11349412d,
         type: 3}
       propertyPath: m_SlopeLimit
@@ -2584,6 +2590,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5665393383030774994, guid: 4e5884f8b6b9f044e8ce42a11349412d,
+        type: 3}
+      propertyPath: m_Bullet
+      value: 
+      objectReference: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

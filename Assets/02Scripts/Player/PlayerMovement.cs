@@ -102,11 +102,10 @@ public partial class PlayerMovement : MonoBehaviour
     /// </summary>
     private void CalculateTargetYawAngle()
     {
-        // 이동하고 있는 상황이 아니라면 호출을 종료합니다.
-        if (normalizedZXSpeed == 0.0f) return;
-        
+        if(_InputDirection == Vector2.zero) return;
+
         // 목표 회전값을 설정합니다.
-        _TargetYawAngle = Mathf.Atan2(_TargetVelocity.x, _TargetVelocity.z) * Mathf.Rad2Deg;        
+        _TargetYawAngle = Mathf.Atan2(_InputDirection.x, _InputDirection.y) * Mathf.Rad2Deg;        
     }
 
     /// <summary>

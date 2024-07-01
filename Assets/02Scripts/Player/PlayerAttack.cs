@@ -23,7 +23,7 @@ public class PlayerAttack : MonoBehaviour
     public float m_PushPowerMultiplier = 1.0f;
 
     [Header("공격 쿨타임")]
-    public float m_AttackReuseTime = 0.75f;
+    public float m_AttackReuseTime = 0.33f;
 
     [Header("------------------------------------------------------------------------------")]
 
@@ -227,7 +227,7 @@ public class PlayerAttack : MonoBehaviour
         effect.transform.SetParent(transform);
 
         // 쿨타임을 돌리기 시작합니다.
-        //_ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
+        _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
     }
 
     /// <summary>
