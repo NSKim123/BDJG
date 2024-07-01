@@ -22,7 +22,7 @@ public class EnemyStateHurt : EnemyStateBase
     public override State MoveNextStep()
     {
         State nextState = State.Hurt;
-        Debug.Log(_currentStep);
+        //Debug.Log(_currentStep);
         switch (_currentStep)
         {
             case StepInState.None:

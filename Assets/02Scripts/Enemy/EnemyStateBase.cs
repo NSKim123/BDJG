@@ -6,9 +6,15 @@ public enum State
     Idle,
     Move,
     Attack,
+    AttackSpecial,
     Hurt,
     AvoidWater,
     Die,
+}
+
+public enum State_Special
+{
+
 }
 
 
@@ -22,7 +28,6 @@ public abstract class EnemyStateBase
         End
     }
 
-
     public abstract bool canExecute();
 
     public StepInState currentStep => _currentStep;
@@ -32,7 +37,7 @@ public abstract class EnemyStateBase
     // 필요한 컴포넌트 선언
     protected Rigidbody rigid;
     protected Animator animator;
-    protected CapsuleCollider collider;
+    protected CapsuleCollider col;
     protected EnemyAIController enemyController;
     protected StateMachine stateMachine;
     protected Enemy enemyCharacter;
@@ -43,7 +48,7 @@ public abstract class EnemyStateBase
     {
         this.stateMachine = stateMachine;
         this.animator = stateMachine.GetComponent<Animator>();
-        this.collider = stateMachine.GetComponent<CapsuleCollider>();
+        this.col = stateMachine.GetComponent<CapsuleCollider>();
         this.rigid = stateMachine.GetComponent<Rigidbody>();
         this.enemyCharacter = stateMachine.GetComponent<Enemy>();
         this.enemyController = stateMachine.GetComponent<EnemyAIController>();
@@ -56,4 +61,5 @@ public abstract class EnemyStateBase
     {
         _currentStep = StepInState.None;
     }
+
 }

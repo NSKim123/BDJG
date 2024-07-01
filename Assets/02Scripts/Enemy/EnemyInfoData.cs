@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 // 적의 기본 정보, 수치 데이터
@@ -14,11 +15,13 @@ public class EnemyInfoData : ScriptableObject
     public float AttackForce => _attackForce;
     public float DefenseForce => _defenseForce;
     public float MoveSpeed => _moveSpeed;
-    public bool IsAttackTargetExist => _isAttackTargetExist;
-    public bool AttackWay => _attackWay;
     public float AttackRange => _attackRange;
     public float AttackSpeed => _attackSpeed;
     public float AttackTime => _attackTime;
+
+    public float SpecialAttackCoolTime => _specialAttackCoolTime;
+    public float SpecialAttackRange => _specialAttackRange;
+    public float SpecialAttackTime => _specialAttackTime;
 
 
 
@@ -27,9 +30,12 @@ public class EnemyInfoData : ScriptableObject
     [SerializeField] private float _attackForce;
     [SerializeField] private float _defenseForce;
     [SerializeField] private float _moveSpeed;
-    [SerializeField] private bool _isAttackTargetExist;
-    [SerializeField] private bool _attackWay;
     [SerializeField] private float _attackRange;
     [SerializeField] private float _attackSpeed;
     [SerializeField] private float _attackTime;
+
+    [Header("특수객체용 데이터")]
+    [SerializeField] private float _specialAttackCoolTime;
+    [SerializeField] private float _specialAttackRange;
+    [SerializeField] private float _specialAttackTime;
 }

@@ -43,7 +43,7 @@ public class CactusAIController : EnemyAIController
 
     public override void ChangeDestination()
     {
-        if (_stateMachine.currentStateType == State.Move || _stateMachine.currentStateType == State.Idle)
+        if (_stateMachine.currentStateType == State.Move)
         {
             _stateMachine.ChangeState(State.AvoidWater);
         }

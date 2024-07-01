@@ -16,6 +16,13 @@ public abstract class Enemy : MonoBehaviour, IHit
     public abstract float Damage_Distance { get; set; }
     public abstract Vector3 Damage_Direction { get; set; }
 
+    #region 특수개체의 특수공격용
+    public abstract float SpecialAttackCoolTime { get; set; }
+    public abstract float SpecialAttackRange {  get; set; }
+    public abstract float SpecialAttackTime { get; set; }
+    #endregion
+
+
     protected StateMachine stateMachine;
 
     [HideInInspector] public SkinnedMeshRenderer dieRenderer;
@@ -23,9 +30,8 @@ public abstract class Enemy : MonoBehaviour, IHit
     [Header("# 피격 이펙트")]
     public GameObject Effect_Hit;
 
-    [Header("# ")]
+    [Header("# 사망 시 변경될 머터리얼")]
     public Material changeMat;
-
 
     public event System.Action onDead;
 

@@ -18,10 +18,10 @@ public class EnemyStateMove : EnemyStateBase
     public override bool canExecute() => stateMachine.currentStateType != State.Die;
 
 
-
     public override State MoveNextStep()
     {
         State nextState = State.Move;
+        //Debug.Log(enemyCharacter.GetType());
 
         switch (_currentStep)
         {
@@ -32,7 +32,6 @@ public class EnemyStateMove : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
-
                     animator.Play("move");
                     _currentStep++;
                 }
@@ -40,9 +39,6 @@ public class EnemyStateMove : EnemyStateBase
             case StepInState.Playing:
                 {
                     enemyAgent.SetDestination(enemyController.target.transform.position);
-
-                    //Debug.Log(enemyAgent.speed);
-                    //MoveToPlayer(enemyController.target);
                 }
                 break;
             case StepInState.End:
@@ -62,6 +58,5 @@ public class EnemyStateMove : EnemyStateBase
         _moveDirection.y = 0;
         enemyCharacter.transform.rotation = Quaternion.LookRotation(_moveDirection);
         rigid.velocity = _moveDirection.normalized * enemyCharacter.MoveSpeed;
-
     }
 }

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ac1d7f71f932d48a430f99e8e07ad5, type: 3}
+  m_Name: Cactus_SpecialData
+  m_EditorClassIdentifier: 
+  _enemyType: 3
+  _enemyID: cac2
+  _attackForce: 20
+  _defenseForce: 10
+  _moveSpeed: 2
+  _attackRange: 1
+  _attackSpeed: 1
+  _attackTime: 1
+  _specialAttackCoolTime: 10
+  _specialAttackRange: 5
+  _specialAttackTime: 1
