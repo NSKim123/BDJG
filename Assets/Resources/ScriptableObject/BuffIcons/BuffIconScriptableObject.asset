@@ -16,14 +16,14 @@ MonoBehaviour:
   - m_BuffCode: 100000
     m_Icon: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   - m_BuffCode: 100001
-    m_Icon: {fileID: 21300000, guid: d1082b8f08d06d347981570fe84bb618, type: 3}
+    m_Icon: {fileID: 21300000, guid: d443afbbba104584ea07e91c700f77ba, type: 3}
   - m_BuffCode: 100002
-    m_Icon: {fileID: 21300000, guid: 25f75f40b5ebce1468ba88a4ddd0a13b, type: 3}
+    m_Icon: {fileID: 21300000, guid: 2161bcae74e9a8d4d8989c148b3c048a, type: 3}
   - m_BuffCode: 100003
-    m_Icon: {fileID: 21300000, guid: e01bae7d529ac854e9bd070d04f8686e, type: 3}
+    m_Icon: {fileID: 21300000, guid: 20a31e7945eb79f40a0cd619522e6fc4, type: 3}
   - m_BuffCode: 100004
-    m_Icon: {fileID: 1125522957, guid: 22efda2121e48a745b162bcc38d4bafa, type: 3}
+    m_Icon: {fileID: 21300000, guid: eb555bda6d40cde48bb9ee1b3c9fdeeb, type: 3}
   - m_BuffCode: 100005
-    m_Icon: {fileID: 1896107619, guid: 22efda2121e48a745b162bcc38d4bafa, type: 3}
+    m_Icon: {fileID: 21300000, guid: a601e8712da4b7d438437c7b9dd43d3d, type: 3}
   - m_BuffCode: 100006
-    m_Icon: {fileID: -1655345930, guid: b2ce8cfffef867a488070e713e45f103, type: 3}
+    m_Icon: {fileID: 21300000, guid: ee24feef552160f4db14a54c030307f1, type: 3}
