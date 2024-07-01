@@ -6,6 +6,10 @@ public enum ItemType
 {
     Giant,
     AreaDeployment,
+    MachineGun,
+    Shell,
+    Scarecrow,
+    Wind,
 }
 
 [CreateAssetMenu(fileName = "ItemScriptableObject", menuName = "ScriptableObject/Item/ItemProbabilityTableScriptableObject")]

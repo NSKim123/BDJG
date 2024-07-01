@@ -7,7 +7,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 캐릭터에 대한 컴포넌트입니다.
 /// </summary>
-public class PlayerCharacter : PlayerCharacterBase, IHit
+public partial class PlayerCharacter : PlayerCharacterBase, IHit
 {
     [Header("# 거대화 슬라임일때 착지 시 이펙트")]
     public GameObject m_Effect_GiantSlimeLand;
@@ -140,7 +140,7 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         InitLevelSystem();
 
         // test
-        testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
+        //testCoroutine = StartCoroutine(Test_IncreaseKillCountPer5s());
     }
 
     private void Update()
@@ -293,88 +293,9 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
         _BuffSystem.AddBuff(buffCode);
     }
 
-    public void AddItem(int itemBuffCode)
-    {
-        // 저장된 아이템이 2개 이상이라면 호출 종료
-        if (_ItemSlots.Count >= 2) return;
+    
 
-        _ItemSlots.Add(itemBuffCode);
-
-        onItemSlotsChanged?.Invoke(_ItemSlots);
-    }
-
-    public void UseItem()
-    {
-        // 아이템이 없다면 호출 종료
-        if (_ItemSlots.Count == 0) return;
-
-        // 아이템 버프 타입의 버프가 존재한다면 호출 종료
-        if (_BuffSystem.IsOtherItemBuffActive()) return;
-        
-        _BuffSystem.AddBuff(_ItemSlots[0]);
-        _ItemSlots.RemoveAt(0);
-
-        onItemSlotsChanged?.Invoke(_ItemSlots);
-    }
-
-    public void OnStartGiant()
-    {
-        // 레벨업 이벤트를 일시적으로 호출을 막습니다.
-        _AbleToLevelUp = false;               
-
-        // 면역상태 설정
-        movementComponent.SetImmuneState(true);
-
-        // 모델 변경
-        //modelComponent.OnGiantStart();
-
-        // 점프 애니메이션 이벤트 바인딩
-        animController.onLand += attackComponent.AttackAround;
-        animController.onLand += InstantiateLandEffect;
-        animController.onLand += FollowCamera.ShakeCamera;
-
-        // 탄창 게이지 초기화 및 설정
-        attackComponent.OnGiantStart();
-
-        movementComponent.characterController.excludeLayers += LayerMask.GetMask("Enemy");
-
-        GameObject UIEffect = Instantiate(m_UIEffect_GiantStarted);
-        UIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
-        (UIEffect.transform as RectTransform).anchoredPosition = Vector2.zero;
-    }
-
-    public void OnFinishGiant()
-    {
-        // 레벨업 이벤트 재개
-        _AbleToLevelUp = true;
-
-        // 점프 애니메이션 이벤트 언바인딩
-        animController.onLand -= attackComponent.AttackAround;
-        animController.onLand -= InstantiateLandEffect;
-        animController.onLand -= FollowCamera.ShakeCamera;
-
-        // 면역상태 원상복구
-        movementComponent.SetImmuneState(false);
-
-        // 모델 원상복구
-        //modelComponent.OnLevelUp(_LevelSystem.level);
-
-        // 탄창 원상복구
-        attackComponent.OnLevelUp(_LevelSystem.level);
-        attackComponent.OnGiantFinish();
-
-        // **임시** 거대화 끝나고 호출
-        onGiantEnd?.Invoke();
-
-        movementComponent.characterController.excludeLayers -= LayerMask.GetMask("Enemy");
-    }
-
-    private void InstantiateLandEffect()
-    {
-        GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
-
-        effect.transform.position = transform.position + Vector3.down * movementComponent.characterController.height / 2.0f * transform.lossyScale.y;
-    }
+    
 
     /// <summary>
     /// 이동 입력을 받았을 때 호출되는 메서드입니다.
@@ -441,4 +362,100 @@ public class PlayerCharacter : PlayerCharacterBase, IHit
     }
 #endif
 
+}
+
+public partial class PlayerCharacter
+{
+    public void AddItem(int itemBuffCode)
+    {
+        // 저장된 아이템이 2개 이상이라면 호출 종료
+        if (_ItemSlots.Count >= 2) return;
+
+        _ItemSlots.Add(itemBuffCode);
+
+        onItemSlotsChanged?.Invoke(_ItemSlots);
+    }
+
+    public void UseItem()
+    {
+        // 아이템이 없다면 호출 종료
+        if (_ItemSlots.Count == 0) return;
+
+        // 아이템 버프 타입의 버프가 존재한다면 호출 종료
+        if (_BuffSystem.IsOtherItemBuffActive()) return;
+
+        _BuffSystem.AddBuff(_ItemSlots[0]);
+        _ItemSlots.RemoveAt(0);
+
+        onItemSlotsChanged?.Invoke(_ItemSlots);
+    }
+
+    public void OnStartGiant()
+    {
+        // 레벨업 이벤트를 일시적으로 호출을 막습니다.
+        _AbleToLevelUp = false;
+
+        // 면역상태 설정
+        movementComponent.SetImmuneState(true);
+
+        // 모델 변경
+        //modelComponent.OnGiantStart();
+
+        // 점프 애니메이션 이벤트 바인딩
+        animController.onLand += attackComponent.AttackAround;
+        animController.onLand += InstantiateLandEffect;
+        animController.onLand += FollowCamera.ShakeCamera;
+
+        // 탄창 게이지 초기화 및 설정
+        attackComponent.OnGiantStart();
+
+        movementComponent.characterController.excludeLayers += LayerMask.GetMask("Enemy");
+
+        GameObject UIEffect = Instantiate(m_UIEffect_GiantStarted);
+        UIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
+        (UIEffect.transform as RectTransform).anchoredPosition = Vector2.zero;
+    }
+
+    public void OnFinishGiant()
+    {
+        // 레벨업 이벤트 재개
+        _AbleToLevelUp = true;
+
+        // 점프 애니메이션 이벤트 언바인딩
+        animController.onLand -= attackComponent.AttackAround;
+        animController.onLand -= InstantiateLandEffect;
+        animController.onLand -= FollowCamera.ShakeCamera;
+
+        // 면역상태 원상복구
+        movementComponent.SetImmuneState(false);
+
+        // 모델 원상복구
+        //modelComponent.OnLevelUp(_LevelSystem.level);
+
+        // 탄창 원상복구
+        attackComponent.OnLevelUp(_LevelSystem.level);
+        attackComponent.OnGiantFinish();
+
+        // **임시** 거대화 끝나고 호출
+        onGiantEnd?.Invoke();
+
+        movementComponent.characterController.excludeLayers -= LayerMask.GetMask("Enemy");
+    }
+
+    private void InstantiateLandEffect()
+    {
+        GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
+
+        effect.transform.position = transform.position + Vector3.down * movementComponent.characterController.height / 2.0f * transform.lossyScale.y;
+    }
+
+    private void OnStartMachineGun()
+    {
+
+    }
+
+    private void OnFinishMachinGun()
+    {
+
+    }
 }
