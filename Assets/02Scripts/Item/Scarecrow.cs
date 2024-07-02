@@ -6,16 +6,22 @@ public class Scarecrow : MonoBehaviour, IHit
 {
     private float _LastProvocationTime;
 
+    private Rigidbody _Rigidbody;
+
     private PlayerCharacterBase _Owner;
 
     private void Awake()
-    {
+    {        
+        _Rigidbody = GetComponent<Rigidbody>();
         _Owner = FindAnyObjectByType<PlayerCharacterBase>();
     }
 
     private void Update()
     {
-        if(_LastProvocationTime + 5.0f < Time.time)
+        if (_Rigidbody.velocity.y > 0.0f)
+            _Rigidbody.velocity = Vector3.zero;
+
+        if(_LastProvocationTime + 2.0f < Time.time)
         {
             Provocation();
         }

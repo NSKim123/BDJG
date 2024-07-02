@@ -86,6 +86,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_Shell: {fileID: 9213489860290698996, guid: d09daae64ec122c46b8b66281b38046b, type: 3}
   m_Effect_Fire: {fileID: 3463157229188906966, guid: 47096eff328e11a418ace7db2d72aa97,
     type: 3}
   m_BulletSpeed: 20

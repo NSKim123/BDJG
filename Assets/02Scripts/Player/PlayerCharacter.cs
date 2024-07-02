@@ -270,6 +270,8 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
         _ItemSlots.Clear();
         onItemSlotsChanged?.Invoke(_ItemSlots);
 
+        attackComponent.ResetAttackComponent();
+
         // 행동불가 상태, 사망 상태를 초기화합니다.
         _IsDead = false;
         _IsStunned = false;
@@ -407,7 +409,7 @@ public partial class PlayerCharacter
         animController.onLand += FollowCamera.ShakeCamera;
 
         // 탄창 게이지 초기화 및 설정
-        attackComponent.OnGiantStart();
+        attackComponent.OnStartGiant();
 
         movementComponent.characterController.excludeLayers += LayerMask.GetMask("Enemy");
 
@@ -428,13 +430,10 @@ public partial class PlayerCharacter
 
         // 면역상태 원상복구
         movementComponent.SetImmuneState(false);
-
-        // 모델 원상복구
-        //modelComponent.OnLevelUp(_LevelSystem.level);
-
+        
         // 탄창 원상복구
         attackComponent.OnLevelUp(_LevelSystem.level);
-        attackComponent.OnGiantFinish();
+        attackComponent.OnFinishGiant();
 
         // **임시** 거대화 끝나고 호출
         onGiantEnd?.Invoke();
@@ -449,13 +448,45 @@ public partial class PlayerCharacter
         effect.transform.position = transform.position + Vector3.down * movementComponent.characterController.height / 2.0f * transform.lossyScale.y;
     }
 
-    private void OnStartMachineGun()
+    public void OnStartMachineGun()
     {
+        _AbleToLevelUp = false;
 
+        attackComponent.OnStartMachineGun();
     }
 
-    private void OnFinishMachinGun()
+    public void OnUpdateMachineGun()
     {
+        movementComponent.SetMovable(false);
+        movementComponent.SetImmuneState(true);
+    }
 
+    public void OnFinishMachinGun()
+    {
+        attackComponent.OnFinishMachineGun();
+
+        movementComponent.SetMovable(true);
+        movementComponent.SetImmuneState(false);
+
+        _AbleToLevelUp = true;
+    }
+
+    public void OnStartShell()
+    {
+        _AbleToLevelUp = false;
+
+        attackComponent.OnStartShell();
+    }
+
+    public void OnUpdateShell()
+    {
+        attackComponent.OnUpdateShell();
+    }
+
+    public void OnFinishShell()
+    {
+        attackComponent.OnFinishShell();
+
+        _AbleToLevelUp = true;
     }
 }

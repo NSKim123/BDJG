@@ -7,11 +7,14 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 캐릭터의 공격을 수행하는 컴포넌트입니다.
 /// </summary>
-public class PlayerAttack : MonoBehaviour
+public partial class PlayerAttack : MonoBehaviour
 {
     [Header("# 탄환 발사 관련")]
     [Header("탄환 프래팹")]
     public Bullet m_Bullet;
+
+    [Header("포탄 프래팹")]
+    public Bullet m_Shell;
 
     [Header("발사 이펙트")]
     public GameObject m_Effect_Fire;
@@ -23,7 +26,7 @@ public class PlayerAttack : MonoBehaviour
     public float m_PushPowerMultiplier = 1.0f;
 
     [Header("공격 쿨타임")]
-    public float m_AttackReuseTime = 0.33f;
+    public float m_AttackReuseTime = 0.2f;
 
     [Header("------------------------------------------------------------------------------")]
 
@@ -88,6 +91,8 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
+    private Bullet _CurrentBullet;
+
     /// <summary>
     /// 공격 가능한 상황인지를 나타내는 읽기전용 프로퍼티입니다.
     /// </summary>
@@ -115,7 +120,9 @@ public class PlayerAttack : MonoBehaviour
         _TargetingSystem = new TargetingSystem(m_SenceLayer, m_SencerDistance, m_SencerWidth, m_SencerHeight);               
         
         // 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
-        _OwnerCharacter = GetComponent<PlayerCharacter>();        
+        _OwnerCharacter = GetComponent<PlayerCharacter>();
+
+        _CurrentBullet = m_Bullet;
     }
 
     private void Update()
@@ -131,6 +138,17 @@ public class PlayerAttack : MonoBehaviour
     {
         // 타켓팅 대상을 지정합니다.
         _TargetingSystem.Targeting(transform);        
+    }
+
+    public void ResetAttackComponent()
+    {
+        _ReuseTimeGuage.max = m_AttackReuseTime;
+
+        _BulletGauge.SwitchProhibitRecover(false);
+
+        _CurrentBullet = m_Bullet;
+
+        _ProhibitFire = false;
     }
 
     /// <summary>
@@ -213,7 +231,7 @@ public class PlayerAttack : MonoBehaviour
     private void Fire()
     {
         // 탄환 게이지를 소모합니다.
-        CostStamina(m_CostBulletGauge);
+        CostBulletGauge(m_CostBulletGauge);
 
         // 투사체를 생성합니다.
         InstantiateBullet();
@@ -234,7 +252,7 @@ public class PlayerAttack : MonoBehaviour
     /// 탄환 게이지를 소모합니다.
     /// </summary>
     /// <param name="cost"> 소모량</param>
-    private void CostStamina(int cost)
+    private void CostBulletGauge(int cost)
     {
         _BulletGauge.CostBullet(cost);
     }
@@ -244,7 +262,7 @@ public class PlayerAttack : MonoBehaviour
     /// </summary>
     private void InstantiateBullet()
     {
-        Bullet bullet = Instantiate(m_Bullet);
+        Bullet bullet = Instantiate(_CurrentBullet);
         bullet.transform.position = _StartPosition.position;
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
@@ -282,17 +300,7 @@ public class PlayerAttack : MonoBehaviour
         _StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
     }
 
-    public void OnGiantStart()
-    {
-        SetBulletGaugeMaxValueByLevel(50);
-        FindStartPoint();
-        _ProhibitFire = true;
-    }
-
-    public void OnGiantFinish()
-    {
-        _ProhibitFire = false;
-    }
+    
 
     public void AttackAround()
     {
@@ -341,4 +349,65 @@ public class PlayerAttack : MonoBehaviour
         Handles.Label(transform.position + Vector3.down, gUIContent);
     }
 #endif
+}
+
+
+public partial class PlayerAttack
+{
+    public void OnStartGiant()
+    {
+        SetBulletGaugeMaxValueByLevel(50);
+        FindStartPoint();
+        _ProhibitFire = true;
+    }
+
+    public void OnFinishGiant()
+    {
+        _ProhibitFire = false;
+    }
+
+    public void OnStartMachineGun()
+    {
+        m_PushPowerMultiplier *= 1.5f;
+
+        bulletGauge.currentValue = bulletGauge.max;
+        m_CostBulletGauge -= 1;
+        _ReuseTimeGuage.max = 0.05f;
+    }
+
+    public void OnFinishMachineGun()
+    {
+        m_PushPowerMultiplier /= 1.5f;
+
+        CostBulletGauge(bulletGauge.currentValue);
+        m_CostBulletGauge += 1;
+        _ReuseTimeGuage.max = m_AttackReuseTime;
+    }
+
+    public void OnStartShell()
+    {   
+        m_PushPowerMultiplier *= 3.0f;        
+        _CurrentBullet = m_Shell;
+
+        bulletGauge.currentValue = bulletGauge.max;
+        m_CostBulletGauge = (bulletGauge.max - bulletGauge.min) / 4;
+        _ReuseTimeGuage.max = 2.0f;
+    }
+
+    public void OnUpdateShell()
+    {
+        bulletGauge.SwitchProhibitRecover(true);
+    }
+
+    public void OnFinishShell()
+    {
+        m_PushPowerMultiplier /= 3.0f;
+        _CurrentBullet = m_Bullet;
+
+        CostBulletGauge(bulletGauge.currentValue);
+        m_CostBulletGauge = 1;
+        bulletGauge.SwitchProhibitRecover(false);
+
+        _ReuseTimeGuage.max = m_AttackReuseTime;
+    }
 }
