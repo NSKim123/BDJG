@@ -37,7 +37,7 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public event System.Action onDead;
 
-    public event System.Action<EnemyType> OnRequestSpawnItem;
+    public event Action<EnemyType> OnRequestSpawnItem;
 
     protected virtual void Start()
     {

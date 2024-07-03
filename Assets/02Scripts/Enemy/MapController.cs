@@ -19,7 +19,7 @@ public class MapController : MonoBehaviour
     // 물이 높아질 때 호출할 이벤트
     // 적의 이동방향을 중앙으로 변경
     public event Action OnChangeDestination;
-    public event Action<bool> OnChangeWave;
+    public event Action<int> OnChangeWave;
 
     private Coroutine _waterCoroutine;
     private float _waterDownDefaultSecond;
@@ -55,7 +55,6 @@ public class MapController : MonoBehaviour
     public IEnumerator C_WaterUP()
     {
         int waterIndex = 0;
-        currentWave = Wave.one;
 
         _waterGround.transform.position = new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
         _navMeshMap.BuildNavMesh();
@@ -66,6 +65,10 @@ public class MapController : MonoBehaviour
             // time for water rising
             yield return new WaitForSeconds(_waterDownDefaultSecond + waterIndex * _waterDownOffset);
 
+            waterIndex++;
+
+            OnChangeWave?.Invoke(waterIndex);
+
             // Show warning UI
             _warningUIAnim.Play();
 
@@ -74,13 +77,7 @@ public class MapController : MonoBehaviour
                 yield return null;
             }
             
-            waterIndex++;
-
-            if (waterIndex == 1)
-            {
-                OnChangeWave?.Invoke(true);
-
-            }
+            
 
             // 적의 이동방향 변경 (중심으로)
             //OnChangeDestination?.Invoke();
@@ -98,7 +95,7 @@ public class MapController : MonoBehaviour
                 yield return new WaitForSeconds(0.1f);
             }
             _navMeshMap.BuildNavMesh();
-            // Debug.Log("맵 구움");
+
 
             // 적의 이동방향 변경 (플레이어쪽으로)
             //OnChangeDestination?.Invoke();
@@ -119,7 +116,4 @@ public class MapController : MonoBehaviour
         }
         _waterCoroutine = StartCoroutine(C_WaterUP());
     }
-
-
-
 }

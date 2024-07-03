@@ -60,7 +60,6 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                 break;
             case StepInState.End:
                 {
-                    mush.transform.position -= mush.transform.forward * 1.5f;
                     nextState = State.Move;
 
                 }

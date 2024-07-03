@@ -9,12 +9,6 @@ public enum EnemySpawnTurn
     cactusTurn,
 }
 
-public enum EnemySpecialSpawnTurn
-{
-    none,
-    mushroomSpecialTurn,
-    cactusSpecialTurn,
-}
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -40,28 +34,26 @@ public class EnemySpawner : MonoBehaviour
     public EnemySpawnInfoData[] cactusSpawnInfo;
 
     private EnemySpawnTurn _turnPivot;
-    private EnemySpecialSpawnTurn _specialTurnPivot;
 
     // 적 개수/총 개수 세기
     private int _mushroomSpawnedCount;
     private int _cactusSpawnedCount;
     private int _totalCount;
 
-    private int _mushroomSpecialSpawnedCount;
-    private int _cactusSpecialSpawnedCount;
-
     public static int TotalEnemyCount;
-    public static int MushroomSpecialCount;
-    public static int CactusSpecialCount;
-    public static int TotalSpecialEnemyCount;
 
-    private Coroutine spawnLoopCoroutine;
+    private float _specialSpawnTime;
 
-    private bool startSpecialEnemySpawn;
+    private Coroutine normalSpawnCoroutine;
+    private Coroutine specialSpawnCoroutine;
 
-    public void SwitchSpawnValue(bool spawnValue)
+    private bool _isFullNormalEnemy = false;
+
+    private int _currentLevel = 0;
+
+    public void ChangeLevelOfSpawn(int level)
     {
-        startSpecialEnemySpawn = spawnValue;
+       _currentLevel = level;
     }
 
     /// <summary>
@@ -84,11 +76,11 @@ public class EnemySpawner : MonoBehaviour
         e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
     }
 
+
     private void EnemyInit_Special(GameObject enemy, EnemyInfoData data)
     {
         Enemy e = enemy.GetComponent<Enemy>();
 
-        //e.agent.speed = data.MoveSpeed;
         e.MoveSpeed = data.MoveSpeed;
         e.AttackForce = data.AttackForce;
         e.AttackTime = data.AttackTime;
@@ -97,7 +89,9 @@ public class EnemySpawner : MonoBehaviour
         e.SpecialAttackCoolTime = data.SpecialAttackCoolTime;
         e.SpecialAttackRange = data.SpecialAttackRange;
         e.SpecialAttackTime = data.SpecialAttackTime;
+        e.Type = data.Type;
         e.onDead += () => onEnemyDead?.Invoke(1);
+        e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
     }
 
 
@@ -124,16 +118,141 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    private IEnumerator C_SpecailEnemySpawn()
+    {
+        while (true)
+        {
+            yield return new WaitUntil(() => isPaused == false);
+
+            while (Time.timeScale == 0)
+            {
+                yield return null;
+            }
+
+            Debug.Log(_currentLevel);
+
+            switch (_currentLevel)
+            {
+                case 0:
+                    {
+                        _specialSpawnTime = 20.0f;
+
+                        EnemySpawnInfoData spawndata;
+                        EnemyInfoData enemydata;
+
+                        enemydata = mushroomData[1];
+                        spawndata = mushroomSpawnInfo[1];
+
+                        Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+
+                        yield return new WaitForSeconds(_specialSpawnTime);
+
+                        Debug.Log("1레벨 스폰");
+
+                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
+                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+
+                        EnemyInit_Special(newEnemy, enemydata);
+                    }
+                    break;
+                case 1:
+                    {
+                        _specialSpawnTime = 10.0f;
+
+                        EnemySpawnInfoData[] spawndata = new EnemySpawnInfoData[2];
+                        EnemyInfoData[] enemydata = new EnemyInfoData[2];
+
+                        enemydata[0] = mushroomData[1];
+                        spawndata[0] = mushroomSpawnInfo[1];
+
+                        enemydata[1] = cactusData[1];
+                        spawndata[1] = cactusSpawnInfo[1];
+
+                        Vector3 randomPosition1 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+
+                        yield return new WaitForSeconds(_specialSpawnTime);
+                        Debug.Log("2레벨 스폰");
 
 
+                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
+                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        EnemyInit_Special(newEnemy_mush, enemydata[0]);
+                        EnemyInit_Special(newEnemy_cac, enemydata[1]);
+                    }
+                    break;
+                case 2:
+                    {
+                        _specialSpawnTime = 6.0f;
+
+                        EnemySpawnInfoData[] spawndata = new EnemySpawnInfoData[2];
+                        EnemyInfoData[] enemydata = new EnemyInfoData[2];
+
+                        enemydata[0] = mushroomData[1];
+                        spawndata[0] = mushroomSpawnInfo[1];
+
+                        enemydata[1] = cactusData[1];
+                        spawndata[1] = cactusSpawnInfo[1];
+
+                        Vector3 randomPosition1 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+
+                        yield return new WaitForSeconds(_specialSpawnTime);
+                        Debug.Log("3레벨 스폰");
+
+
+                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
+                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        EnemyInit_Special(newEnemy_mush, enemydata[0]);
+                        EnemyInit_Special(newEnemy_cac, enemydata[1]);
+                    }
+                    break;
+                case 3:
+                    {
+                        _specialSpawnTime = 5.0f;
+
+                        EnemySpawnInfoData[] spawndata = new EnemySpawnInfoData[2];
+                        EnemyInfoData[] enemydata = new EnemyInfoData[2];
+
+                        enemydata[0] = mushroomData[1];
+                        spawndata[0] = mushroomSpawnInfo[1];
+
+                        enemydata[1] = cactusData[1];
+                        spawndata[1] = cactusSpawnInfo[1];
+
+                        Vector3 randomPosition1 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+
+                        yield return new WaitForSeconds(_specialSpawnTime);
+                        Debug.Log("4레벨 스폰");
+
+
+                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        EnemyInit_Special(newEnemy_mush, enemydata[0]);
+                        EnemyInit_Special(newEnemy_cac, enemydata[1]);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            yield return null;
+        }
+        
+    }
 
     /// <summary>
     /// 적 스폰 루프를 도는 코루틴입니다. 순서에 맞춰 차례대로 스폰합니다.
     /// </summary>
     /// <returns></returns>
-    private IEnumerator C_SpawnLoop()
+    private IEnumerator C_NormalEnemySpawn()
     {
-
         while (true)
         {
             yield return new WaitUntil(() => isPaused == false);
@@ -145,9 +264,11 @@ public class EnemySpawner : MonoBehaviour
 
             while (IsFull())
             {
-                //Debug.Log("꽉참" + _totalCount + " " + EnemyManager.Instance.TotalCount);
                 yield return null;
             }
+
+            Debug.Log(_mushroomSpawnedCount + " 버섯 스폰된 개수");
+            Debug.Log(_cactusSpawnedCount + " 선인장 스폰된 개수");
 
             if (_mushroomSpawnedCount >= mushroomSpawnInfo[0].MaxEnemyCount)
             {
@@ -159,10 +280,6 @@ public class EnemySpawner : MonoBehaviour
                 MoveNextTurn();
                 _cactusSpawnedCount = 0;
             }
-
-           
-
-            
 
             switch (_turnPivot)
             {
@@ -176,7 +293,7 @@ public class EnemySpawner : MonoBehaviour
 
                         Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
-                        
+
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
@@ -184,10 +301,6 @@ public class EnemySpawner : MonoBehaviour
                         EnemyInit(newEnemy, enemydata);
                         ++_mushroomSpawnedCount;
                         ++TotalEnemyCount;
-                        //++EnemyManager.Instance.TotalCount;
-
-                        //Debug.Log("버섯 스폰");
-
                     }
                     break;
                 case EnemySpawnTurn.cactusTurn:
@@ -208,86 +321,13 @@ public class EnemySpawner : MonoBehaviour
                         EnemyInit(newEnemy, enemydata);
                         ++_cactusSpawnedCount;
                         ++TotalEnemyCount;
-
-                        //++EnemyManager.Instance.TotalCount;
-
-                        //Debug.Log("선인장");
-                    }
-                    break;
-                default:
-                    break;
-            }
-
-
-            switch (_specialTurnPivot)
-            {
-                case EnemySpecialSpawnTurn.none:
-                    {
-                        if (MushroomSpecialCount == 0)
-                        {
-                            _specialTurnPivot = EnemySpecialSpawnTurn.mushroomSpecialTurn;
-                        }
-                        else if (CactusSpecialCount == 0)
-                        {
-                            _specialTurnPivot = EnemySpecialSpawnTurn.cactusSpecialTurn;
-                        }
-                    }
-                    break;
-                case EnemySpecialSpawnTurn.mushroomSpecialTurn:
-                    {
-                        EnemyInfoData enemydata;
-                        EnemySpawnInfoData spawndata;
-
-                        enemydata = mushroomData[1];
-                        spawndata = mushroomSpawnInfo[1];
-
-                        Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
-
-                        float spawnTime = spawndata.SpawnTime - mushroomSpawnInfo[0].SpawnTime;
-
-                        yield return new WaitForSeconds(spawnTime);
-
-                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-                        EnemyInit_Special(newEnemy, enemydata);
-                        //++_mushroomSpawnedCount;
-                        ++MushroomSpecialCount;
-                        ++TotalSpecialEnemyCount;
-
-                        //temp
-                        _specialTurnPivot++;
-                    }
-                    break;
-                case EnemySpecialSpawnTurn.cactusSpecialTurn:
-                    {
-                        EnemySpawnInfoData spawndata;
-                        EnemyInfoData enemydata;
-
-                        enemydata = cactusData[1];
-                        spawndata = cactusSpawnInfo[1];
-
-                        Vector3 randomPosition = GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
-
-                        float spawnTime = spawndata.SpawnTime - cactusSpawnInfo[0].SpawnTime;
-
-                        yield return new WaitForSeconds(spawnTime);
-
-                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
-                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
-                        EnemyInit_Special(newEnemy, enemydata);
-                        //++_cactusSpawnedCount;
-                        ++CactusSpecialCount;
-                        ++TotalSpecialEnemyCount;
-
-                        //temp
-                        _specialTurnPivot = EnemySpecialSpawnTurn.none;
                     }
                     break;
                 default:
                     break;
             }
             yield return null;
+
         }
     }
 
@@ -296,10 +336,16 @@ public class EnemySpawner : MonoBehaviour
     /// </summary>
     public void ResetForRestart()
     {
-        if (spawnLoopCoroutine != null)
+        if (normalSpawnCoroutine != null)
         {
-            StopCoroutine(spawnLoopCoroutine);
-            spawnLoopCoroutine = null;
+            StopCoroutine(normalSpawnCoroutine);
+            normalSpawnCoroutine = null;
+        }
+
+        if (specialSpawnCoroutine != null)
+        {
+            StopCoroutine(specialSpawnCoroutine);
+            specialSpawnCoroutine = null;
         }
 
         // 맵 내에 있는 적들 모두 파괴
@@ -315,19 +361,13 @@ public class EnemySpawner : MonoBehaviour
         _mushroomSpawnedCount = 0;
         _cactusSpawnedCount = 0;
 
-        _mushroomSpawnedCount = 0;
-        _cactusSpawnedCount = 0;
-
-        MushroomSpecialCount = 0;
-        CactusSpecialCount = 0;
-
         TotalEnemyCount = 0;
-        TotalSpecialEnemyCount = 0;
 
         // 버섯부터 스폰 시작
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        _specialTurnPivot = EnemySpecialSpawnTurn.mushroomSpecialTurn;
-        spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
+        _currentLevel = 0;
+        normalSpawnCoroutine = StartCoroutine(C_NormalEnemySpawn());
+        specialSpawnCoroutine = StartCoroutine(C_SpecailEnemySpawn());
     }
 
     /// <summary>
@@ -349,15 +389,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
 
-    // 반지름을 받아서 원형 내부에서 랜덤 위치를 계산하는 메서드들입니다.
-    private Vector3 GetRandomPositionInCircle(float radius)
-    {
-        float angle = UnityEngine.Random.Range(0, 360) * Mathf.Deg2Rad; // 각도를 라디안으로 변환
-        float r = Mathf.Sqrt(UnityEngine.Random.value) * radius; // 거리를 보정
-        float x = r * Mathf.Cos(angle);
-        float z = r * Mathf.Sin(angle);
-        return new Vector3(x, 1.0f, z); // 변환된 좌표를 반환
-    }
+    // 반지름을 받아서 원형 내부에서 랜덤 위치를 계산하는 메서드입니다.
 
     Vector3 GetRandomPositionOnCircleEdge(Vector3 center, float radius)
     {

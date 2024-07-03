@@ -38,10 +38,10 @@ public class GameSceneInstance : SceneInstanceBase
     /// <summary>
     /// 맵 관리 객체
     /// </summary>
-    private MapController _MapManager;
+    private MapController _MapController;
 
     /// <summary>
-    /// item spawn 객체
+    /// 아이템 스포너 객체
     /// </summary>
     private ItemSpawner _ItemSpawner;
 
@@ -57,8 +57,8 @@ public class GameSceneInstance : SceneInstanceBase
 
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
 
-        _MapManager = FindAnyObjectByType<MapController>();
-        _MapManager.warning = m_GameSceneUI.m_WarningUI;
+        _MapController = FindAnyObjectByType<MapController>();
+        _MapController.warning = m_GameSceneUI.m_WarningUI;
 
         _ItemSpawner = FindAnyObjectByType<ItemSpawner>();
     }
@@ -100,8 +100,14 @@ public class GameSceneInstance : SceneInstanceBase
         // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
         _EnemySpawner.ResetForRestart();
 
-        // 맵 초기화
-        _MapManager.StartMapSetting();
+        // 맵 초기화 (위치 원래대로)
+        _MapController.StartMapSetting();
+
+        // 아이템 초기화 (아이템 남아있다면 없앰)
+        _ItemSpawner.ResetItem();
+
+        // 특수공격 남아있다면 없앰
+        EnemyManager.Instance.ResetElements();
 
         // 3초 카운트 ( 코루틴 )        
         yield return Count3sBeforeGameStart();
@@ -241,9 +247,8 @@ public class GameSceneInstance : SceneInstanceBase
 
         playerController.controlledCharacter.onItemSlotsChanged += m_GameSceneUI.m_ItemSlotsUI.OnItemSlotChanged;
 
-        // 프로토타입에서만 임시로 바인드한 메서드입니다. 아이템을 순차적으로 스폰합니다.
-        playerController.controlledCharacter.levelSystem.onLevelUp += _ItemSpawner.ItemSpawn_proto;
-        playerController.controlledCharacter.onGiantEnd += _ItemSpawner.ToggleGiantValue;
+
+
 
 
     }

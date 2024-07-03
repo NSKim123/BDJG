@@ -34,9 +34,6 @@ public class SpecialCactus : Enemy
     {
         base.OnDead();
         stateMachine.ChangeState(State.Die);
-        //EnemyManager.Instance.TotalCount--;
-        EnemySpawner.TotalSpecialEnemyCount--;
-        EnemySpawner.CactusSpecialCount--;
     }
 
     protected override void Start()

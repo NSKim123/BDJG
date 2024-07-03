@@ -35,8 +35,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
 
     private void Start()
     {
-        mapController.OnChangeWave += spawner.SwitchSpawnValue;
-
+        mapController.OnChangeWave += spawner.ChangeLevelOfSpawn;
     }
 
 
@@ -115,6 +114,31 @@ public class EnemyManager : SingletonBase<EnemyManager>
         
 
         Debug.Log(currentDuration + "현재 남은 시간");
+    }
+
+    public void ResetElements()
+    {
+        GameObject[] removeList = isItemExistInMap();
+        if (removeList != null)
+        {
+            foreach (var item in removeList)
+            {
+                Destroy(item);
+            }
+        }
+    }
+
+    private GameObject[] isItemExistInMap()
+    {
+        GameObject[] items = GameObject.FindGameObjectsWithTag("specialAttack");
+        if (items.Length > 0)
+        {
+            return items;
+        }
+        else
+        {
+            return null;
+        }
     }
 
 
