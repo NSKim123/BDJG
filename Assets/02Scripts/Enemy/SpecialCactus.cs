@@ -11,6 +11,8 @@ public class SpecialCactus : Enemy
     public override float AttackForce { get; set; }
     public override float AttackSpeed { get; set ; }
     public override float AttackTime { get; set; }
+    public override EnemyType Type { get; set; }
+
 
     #region 특수개체의 특수공격용
     public override float SpecialAttackCoolTime { get; set; }

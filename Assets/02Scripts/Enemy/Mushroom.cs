@@ -23,6 +23,7 @@ public class Mushroom : Enemy
     public override float SpecialAttackCoolTime { get; set; }
     public override float SpecialAttackRange { get; set; }
     public override float SpecialAttackTime { get; set; }
+    public override EnemyType Type { get; set; }
     #endregion
 
     public override void OnDamaged(float distance, Vector3 direction)

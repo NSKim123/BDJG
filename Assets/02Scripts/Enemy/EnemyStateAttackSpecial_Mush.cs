@@ -35,7 +35,7 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                     animLength = animator.GetCurrentAnimatorStateInfo(0).length;
                     animator.speed = animLength / enemyCharacter.SpecialAttackTime;
                     //animator.Play("attack_special");
-                    Vector3 pos = mush.transform.position + new Vector3(0, 0, 2);
+                    Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
                     GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
 
                     cloud.transform.position += mush.transform.forward * 2f;

@@ -27,7 +27,7 @@ public class EnemyStateAvoidWater : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
-                    enemyAgent.SetDestination(EnemyManager.Instance.centerPos.position);
+                    //enemyAgent.SetDestination(EnemyManager.Instance.centerPos.position);
                     _currentStep++;
                 }
                 break;
