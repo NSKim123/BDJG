@@ -168,7 +168,9 @@ public partial class PlayerMovement : MonoBehaviour
     {
         // 이동이 가능한 상태라면 이동시킵니다.
         if(_AbleToMove)
-            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);        
+            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);  
+        else
+            characterController.Move(Vector3.up * _TargetVelocity.y * Time.fixedDeltaTime);
     }
 
     /// <summary>

@@ -113,11 +113,7 @@ public class MachineGunBuff : TimerBuff
 
     protected override void onStartBuffContext()
     {
-        _PlayerCharacter.attackComponent.m_PushPowerMultiplier *= 1.5f;
-
-        _PlayerCharacter.attackComponent.bulletGauge.currentValue = _PlayerCharacter.attackComponent.bulletGauge.max;
-        _PlayerCharacter.attackComponent.m_CostBulletGauge -= 1;
-        _PlayerCharacter.attackComponent.m_AttackReuseTime = 0.0f;
+        _PlayerCharacter.OnStartMachineGun();
         
     }
 
@@ -128,32 +124,18 @@ public class MachineGunBuff : TimerBuff
 
     protected override void onUpdateBuffContext()
     {
-        _PlayerCharacter.movementComponent.SetMovable(false);
-        _PlayerCharacter.movementComponent.SetImmuneState(true);
-
+        _PlayerCharacter.OnUpdateMachineGun();
     }
 
     protected override void onFinishBuffContext()
     {
-        _PlayerCharacter.attackComponent.m_PushPowerMultiplier /= 1.5f;
-
-        _PlayerCharacter.attackComponent.bulletGauge.currentValue = _PlayerCharacter.attackComponent.bulletGauge.min;
-        _PlayerCharacter.attackComponent.m_CostBulletGauge += 1;
-        _PlayerCharacter.attackComponent.m_AttackReuseTime = 0.33f;        
-
-        _PlayerCharacter.movementComponent.SetMovable(true);
-        _PlayerCharacter.movementComponent.SetImmuneState(false);
-
+        _PlayerCharacter.OnFinishMachinGun();
         //3초 간 탄환을 쏠 수 없는 디버프 부여
     }
 }
 
 public class ShellBuff : TimerBuff
-{
-    private Shell _ShellPrefab;
-
-    private Bullet _PrevBullet;
-
+{    
     private PlayerCharacter _PlayerCharacter;
 
     public ShellBuff(int buffCode, GameObject owner, BuffType buffType, float buffTime, bool visibility = false, int maxStack = 1) : base(buffCode, owner, buffType, buffTime, visibility, maxStack)
@@ -170,14 +152,7 @@ public class ShellBuff : TimerBuff
 
     protected override void onStartBuffContext()
     {
-        _ShellPrefab = Resources.Load<Shell>("Prefabs/Shell");
-        _PlayerCharacter.attackComponent.m_PushPowerMultiplier *= 3.0f;
-        _PrevBullet = _PlayerCharacter.attackComponent.m_Bullet;
-        _PlayerCharacter.attackComponent.m_Bullet = _ShellPrefab;
-
-        _PlayerCharacter.attackComponent.bulletGauge.currentValue = _PlayerCharacter.attackComponent.bulletGauge.max;
-        _PlayerCharacter.attackComponent.m_CostBulletGauge = (_PlayerCharacter.attackComponent.bulletGauge.max - _PlayerCharacter.attackComponent.bulletGauge.min) / 4;
-        _PlayerCharacter.attackComponent.m_AttackReuseTime = 2.0f;
+        _PlayerCharacter.OnStartShell();
     }
 
     protected override void onRenewBuffContext()
@@ -187,18 +162,12 @@ public class ShellBuff : TimerBuff
 
     protected override void onUpdateBuffContext()
     {
-        
+        _PlayerCharacter.OnUpdateShell();
     }
 
     protected override void onFinishBuffContext()
     {
-        _PlayerCharacter.attackComponent.m_PushPowerMultiplier /= 3.0f;
-        _PlayerCharacter.attackComponent.m_Bullet = _PrevBullet;
-
-        _PlayerCharacter.attackComponent.bulletGauge.currentValue = _PlayerCharacter.attackComponent.bulletGauge.min;
-        _PlayerCharacter.attackComponent.m_CostBulletGauge = 1;
-        _PlayerCharacter.attackComponent.m_AttackReuseTime = 0.33f;
-
+        _PlayerCharacter.OnFinishShell();
         //3초관 탄환을 쏠 수 없는 디버프 부여
     }
 }
@@ -272,6 +241,7 @@ public class WindBuff : TimerBuff
         _InstantiatedPrefab = GameObject.Instantiate(_WindPrefab);
 
         // 이펙트 생성
+
         // 적 스폰 일시정지
         EnemyManager.Instance.spawner.PauseSwitchEnemySpawn(true);
     }
@@ -293,6 +263,7 @@ public class WindBuff : TimerBuff
         GameObject.Destroy(_InstantiatedPrefab);
 
         // 이펙트 제거
+
         // 적 스폰 재개
         EnemyManager.Instance.spawner.PauseSwitchEnemySpawn(false);
 
