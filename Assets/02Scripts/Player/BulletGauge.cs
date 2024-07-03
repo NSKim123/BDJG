@@ -82,8 +82,8 @@ public class BulletGauge : IntGauge
     private bool CheckRecoverCondition()
     {
         // 공격 버튼 상호 작용 후 1초간 상호작용이 없을 때, 1초당 한 번씩 회복하도록 설정하였습니다.
-        return Time.time - _LastAttackTime >= _BulletGaugeStartRecoverTime
-                  && Time.time - _LastRecoverTime >= _BulletGaugeRecoverCycle
+        return (Time.time - _LastAttackTime >= _BulletGaugeStartRecoverTime)
+                  && (Time.time - _LastRecoverTime >= _BulletGaugeRecoverCycle)
                   && !_ProhibitRecover;
     }
 

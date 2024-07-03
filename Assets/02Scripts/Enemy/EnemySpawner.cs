@@ -326,7 +326,7 @@ public class EnemySpawner : MonoBehaviour
 
         // 버섯부터 스폰 시작
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        _specialTurnPivot = EnemySpecialSpawnTurn.mushroomSpecialTurn;
+        _specialTurnPivot = EnemySpecialSpawnTurn.cactusSpecialTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 
@@ -378,7 +378,7 @@ public class EnemySpawner : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(cactusSpawnAxis.position, 8);
+        //Gizmos.DrawSphere(cactusSpawnAxis.position, 8);
 
         
     }

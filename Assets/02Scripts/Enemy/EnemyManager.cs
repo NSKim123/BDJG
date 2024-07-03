@@ -16,13 +16,12 @@ public class EnemyManager : SingletonBase<EnemyManager>
 
     public EnemySpawner spawner;
     public ItemSpawner itemSpawner;
-    public Enemy enemy;
     public MapController mapController;
 
     private PlayerCharacter player;
 
     private float holdingtimeGauge = 5f;
-    private bool isCountingProhibit;
+    private bool isCountingProhibit = false;
 
     private float originDuration;
     private float currentDuration;
@@ -42,10 +41,13 @@ public class EnemyManager : SingletonBase<EnemyManager>
         if (isCountingProhibit)
         {
             holdingtimeGauge -= Time.deltaTime;
+            Debug.Log("가시");
+            Debug.Log(holdingtimeGauge);
 
             if (holdingtimeGauge <= 0)
             {
                 player.attackComponent.bulletGauge.SwitchProhibitRecover(false);
+                Debug.Log(player.GetType() + "시간 다 됨");
                 holdingtimeGauge = 5f;
                 isCountingProhibit = false;
             }
@@ -66,6 +68,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
         player = other.GetComponent<PlayerCharacter>();
         player.attackComponent.bulletGauge.SwitchProhibitRecover(true);
         isCountingProhibit = true;
+        holdingtimeGauge = 5.0f;
     }
 
     public void StartCloud(GameObject cloud)
