@@ -326,7 +326,7 @@ public class EnemySpawner : MonoBehaviour
 
         // 버섯부터 스폰 시작
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        _specialTurnPivot = EnemySpecialSpawnTurn.cactusSpecialTurn;
+        _specialTurnPivot = EnemySpecialSpawnTurn.mushroomSpecialTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 

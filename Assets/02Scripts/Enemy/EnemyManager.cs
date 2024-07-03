@@ -27,11 +27,16 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private float currentDuration;
     private float decreaseOffset = 0.2f;
     private bool isStartCloud;
+    private GameObject particleObj;
     private ParticleSystem.MainModule particle;
+    private float currTime = 0;
+    private float delayTime = 0.3f;
+
 
     private void Start()
     {
         mapController.OnChangeWave += spawner.SwitchSpawnValue;
+
     }
 
 
@@ -41,13 +46,11 @@ public class EnemyManager : SingletonBase<EnemyManager>
         if (isCountingProhibit)
         {
             holdingtimeGauge -= Time.deltaTime;
-            Debug.Log("가시");
             Debug.Log(holdingtimeGauge);
 
             if (holdingtimeGauge <= 0)
             {
                 player.attackComponent.bulletGauge.SwitchProhibitRecover(false);
-                Debug.Log(player.GetType() + "시간 다 됨");
                 holdingtimeGauge = 5f;
                 isCountingProhibit = false;
             }
@@ -56,8 +59,17 @@ public class EnemyManager : SingletonBase<EnemyManager>
         // 포자구름
         if (isStartCloud)
         {
-            StartCloudAttack();
+             if (player.movementComponent.normalizedZXSpeed > 0)
+             {
+                if (currTime > delayTime)
+                {
+                    Debug.Log("움직임");
+                    StartCloudAttack();
+                    currTime = 0;
+                }
+                currTime += Time.deltaTime;
 
+             }
         }
 
         
@@ -71,16 +83,20 @@ public class EnemyManager : SingletonBase<EnemyManager>
         holdingtimeGauge = 5.0f;
     }
 
-    public void StartCloud(GameObject cloud)
+    public void StartCloud(GameObject cloud, GameObject other)
     {
         isStartCloud = true;
+        particleObj = cloud;
         particle = cloud.GetComponent<ParticleSystem>().main;
+        player = other.GetComponent<PlayerCharacter>();
+
+        originDuration = particle.duration;
+        currentDuration = originDuration;
 
     }
 
     public void StartCloudAttack()
     {
-        originDuration = particle.duration;
 
         currentDuration = Mathf.Max(currentDuration - decreaseOffset, 0.1f);
 
@@ -90,8 +106,13 @@ public class EnemyManager : SingletonBase<EnemyManager>
             return;
         }
 
+        if (particleObj == null)
+        {
+            return;
+        }
         float newSpeedrate = originDuration / currentDuration;
         particle.simulationSpeed = newSpeedrate;
+        
 
         Debug.Log(currentDuration + "현재 남은 시간");
     }

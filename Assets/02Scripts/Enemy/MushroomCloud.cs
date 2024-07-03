@@ -15,12 +15,11 @@ public class MushroomCloud : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("닿음");
             // 화면 가리는 이펙트 생성
             GameObject effect = Instantiate(screenEffect);
             effect.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 1.0f;
             effect.transform.SetParent(Camera.main.transform);
-            EnemyManager.Instance.StartCloud(effect);
+            EnemyManager.Instance.StartCloud(effect, other);
 
             Destroy(gameObject);
         }
