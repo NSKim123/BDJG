@@ -9,6 +9,10 @@ public class ItemSpawner : MonoBehaviour
     public GameObject giantPrefab;
     public GameObject timestopPrefab;
 
+    private float rate;
+    private float normalRate = 0.2f;
+    private float specialRate = 0.5f;
+
     // 임시
     public bool isGiantEnd = false;
 
@@ -23,6 +27,43 @@ public class ItemSpawner : MonoBehaviour
     private void Start()
     {
         //Invoke("ItemSpawn", 3f);
+    }
+
+    public void ItemSpawnByPercentage(EnemyType type)
+    {
+        rate = UnityEngine.Random.Range(0, 1);
+
+        // 일반 개체
+        if ((int)type == 0 || (int)type == 1)
+        {
+            if (rate >= 0 && rate <= normalRate)
+            {
+                // 아이템 스폰
+            }
+
+        }
+        //특수 개체
+        else if ((int)type == 2 || (int)type == 3)
+        {
+            if (rate>=0 || rate <= specialRate)
+            {
+                // 아이템 스폰
+            }
+        }
+
+    }
+
+    public void ResetItem()
+    {
+        // 맵 내에 아이템이 있다면 제거합니다.
+        GameObject[] removeList = isItemExistInMap();
+        if (removeList != null)
+        {
+            foreach (var item in removeList)
+            {
+                Destroy(item);
+            }
+        }
     }
 
     public void ItemSpawn()

@@ -317,6 +317,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b11951f9cb5ef614b933fee4c2d6a3eb, type: 3}
+
 --- !u!1001 &288156232
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -390,6 +391,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc43dcb354fbbe949bab2f7b8dd5eb3b, type: 3}
+
 --- !u!1001 &311001286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -950,37 +952,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 311001286}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &557652206
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 557652207}
-  m_Layer: 0
-  m_Name: CenterPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &557652207
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 557652206}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.65, y: 7.55, z: 17.52}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &593470960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,29 +1196,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 843712206}
-  - component: {fileID: 843712205}
+  - component: {fileID: 843712207}
   m_Layer: 0
-  m_Name: MapManager
+  m_Name: MapController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &843712205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 843712204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a3f13469408da64c8a81986f4d60318, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _waterGround: {fileID: 2097778241}
-  _map: {fileID: 1164451482}
-  warning: {fileID: 0}
 --- !u!4 &843712206
 Transform:
   m_ObjectHideFlags: 0
@@ -1263,6 +1219,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &843712207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843712204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e597c7f5745cb14c85e155ec9157812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _waterGround: {fileID: 2097778241}
+  _map: {fileID: 1164451482}
+  warning: {fileID: 1874608257}
 --- !u!1001 &853668381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1360,7 +1331,7 @@ Transform:
   m_GameObject: {fileID: 878436947}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.89, y: 7.5, z: 16.48}
+  m_LocalPosition: {x: 20.2, y: 7.5, z: 17.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1469,8 +1440,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawner: {fileID: 229066413}
-  currentWave: 0
-  centerPos: {fileID: 557652207}
+  itemSpawner: {fileID: 2058321944}
+  mapController: {fileID: 843712207}
 --- !u!4 &911747145
 Transform:
   m_ObjectHideFlags: 0
@@ -2145,7 +2116,7 @@ Transform:
   m_GameObject: {fileID: 1899784336}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 21.65, y: 7.5, z: 16.04}
+  m_LocalPosition: {x: 20.2, y: 7.5, z: 17.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2705,6 +2676,7 @@ SceneRoots:
   - {fileID: 2058321943}
   - {fileID: 843712206}
   - {fileID: 326624095010132707}
-  - {fileID: 557652207}
   - {fileID: 753366849}
+
   - {fileID: 288156232}
+

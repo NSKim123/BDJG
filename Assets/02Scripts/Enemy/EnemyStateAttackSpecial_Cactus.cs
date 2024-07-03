@@ -20,7 +20,7 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
         State nextState = State.AttackSpecial;
 
         SpecialCactus cactus = enemyCharacter as SpecialCactus;
-
+  
         
         //Debug.Log(_currentStep);
 
@@ -40,13 +40,16 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
 
                     Transform thornTrans = cactus.transform.GetChild(1).transform;
                     GameObject.Instantiate(cactus.thornArea, thornTrans.position, Quaternion.identity);
-                    
+
                     _currentStep++;
+
+
 
                 }
                 break;
             case StepInState.Playing:
                 {
+                   
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
                         _currentStep++;

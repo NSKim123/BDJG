@@ -38,7 +38,7 @@ public class GameSceneInstance : SceneInstanceBase
     /// <summary>
     /// 甘 包府 按眉
     /// </summary>
-    private MapManager _MapManager;
+    private MapController _MapManager;
 
     /// <summary>
     /// item spawn 按眉
@@ -57,7 +57,7 @@ public class GameSceneInstance : SceneInstanceBase
 
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
 
-        _MapManager = FindAnyObjectByType<MapManager>();
+        _MapManager = FindAnyObjectByType<MapController>();
         _MapManager.warning = m_GameSceneUI.m_WarningUI;
 
         _ItemSpawner = FindAnyObjectByType<ItemSpawner>();

@@ -160,7 +160,7 @@ Transform:
   m_GameObject: {fileID: 2329695567898972231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.03, y: 0.04, z: 0}
+  m_LocalPosition: {x: -0.03, y: -0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -690,7 +690,7 @@ MonoBehaviour:
   Effect_Hit: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
     type: 3}
   changeMat: {fileID: 2100000, guid: c434d8c3d93524344bf2e01ff64dc04b, type: 2}
-  thornArea: {fileID: 6248104182939755522, guid: f9cb2692b6e9f614f94e392bc04febf9,
+  thornArea: {fileID: 2758007761011041935, guid: c8c4aaba995dfad4f920bdf36383364e,
     type: 3}
 --- !u!114 &8310618717141309106
 MonoBehaviour:

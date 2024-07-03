@@ -34,7 +34,7 @@ public class CactusAIController : EnemyAIController
             _stateMachine.ChangeState(State.Attack);
         }
 
-        if (_stateMachine.currentStateType == State.Move && _attacked)
+        if ((_stateMachine.currentStateType != State.Attack || _stateMachine.currentStateType != State.AttackSpecial) && _attacked)
         {
             _attacked = false;
         }

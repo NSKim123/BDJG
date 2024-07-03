@@ -9,10 +9,21 @@ public class ThornArea : MonoBehaviour
 {
     float currentTime = 0f;
     float destroyTime = 5f;
+    float desiredPos;
+
+    private void Start()
+    {
+        desiredPos = transform.position.y + 0.8f;
+    }
 
     private void Update()
     {
-        currentTime += Time.deltaTime;
+        
+        if (transform.position.y >= desiredPos)
+        {
+            currentTime += Time.deltaTime;
+
+        }
 
         if (currentTime > destroyTime)
         {
@@ -21,14 +32,21 @@ public class ThornArea : MonoBehaviour
 
     }
 
+    private void FixedUpdate()
+    {
+        if (transform.position.y < desiredPos)
+        {
+            transform.position += Vector3.up * Time.fixedDeltaTime * 0.2f;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            //other.GetComponent<PlayerCharacter>().attackComponent.bulletGauge.Switch~~~~
-            //탄환 회복 막고 함정 없애기
-            //other.GetComponent<BulletGauge>().
-            //Destroy(gameObject);
+            EnemyManager.Instance.StartThornAttack(other);
+            Debug.Log("가시 트리거");
+            Destroy(gameObject);
         }
     }
 }

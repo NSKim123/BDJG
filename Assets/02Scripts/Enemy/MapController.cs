@@ -5,7 +5,7 @@ using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapController : MonoBehaviour
 {
     // 물 객체
     [SerializeField] private GameObject _waterGround;
@@ -19,22 +19,24 @@ public class MapManager : MonoBehaviour
     // 물이 높아질 때 호출할 이벤트
     // 적의 이동방향을 중앙으로 변경
     public event Action OnChangeDestination;
+    public event Action<bool> OnChangeWave;
 
     private Coroutine _waterCoroutine;
     private float _waterDownDefaultSecond;
-    private float _waterDownDelta;
+    private float _waterDownOffset;
 
     // 경고 UI
     public GameObject warning;
     private Animation _warningUIAnim;
 
+    Wave currentWave;
 
     private void Start()
     {
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
         _warningUIAnim = warning.GetComponent<Animation>();
         _waterDownDefaultSecond = 40f;
-        _waterDownDelta = 10f;
+        _waterDownOffset = 10f;
 
         // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
         _heightOfWater = new float[]
@@ -53,6 +55,7 @@ public class MapManager : MonoBehaviour
     public IEnumerator C_WaterUP()
     {
         int waterIndex = 0;
+        currentWave = Wave.one;
 
         _waterGround.transform.position = new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
         _navMeshMap.BuildNavMesh();
@@ -61,7 +64,7 @@ public class MapManager : MonoBehaviour
         {
             
             // time for water rising
-            yield return new WaitForSeconds(_waterDownDefaultSecond + waterIndex * _waterDownDelta);
+            yield return new WaitForSeconds(_waterDownDefaultSecond + waterIndex * _waterDownOffset);
 
             // Show warning UI
             _warningUIAnim.Play();
@@ -73,6 +76,11 @@ public class MapManager : MonoBehaviour
             
             waterIndex++;
 
+            if (waterIndex == 1)
+            {
+                OnChangeWave?.Invoke(true);
+
+            }
 
             // 적의 이동방향 변경 (중심으로)
             //OnChangeDestination?.Invoke();

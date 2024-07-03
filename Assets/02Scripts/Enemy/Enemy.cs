@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 [Serializable]
 // Enemy에 대한 정보. 값을 데이터로 받아오고 각각의 적이 상속받습니다.
 public abstract class Enemy : MonoBehaviour, IHit
 {
+    public abstract EnemyType Type { get; set; }
     public abstract float MoveSpeed { get; set; }
     public abstract float AttackRange { get; set; }
     public abstract float AttackForce { get; set; }
@@ -35,6 +37,8 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public event System.Action onDead;
 
+    public event System.Action<EnemyType> OnRequestSpawnItem;
+
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -53,6 +57,8 @@ public abstract class Enemy : MonoBehaviour, IHit
     public virtual void OnDead()
     {
         onDead?.Invoke();
+        OnRequestSpawnItem?.Invoke(Type);
+
     }
 
 }
