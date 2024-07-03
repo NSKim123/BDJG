@@ -45,7 +45,6 @@ public class ThornArea : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             EnemyManager.Instance.StartThornAttack(other);
-            Debug.Log("가시 트리거");
             Destroy(gameObject);
         }
     }

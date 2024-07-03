@@ -22,6 +22,7 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
 
         SpecialMushroom mush = enemyCharacter as SpecialMushroom;
 
+
         switch (_currentStep)
         {
             case StepInState.None:
@@ -38,18 +39,15 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                     Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
                     GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
 
-                    cloud.transform.position += mush.transform.forward * 2f;
+                    cloud.transform.position += mush.transform.up * 0.5f;
                     _currentStep++;
-
-
                 }
                 break;
             case StepInState.Playing:
                 {
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
                     {
-
-                        _currentStep++;
+                        //_currentStep++;
 
                     }
                     
@@ -62,7 +60,7 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                 break;
             case StepInState.End:
                 {
-                    
+                    mush.transform.position -= mush.transform.forward * 1.5f;
                     nextState = State.Move;
 
                 }
