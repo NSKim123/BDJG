@@ -33,7 +33,7 @@ public class WindArea : MonoBehaviour
 
         foreach (Collider enemy in enemys)
         {
-            enemy.GetComponent<IHit>().OnDamaged(5.0f, _WindDirection);
+            enemy.GetComponent<IHit>().OnDamaged(10.0f, _WindDirection);
         }
 
         _LastAttackTime = Time.time;
