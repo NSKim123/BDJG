@@ -22,6 +22,6 @@ MonoBehaviour:
   - m_ItemCode: 100004
     m_ItemIcon: {fileID: 21300000, guid: eb555bda6d40cde48bb9ee1b3c9fdeeb, type: 3}
   - m_ItemCode: 100005
-    m_ItemIcon: {fileID: 21300000, guid: a601e8712da4b7d438437c7b9dd43d3d, type: 3}
+    m_ItemIcon: {fileID: 21300000, guid: ae0b9cf49a36caf40bef374af0b4eebf, type: 3}
   - m_ItemCode: 100006
     m_ItemIcon: {fileID: 21300000, guid: ee24feef552160f4db14a54c030307f1, type: 3}

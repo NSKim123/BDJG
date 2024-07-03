@@ -19,11 +19,6 @@ public class WindArea : MonoBehaviour
         _WindDirection.y = 0.0f;
     }
 
-    private void Update()
-    {
-        
-    }
-
     private void FixedUpdate()
     {
         if (_LastAttackTime + _AttackPeriod < Time.time)
@@ -34,11 +29,11 @@ public class WindArea : MonoBehaviour
 
     private void Push()
     {
-        Collider[] enemys = Physics.OverlapSphere(transform.position, 30.0f, LayerMask.GetMask("Enemy"));
+        Collider[] enemys = Physics.OverlapSphere(transform.position, 70.0f, LayerMask.GetMask("Enemy"));
 
         foreach (Collider enemy in enemys)
         {
-            enemy.GetComponent<IHit>().OnDamaged(10.0f, _WindDirection);
+            enemy.GetComponent<IHit>().OnDamaged(5.0f, _WindDirection);
         }
 
         _LastAttackTime = Time.time;
