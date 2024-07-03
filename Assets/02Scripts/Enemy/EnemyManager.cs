@@ -1,33 +1,100 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum WaveName
+public enum Wave
 {
-    General = 1,
-    Trainee,
-    Three,
-    Four,
+    one,
+    two,
+    three,
+    four,
 }
-
 public class EnemyManager : SingletonBase<EnemyManager>
 {
+
+    // 특수 개체 공격 생성
+
     public EnemySpawner spawner;
+    public ItemSpawner itemSpawner;
+    public MapController mapController;
 
-    public int MushroomCount { get; set; }
-    public int CactusCount { get; set; }
+    private PlayerCharacter player;
 
-    public int TotalCount { get; set; }
+    private float holdingtimeGauge = 5f;
+    private bool isCountingProhibit = false;
+
+    private float originDuration;
+    private float currentDuration;
+    private float decreaseOffset = 0.2f;
+    private bool isStartCloud;
+    private ParticleSystem.MainModule particle;
+
+    private void Start()
+    {
+        mapController.OnChangeWave += spawner.SwitchSpawnValue;
+    }
 
 
-    public WaveName currentWave;
+    private void Update()
+    {
+        // 가시 함정
+        if (isCountingProhibit)
+        {
+            holdingtimeGauge -= Time.deltaTime;
+            Debug.Log("가시");
+            Debug.Log(holdingtimeGauge);
 
-    public Transform centerPos;
+            if (holdingtimeGauge <= 0)
+            {
+                player.attackComponent.bulletGauge.SwitchProhibitRecover(false);
+                Debug.Log(player.GetType() + "시간 다 됨");
+                holdingtimeGauge = 5f;
+                isCountingProhibit = false;
+            }
+        }
 
+        // 포자구름
+        if (isStartCloud)
+        {
+            StartCloudAttack();
 
+        }
+
+        
+    }
+
+    public void StartThornAttack(Collider other)
+    {
+        player = other.GetComponent<PlayerCharacter>();
+        player.attackComponent.bulletGauge.SwitchProhibitRecover(true);
+        isCountingProhibit = true;
+        holdingtimeGauge = 5.0f;
+    }
+
+    public void StartCloud(GameObject cloud)
+    {
+        isStartCloud = true;
+        particle = cloud.GetComponent<ParticleSystem>().main;
+
+    }
+
+    public void StartCloudAttack()
+    {
+        originDuration = particle.duration;
+
+        currentDuration = Mathf.Max(currentDuration - decreaseOffset, 0.1f);
+
+        if (currentDuration <= 0.1f)
+        {
+            isStartCloud = false;
+            return;
+        }
+
+        float newSpeedrate = originDuration / currentDuration;
+        particle.simulationSpeed = newSpeedrate;
+
+        Debug.Log(currentDuration + "현재 남은 시간");
+    }
 
 
 }

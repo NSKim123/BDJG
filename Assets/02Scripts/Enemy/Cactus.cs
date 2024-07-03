@@ -18,6 +18,8 @@ public class Cactus : Enemy
     public override float SpecialAttackTime { get; set; }
     #endregion
 
+    public override EnemyType Type { get; set; }
+
 
     public override void OnDamaged(float distance, Vector3 direction)
     {

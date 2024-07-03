@@ -57,6 +57,13 @@ public class EnemySpawner : MonoBehaviour
 
     private Coroutine spawnLoopCoroutine;
 
+    private bool startSpecialEnemySpawn;
+
+    public void SwitchSpawnValue(bool spawnValue)
+    {
+        startSpecialEnemySpawn = spawnValue;
+    }
+
     /// <summary>
     /// 적 생성 후 데이터를 초기화하는 메서드입니다.
     /// </summary>
@@ -72,7 +79,9 @@ public class EnemySpawner : MonoBehaviour
         e.AttackTime = data.AttackTime;
         e.AttackSpeed = data.AttackSpeed;
         e.AttackRange = data.AttackRange;
+        e.Type = data.Type;
         e.onDead += () => onEnemyDead?.Invoke(1);
+        e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
     }
 
     private void EnemyInit_Special(GameObject enemy, EnemyInfoData data)
@@ -317,7 +326,7 @@ public class EnemySpawner : MonoBehaviour
 
         // 버섯부터 스폰 시작
         _turnPivot = EnemySpawnTurn.mushroomTurn;
-        _specialTurnPivot = EnemySpecialSpawnTurn.mushroomSpecialTurn;
+        _specialTurnPivot = EnemySpecialSpawnTurn.cactusSpecialTurn;
         spawnLoopCoroutine = StartCoroutine(C_SpawnLoop());
     }
 
@@ -365,5 +374,16 @@ public class EnemySpawner : MonoBehaviour
         this.isPaused = isPaused;
     }
 
-  
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        //Gizmos.DrawSphere(cactusSpawnAxis.position, 8);
+
+        
+    }
+#endif
+
+
+
 }

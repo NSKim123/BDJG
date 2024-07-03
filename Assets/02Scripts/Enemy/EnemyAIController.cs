@@ -17,14 +17,14 @@ public abstract class EnemyAIController : MonoBehaviour
 
     //public int AttackDetected { get; set; }
 
-    private MapManager _mapManager;
+    private MapController _mapManager;
 
     private void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player");
         _stateMachine = GetComponent<StateMachine>();
         _enemyCharacter = GetComponent<Enemy>();
-        _mapManager = FindAnyObjectByType<MapManager>();
+        _mapManager = FindAnyObjectByType<MapController>();
         //_mapManager.OnChangeDestination += ChangeDestination;
     }
 
