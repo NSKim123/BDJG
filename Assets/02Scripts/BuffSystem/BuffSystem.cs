@@ -79,7 +79,7 @@ public class BuffSystem
                 { 100003, new MachineGunBuff(100003, null, BuffType.Item, 10.0f, true) },
                 { 100004, new ShellBuff(100004, null, BuffType.Item, 10.0f, true) },
                 { 100005, new ScarecrowBuff(100005, null, BuffType.Item, 10.0f, true) },
-                { 100006, new WindBuff(100006, null, BuffType.Item, 10.0f, true) },
+                { 100006, new WindBuff(100006, null, BuffType.Item, 3.0f, true) },
             };
         }     
     }
