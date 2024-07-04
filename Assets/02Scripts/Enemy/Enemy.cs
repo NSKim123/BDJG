@@ -51,7 +51,7 @@ public abstract class Enemy : MonoBehaviour, IHit
         // 피격 이펙트 생성
         GameObject effect = Instantiate(Effect_Hit);
         effect.transform.position = transform.position + Vector3.up * GetComponent<CapsuleCollider>().height * 0.5f;
-        effect.transform.SetParent(transform);
+        effect.transform.SetParent(transform);        
     }
 
     public virtual void OnDead()

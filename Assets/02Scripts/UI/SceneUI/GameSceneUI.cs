@@ -61,6 +61,7 @@ public class GameSceneUI : MonoBehaviour
     {
         // 환경 설정 버튼 클릭 이벤트 <-- 바인딩 -- 환경설정 창 활성화 함수
         m_Button_Configuration.onClick.AddListener(() => m_ConfigurationUI.gameObject.SetActive(true));
+        m_Button_Configuration.onClick.AddListener(() => SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect));
     }
 
     /// <summary>
