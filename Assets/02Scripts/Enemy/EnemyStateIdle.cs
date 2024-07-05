@@ -6,7 +6,7 @@ public class EnemyStateIdle : EnemyStateBase
     {
     }
 
-    public override bool canExecute() => stateMachine.currentStateType != State.Die;
+    public override bool canExecute() => stateMachine.currentStateType == State.Init;
 
     public override State MoveNextStep()
     {

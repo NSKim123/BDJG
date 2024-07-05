@@ -26,7 +26,7 @@ public class Shell : Bullet
                 hitDirection.Normalize();
                 hitEnemy.OnDamaged(_AttackPower, hitDirection);
 
-                Instantiate(_effect, transform.position, Quaternion.identity);
+                Instantiate(_effect, transform.position + Vector3.up, Quaternion.identity);
             }
         }
 
