@@ -22,6 +22,8 @@ public class GameOverUI : PanelWithTwoButtonsUI
     /// </summary>
     protected override void BindButtonsEvents()
     {
+        base.BindButtonsEvents();
+
         // 메인 화면 버튼 클릭 이벤트 바인딩
         BindButton2Events(() => SceneManager.LoadScene(0));
     }

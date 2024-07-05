@@ -9,8 +9,7 @@ using UnityEngine;
 /// </summary>
 public partial class PlayerCharacter : PlayerCharacterBase, IHit
 {
-    [Header("# 거대화 슬라임일때 착지 시 이펙트")]
-    public GameObject m_Effect_GiantSlimeLand;
+    private static string SOUNDNAME_LEVELUP = "Effect_Slime_Upgrade";
 
     [Header("# 거대화 시작 시 생성될 UI 이펙트")]
     public GameObject m_UIEffect_GiantStarted;
@@ -198,6 +197,9 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
         modelComponent.OnLevelUp(level);
         attackComponent.OnLevelUp(level);
         movementComponent.OnLevelUp(level);
+
+        if(level > 1)
+            SoundManager.Instance.PlaySound(SOUNDNAME_LEVELUP, SoundType.Effect);
     }
 
     /// <summary>
@@ -257,6 +259,7 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
     private void ResetAnimController()
     {
         _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
+        _PlayerAnimController.onMoveStart += movementComponent.PlayMoveSound;
     }    
 
     /// <summary>
@@ -264,6 +267,8 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
     /// </summary>
     public void ResetPlayerCharacter()
     {
+        _BuffSystem.Clear();
+
         // 레벨 시스템 내부에서의 초기화를 진행합니다.
         _LevelSystem.Initailize();
 
@@ -397,22 +402,19 @@ public partial class PlayerCharacter
         // 레벨업 이벤트를 일시적으로 호출을 막습니다.
         _AbleToLevelUp = false;
 
-        // 면역상태 설정
-        movementComponent.SetImmuneState(true);
-
-        // 모델 변경
-        //modelComponent.OnGiantStart();
+        // MovementComponent 에서 실행되어야하는 동작 실행
+        movementComponent.OnStartGiant();
 
         // 점프 애니메이션 이벤트 바인딩
         animController.onLand += attackComponent.AttackAround;
-        animController.onLand += InstantiateLandEffect;
-        animController.onLand += FollowCamera.ShakeCamera;
+        animController.onLand += movementComponent.InstantiateLandEffect;
+        animController.onLand += movementComponent.PlayGiantSlimeLandSound;
+        animController.onLand += FollowCamera.ShakeCamera;        
 
         // 탄창 게이지 초기화 및 설정
         attackComponent.OnStartGiant();
 
-        movementComponent.characterController.excludeLayers += LayerMask.GetMask("Enemy");
-
+        // UI 이펙트 생성
         GameObject UIEffect = Instantiate(m_UIEffect_GiantStarted);
         UIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
         (UIEffect.transform as RectTransform).anchoredPosition = Vector2.zero;
@@ -425,11 +427,12 @@ public partial class PlayerCharacter
 
         // 점프 애니메이션 이벤트 언바인딩
         animController.onLand -= attackComponent.AttackAround;
-        animController.onLand -= InstantiateLandEffect;
+        animController.onLand -= movementComponent.InstantiateLandEffect;
+        animController.onLand -= movementComponent.PlayGiantSlimeLandSound;
         animController.onLand -= FollowCamera.ShakeCamera;
 
-        // 면역상태 원상복구
-        movementComponent.SetImmuneState(false);
+        // MovementComponent 에서 실행되어야하는 동작 실행
+        movementComponent.OnFinishGiant();
         
         // 탄창 원상복구
         attackComponent.OnLevelUp(_LevelSystem.level);
@@ -437,22 +440,15 @@ public partial class PlayerCharacter
 
         // **임시** 거대화 끝나고 호출
         onGiantEnd?.Invoke();
-
-        movementComponent.characterController.excludeLayers -= LayerMask.GetMask("Enemy");
     }
 
-    private void InstantiateLandEffect()
-    {
-        GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
-
-        effect.transform.position = transform.position + Vector3.down * movementComponent.characterController.height / 2.0f * transform.lossyScale.y;
-    }
 
     public void OnStartMachineGun()
     {
         _AbleToLevelUp = false;
 
         attackComponent.OnStartMachineGun();
+        modelComponent.OnStartMachineGun();
     }
 
     public void OnUpdateMachineGun()
@@ -467,6 +463,8 @@ public partial class PlayerCharacter
 
         movementComponent.SetMovable(true);
         movementComponent.SetImmuneState(false);
+
+        modelComponent.OnFinishMachineGun();
 
         _AbleToLevelUp = true;
     }

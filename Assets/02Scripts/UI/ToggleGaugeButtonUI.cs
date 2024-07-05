@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -10,6 +11,20 @@ public class ToggleGaugeButtonUI : ToggleGaugeUI
 {
     [Header("# 버튼")]
     public Button m_Button;
+
+    private bool _Interactable = true;
+
+    private void Awake()
+    {
+        m_Button.onClick.AddListener(PlayClickSound);
+    }
+
+    private void PlayClickSound()
+    {
+        if (m_GaugeImage.fillAmount > 0.0f) return;
+
+        SoundManager.Instance.PlaySound(_Interactable ? Constants.SOUNDNAME_CLICK_ABLEBUTTON : Constants.SOUNDNAME_CLICK_DISABLEBUTTON, SoundType.Effect);
+    }
 
     /// <summary>
     /// 버튼 클릭 이벤트를 바인딩하는 메서드입니다.
@@ -39,6 +54,9 @@ public class ToggleGaugeButtonUI : ToggleGaugeUI
         base.OnToggleChanged(toggleSwitch);
 
         // 버튼 비활성화
-        m_Button.interactable = toggleSwitch;
+        //m_Button.interactable = toggleSwitch;
+        _Interactable = toggleSwitch;
     }
+
+    
 }

@@ -216,6 +216,8 @@ public class ScarecrowBuff : TimerBuff
 
 public class WindBuff : TimerBuff
 {
+    private static string AUDIONAME_WIND = "Effect_Wind_ver1";
+
     private GameObject _WindPrefab;
 
     private GameObject _InstantiatedPrefab;
@@ -244,6 +246,8 @@ public class WindBuff : TimerBuff
 
         // 적 스폰 일시정지
         EnemyManager.Instance.spawner.PauseSwitchEnemySpawn(true);
+
+        SoundManager.Instance.PlaySound(AUDIONAME_WIND, SoundType.Effect);
     }
 
     protected override void onRenewBuffContext()

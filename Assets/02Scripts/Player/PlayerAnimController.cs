@@ -15,6 +15,7 @@ public class PlayerAnimController : AnimController
     private const string PARAMNAME_DAMAGED = "_Damaged";
     private const string PARAMNAME_ATTACK = "_Attack";
 
+    public event System.Action onMoveStart;
     public event System.Action onLand;
 
     /// <summary>
@@ -57,6 +58,11 @@ public class PlayerAnimController : AnimController
     public void TriggerAttackParam()
     {
         SetTrigger(PARAMNAME_ATTACK);
+    }
+
+    public void AnimEvent_StartMove()
+    {
+        onMoveStart?.Invoke();
     }
 
     public void AnimEvent_LandAttack()

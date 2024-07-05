@@ -6,7 +6,9 @@ using UnityEngine;
 /// 슬라임이 발사하는 투사체입니다.
 /// </summary>
 public class Bullet : GuidedProjectile
-{   
+{
+    protected static string SOUNDNAME_DAMAGED = "Effect_Damaged";
+
     /// <summary>
     /// 이 투사체가 가질 공격력
     /// </summary>
@@ -27,13 +29,24 @@ public class Bullet : GuidedProjectile
         {
             _Direction.y = 0.0f;
             _Direction.Normalize();
-            hitEnemy.OnDamaged(_AttackPower, _Direction);            
+            hitEnemy.OnDamaged(_AttackPower, _Direction);
+
+            PlaySound(collider);
         }
 
         // 이 투사체를 제거합니다.
         Destroy(this.gameObject);
     }
 
+    protected virtual float CalculateSoundPitch(Collider other)
+    {
+        return Mathf.Pow(2.0f, -(_Owner.transform.position - other.transform.position).magnitude);
+    }
+
+    protected virtual void PlaySound(Collider other)
+    {
+        SoundManager.Instance.PlaySound("Effect_Damaged", SoundType.Effect);
+    }
 
     /// <summary>
     /// 공격력 설정 메서드

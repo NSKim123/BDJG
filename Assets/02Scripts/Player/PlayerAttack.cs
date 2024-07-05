@@ -4,11 +4,20 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
+public enum BulletType
+{
+    Basic,
+    Shell,
+}
+
 /// <summary>
 /// 플레이어의 캐릭터의 공격을 수행하는 컴포넌트입니다.
 /// </summary>
 public partial class PlayerAttack : MonoBehaviour
 {
+    private static string SOUNDNAME_FIRE_BASIC = "Effect_FIre_ver2";
+    private static string SOUNDNAME_FIRE_SHELL = "Effect_FireShell";
+
     [Header("# 탄환 발사 관련")]
     [Header("탄환 프래팹")]
     public Bullet m_Bullet;
@@ -66,6 +75,8 @@ public partial class PlayerAttack : MonoBehaviour
 
     private bool _ProhibitFire;
 
+    private string _CurrentFireSoundName;
+
     /// <summary>
     /// 발사 시작 위치
     /// </summary>
@@ -122,7 +133,7 @@ public partial class PlayerAttack : MonoBehaviour
         // 이 공격 컴포넌트를 가지고 있는 PlayerCharacter 객체를 찾습니다.
         _OwnerCharacter = GetComponent<PlayerCharacter>();
 
-        _CurrentBullet = m_Bullet;
+        ChangeBullet(BulletType.Basic);
     }
 
     private void Update()
@@ -146,7 +157,7 @@ public partial class PlayerAttack : MonoBehaviour
 
         _BulletGauge.SwitchProhibitRecover(false);
 
-        _CurrentBullet = m_Bullet;
+        ChangeBullet(BulletType.Basic);
 
         _ProhibitFire = false;
     }
@@ -240,12 +251,12 @@ public partial class PlayerAttack : MonoBehaviour
         _OwnerCharacter.animController.TriggerAttackParam();
 
         // 발사 이펙트 생성
-        GameObject effect = Instantiate(m_Effect_Fire);
-        effect.transform.position = _StartPosition.position;
-        effect.transform.SetParent(transform);
+        InstantiateEffect();
 
         // 쿨타임을 돌리기 시작합니다.
         _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
+
+        PlayFireSound();
     }
 
     /// <summary>
@@ -270,6 +281,18 @@ public partial class PlayerAttack : MonoBehaviour
         // 타겟팅 중인 객체가 있다면 탄환의 목표 Transform 을 설정해줍니다.
         if(_TargetingSystem.currentTargetTransform != null)
             bullet.SetTarget(_TargetingSystem.currentTargetTransform);
+    }
+
+    private void InstantiateEffect()
+    {
+        GameObject effect = Instantiate(m_Effect_Fire);
+        effect.transform.position = _StartPosition.position;
+        effect.transform.SetParent(transform);
+    }
+
+    private void PlayFireSound()
+    {
+        SoundManager.Instance.PlaySound(_CurrentFireSoundName, SoundType.Effect);
     }
 
     /// <summary>
@@ -300,8 +323,6 @@ public partial class PlayerAttack : MonoBehaviour
         _StartPosition = _OwnerCharacter.modelComponent.currentModel.transform.Find("FirePoint");
     }
 
-    
-
     public void AttackAround()
     {
         Collider[] hitResult = Physics.OverlapSphere(transform.position + Vector3.down * 0.35f * transform.localScale.y, 0.3f * transform.localScale.x);
@@ -317,6 +338,22 @@ public partial class PlayerAttack : MonoBehaviour
                 iHit.OnDamaged(_AttackForce * 3.0f, direction);
             }
         }
+    }
+
+    public void ChangeBullet(BulletType newBulletType)
+    {
+        switch (newBulletType)
+        {
+            case BulletType.Basic:
+                _CurrentBullet = m_Bullet;
+                _CurrentFireSoundName = SOUNDNAME_FIRE_BASIC;
+                break;
+            case BulletType.Shell:
+                _CurrentBullet = m_Shell;
+                _CurrentFireSoundName = SOUNDNAME_FIRE_SHELL;
+                break;
+        }
+
     }
 
     /// <summary>
@@ -387,7 +424,7 @@ public partial class PlayerAttack
     public void OnStartShell()
     {   
         m_PushPowerMultiplier *= 3.0f;        
-        _CurrentBullet = m_Shell;
+        ChangeBullet(BulletType.Shell);
 
         bulletGauge.currentValue = bulletGauge.max;
         m_CostBulletGauge = (bulletGauge.max - bulletGauge.min) / 4;
@@ -402,7 +439,7 @@ public partial class PlayerAttack
     public void OnFinishShell()
     {
         m_PushPowerMultiplier /= 3.0f;
-        _CurrentBullet = m_Bullet;
+        ChangeBullet(BulletType.Basic);
 
         CostBulletGauge(bulletGauge.currentValue);
         m_CostBulletGauge = 1;
