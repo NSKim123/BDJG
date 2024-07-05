@@ -34,33 +34,30 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                 {
                     Debug.Log("공격 상태 들어옴");
                     animLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                    animator.speed = animLength / enemyCharacter.SpecialAttackTime;
-                    //animator.Play("attack_special");
-                    Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
-                    GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
-
-                    cloud.transform.position += mush.transform.up * 0.5f;
+                    //animator.speed = animLength / enemyCharacter.SpecialAttackTime;
+                    animator.Play("attack_special");
+                    
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1.0f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {
-                        //_currentStep++;
+                        Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
+                        GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
+
+                        cloud.transform.position += mush.transform.up * 0.5f;
+                        _currentStep++;
 
                     }
-                    
-                    
-                    // temp
-                    _currentStep++;
+         
 
 
                 }
                 break;
             case StepInState.End:
                 {
-                    mush.transform.position -= mush.transform.forward * 1.5f;
                     nextState = State.Move;
 
                 }

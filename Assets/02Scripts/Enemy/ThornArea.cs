@@ -8,7 +8,7 @@ using UnityEngine;
 public class ThornArea : MonoBehaviour
 {
     float currentTime = 0f;
-    float destroyTime = 5f;
+    float destroyTime = 7f;
     float desiredPos;
 
     private void Start()

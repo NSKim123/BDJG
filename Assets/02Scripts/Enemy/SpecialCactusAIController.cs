@@ -47,7 +47,7 @@ public class SpecialCactusAIController : EnemyAIController
             if (isAvailableSpecialAttack)
             {
 
-                _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.SpecialAttackRange, _targetLayer);
+                _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange, _targetLayer);
 
                 if (_attackDetect.Length > 0 && !_attacked)
                 {
@@ -65,7 +65,7 @@ public class SpecialCactusAIController : EnemyAIController
             }
             else
             {
-                _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.AttackRange, _targetLayer);
+                _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
 
                 if (_attackDetect.Length > 0 && !_attacked)
                 {
@@ -107,12 +107,12 @@ public class SpecialCactusAIController : EnemyAIController
             Gizmos.color = Color.green;
             if (isAvailableSpecialAttack)
             {
-                Gizmos.DrawSphere(transform.position, _enemyCharacter.SpecialAttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange);
 
             }
             else
             {
-                Gizmos.DrawSphere(transform.position, _enemyCharacter.AttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange);
 
             }
         }

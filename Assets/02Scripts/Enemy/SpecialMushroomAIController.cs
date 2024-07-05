@@ -9,8 +9,6 @@ public class SpecialMushroomAIController : EnemyAIController
     [SerializeField] private bool coolTimeStart = false;
     private float coolTime = 0;
 
-
-
     public override Collider[] AttackDetect { get { return _attackDetect; } }
 
     private Collider[] _attackDetect;
@@ -27,7 +25,6 @@ public class SpecialMushroomAIController : EnemyAIController
         // 특수공격 쿨타임 계산
         if (coolTimeStart)
         {
-            Debug.Log("쿨타임");
             coolTime += Time.deltaTime;
 
             if (coolTime > _enemyCharacter.SpecialAttackCoolTime)
@@ -41,12 +38,10 @@ public class SpecialMushroomAIController : EnemyAIController
         // 특수공격이 가능하다면
         if (isAvailableSpecialAttack)
         {
-            Debug.Log("공격 시도");
-            _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.SpecialAttackRange, _targetLayer);
+            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange, _targetLayer);
 
             if (_attackDetect.Length > 0 && !_attacked)
             {
-                Debug.Log("특수 공격 버섯");
                 _attacked = true;
                 isAvailableSpecialAttack = false;
                 coolTimeStart = true;
@@ -58,8 +53,7 @@ public class SpecialMushroomAIController : EnemyAIController
         }
         else
         {
-            Debug.Log("걍 공격");
-            _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.AttackRange, _targetLayer);
+            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
 
             if (_attackDetect.Length > 0 && !_attacked)
             {
@@ -99,12 +93,12 @@ public class SpecialMushroomAIController : EnemyAIController
             Gizmos.color = Color.green;
             if (isAvailableSpecialAttack)
             {
-                Gizmos.DrawSphere(transform.position, _enemyCharacter.SpecialAttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange);
 
             }
             else
             {
-                Gizmos.DrawSphere(transform.position, _enemyCharacter.AttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange);
 
             }
         }

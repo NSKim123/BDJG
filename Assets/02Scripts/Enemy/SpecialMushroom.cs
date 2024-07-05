@@ -41,10 +41,6 @@ public class SpecialMushroom : Enemy
     {
         base.OnDead();
         stateMachine.ChangeState(State.Die);
-        //EnemyManager.Instance.TotalCount--;
-        //EnemySpawner.TotalEnemyCount--;
-        EnemySpawner.TotalSpecialEnemyCount--;
-        EnemySpawner.MushroomSpecialCount--;
     }
 
     protected override void Start()

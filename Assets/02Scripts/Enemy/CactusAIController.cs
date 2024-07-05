@@ -17,7 +17,7 @@ public class CactusAIController : EnemyAIController
         dis = Vector3.Distance(transform.position, target.transform.position);
 
         // 수정하기
-        _attackDetect = Physics.OverlapSphere(transform.position, _enemyCharacter.AttackRange, _targetLayer);
+        _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
 
         //AttackDetected = Physics.OverlapSphereNonAlloc(transform.position, _enemyCharacter.AttackRange, AttackDetect);
 
@@ -59,7 +59,7 @@ public class CactusAIController : EnemyAIController
         if (_enemyCharacter != null)
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawSphere(transform.position, _enemyCharacter.AttackRange);
+            Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange);
         }
     }
 #endif
