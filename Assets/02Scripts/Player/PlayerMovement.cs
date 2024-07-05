@@ -319,7 +319,7 @@ public partial class PlayerMovement
 
         return result;
     }
-    bool _tempJumpInput;
+
     private void CheckAboveEnemy()
     {
         if ( ((LayerMask.GetMask("Enemy")) & characterController.excludeLayers.value) > 0) return;
@@ -389,8 +389,6 @@ public partial class PlayerMovement
         // 쿨타임을 돌리기 시작합니다.
         _JumpReuseTimeGauge.currentValue = _JumpReuseTimeGauge.max;
     }
-
-
 
 
     /// <summary>
