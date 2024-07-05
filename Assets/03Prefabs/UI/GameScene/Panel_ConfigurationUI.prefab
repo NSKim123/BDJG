@@ -798,9 +798,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Button_MainScene: {fileID: 7071909609131196228}
+  m_Button_SoundUI: {fileID: 8500002034486055073}
   m_Button_QuitGame: {fileID: 1704862391329124385}
   m_Button_Cancel: {fileID: 3357161665477365139}
   m_PopUpOnClickMainSceneButton: {fileID: 0}
+  m_SoundUI: {fileID: 0}
   m_PopUpOnClickQuitGameButton: {fileID: 0}
 --- !u!1 &5998062952736465255
 GameObject:
