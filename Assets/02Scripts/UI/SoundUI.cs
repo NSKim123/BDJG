@@ -14,11 +14,16 @@ public class SoundUI : MonoBehaviour
     [Header("# 효과음 볼륨 스크롤 바")]
     public Scrollbar m_ScrollBar_Effect;
 
+    [Header("# 닫기 버튼")]
+    public Button m_ExitButton;
+
     private void Start()
     {
         m_ScrollBar_Master.onValueChanged.AddListener(SetMasterVolume);
         m_ScrollBar_BGM.onValueChanged.AddListener(SetBGMVolume);
         m_ScrollBar_Effect.onValueChanged.AddListener(SetEffectVolume);
+
+        m_ExitButton.onClick.AddListener(() => this.gameObject.SetActive(false));
     }
 
     private void OnEnable()

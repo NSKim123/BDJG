@@ -17,6 +17,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     public EnemySpawner spawner;
     public ItemSpawner itemSpawner;
     public MapController mapController;
+    public GameObject brokenUIEffect;
 
     private PlayerCharacter player;
 
@@ -31,6 +32,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private ParticleSystem.MainModule particle;
     private float currTime = 0;
     private float delayTime = 0.3f;
+    private GameObject instantiatedBrokenUIEffect;
 
 
     private void Start()
@@ -44,14 +46,15 @@ public class EnemyManager : SingletonBase<EnemyManager>
         // 가시 함정
         if (isCountingProhibit)
         {
-            holdingtimeGauge -= Time.deltaTime;
-            Debug.Log(holdingtimeGauge);
+            holdingtimeGauge -= Time.deltaTime;            
 
             if (holdingtimeGauge <= 0)
             {
                 player.attackComponent.bulletGauge.SwitchProhibitRecover(false);
                 holdingtimeGauge = 5f;
                 isCountingProhibit = false;
+
+                Destroy(instantiatedBrokenUIEffect);
             }
         }
 
@@ -80,6 +83,14 @@ public class EnemyManager : SingletonBase<EnemyManager>
         player.attackComponent.bulletGauge.SwitchProhibitRecover(true);
         isCountingProhibit = true;
         holdingtimeGauge = 5.0f;
+
+        instantiatedBrokenUIEffect = Instantiate(brokenUIEffect);
+        instantiatedBrokenUIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
+        (instantiatedBrokenUIEffect.transform as RectTransform).anchorMin = Vector2.zero;
+        (instantiatedBrokenUIEffect.transform as RectTransform).anchorMax = Vector2.one;
+        (instantiatedBrokenUIEffect.transform as RectTransform).localScale = Vector2.one * 1.5f;
+        (instantiatedBrokenUIEffect.transform as RectTransform).offsetMin = Vector2.zero;
+        (instantiatedBrokenUIEffect.transform as RectTransform).offsetMax = Vector2.zero;
     }
 
     public void StartCloud(GameObject cloud, GameObject other)

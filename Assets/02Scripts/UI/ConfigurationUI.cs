@@ -12,6 +12,9 @@ public class ConfigurationUI : MonoBehaviour
     [Header("# 메인 화면 버튼")]
     public Button m_Button_MainScene;
 
+    [Header("# 사운드 조절 UI 활성화 버튼")]
+    public Button m_Button_SoundUI;
+
     [Header("# 게임 종료 버튼")]
     public Button m_Button_QuitGame;
 
@@ -20,6 +23,9 @@ public class ConfigurationUI : MonoBehaviour
 
     [Header("# 메인 화면 버튼 클릭 시 뜨는 UI")]
     public PanelWithTwoButtonsUI m_PopUpOnClickMainSceneButton;
+
+    [Header("# 사운드 조절 UI")]
+    public SoundUI m_SoundUI;
 
     [Header("# 게임 종료 버튼 클릭 시 뜨는 UI")]
     public PanelWithTwoButtonsUI m_PopUpOnClickQuitGameButton;
@@ -77,6 +83,9 @@ public class ConfigurationUI : MonoBehaviour
         // 메인 화면 버튼 클릭 이벤트 <-- 바인딩 -- 메인 화면 버튼 클릭 시 떠야하는 UI 객체 활성화 함수
         m_Button_MainScene.onClick.AddListener(() => m_PopUpOnClickMainSceneButton.gameObject.SetActive(true));
         m_Button_MainScene.onClick.AddListener(PlayClickSound);
+
+        m_Button_SoundUI.onClick.AddListener(() => m_SoundUI.gameObject.SetActive(true));
+        m_Button_SoundUI.onClick.AddListener(PlayClickSound);
 
         // 게임 종료 버튼 클릭 이벤트 <-- 바인딩 -- 게임 종료 버튼 클릭 시 떠야하는 UI 객체 활성화 함수
         m_Button_QuitGame.onClick.AddListener(() => m_PopUpOnClickQuitGameButton.gameObject.SetActive(true));
