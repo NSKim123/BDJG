@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Shell : Bullet
 {
+    [SerializeField] private GameObject _effect;
+
     protected override void OnTriggerEnter(Collider collider)
     {
         // 플레이어와의 충돌은 무시합니다.
@@ -23,6 +25,8 @@ public class Shell : Bullet
                 hitDirection.y = 0.0f;
                 hitDirection.Normalize();
                 hitEnemy.OnDamaged(_AttackPower, hitDirection);
+
+                Instantiate(_effect, transform.position, Quaternion.identity);
             }
         }
 
