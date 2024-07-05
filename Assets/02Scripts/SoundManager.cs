@@ -86,11 +86,11 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <param name="audioName">사운드의 파일명입니다.</param>
     /// <param name="type">사운드의 종류입니다.</param>
     /// <param name="pitch">사운드의 빠르기입니다.</param>
-    public void PlaySound(string audioName, SoundType type, float pitch = 1)
+    public void PlaySound(string audioName, SoundType type, float pitch = 1, float volume = 1)
     {
         AudioClip clip = GetOrLoadAudioClip(audioName, type);
         
-        Play(clip, type, pitch);
+        Play(clip, type, pitch, volume);
 
     }
 
@@ -99,7 +99,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// </summary>
     /// <param name="audioClip"></param>
     /// <param name="type"></param>
-    private void Play(AudioClip audioClip, SoundType type, float pitch = 1)
+    private void Play(AudioClip audioClip, SoundType type, float pitch = 1, float volume = 1)
     {
         if (audioClip == null)
         {
@@ -123,12 +123,14 @@ public class SoundManager : SingletonBase<SoundManager>
             
             audioSource.clip = audioClip;
             audioSource.pitch = pitch;
+            audioSource.volume = volume;
             audioSource.Play();
         }
         else
         {
             AudioSource audioSource = _audioSources[(int)SoundType.Effect];
             audioSource.pitch = pitch;
+            audioSource.volume = volume;
             audioSource.PlayOneShot(audioClip);  // 중첩가능하게 재생
         }
     }

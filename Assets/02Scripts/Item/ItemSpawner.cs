@@ -5,8 +5,8 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour
 {
     private float rate;
-    private float normalRate = 0.2f;
-    private float specialRate = 0.5f;
+    private float normalRate = 1.0f;
+    private float specialRate = 1.0f;
 
     private float itemSpawnRadius = 8.0f;
     [SerializeField] private Transform itemSpawnAxis;
