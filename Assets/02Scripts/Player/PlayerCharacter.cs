@@ -259,7 +259,7 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
     private void ResetAnimController()
     {
         _PlayerAnimController = modelComponent.currentModel.GetComponentInChildren<PlayerAnimController>();
-        _PlayerAnimController.onMoveStart += movementComponent.PlayMoveSound;
+        //_PlayerAnimController.onMoveStart += movementComponent.PlayMoveSound;
     }    
 
     /// <summary>

@@ -116,7 +116,7 @@ public class GameSceneInstance : SceneInstanceBase
         SetUpControl(true);
 
         // 배경음악 플레이
-        SoundManager.Instance.PlaySound("bgm", SoundType.Bgm);
+        SoundManager.Instance.PlaySound("bgm", SoundType.Bgm, 1.0f, 0.3f);
 
         // 게임을 재개합니다.
         ContinueGame();
