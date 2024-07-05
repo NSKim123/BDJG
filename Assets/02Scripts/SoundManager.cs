@@ -18,6 +18,12 @@ public class SoundManager : SingletonBase<SoundManager>
     private Dictionary<string, AudioClip> _bgmAudioClips = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> _effectAudioClips = new Dictionary<string, AudioClip>();
 
+    public float m_MasterVolume = 1.0f;
+
+    public float m_BGMVolume = 1.0f;
+
+    public float m_EffectVolume = 1.0f;
+
 
     private void Awake()
     {
@@ -176,14 +182,21 @@ public class SoundManager : SingletonBase<SoundManager>
         _effectAudioClips.Clear();
     }
 
+    public void SetMasterVolume(float value)
+    {
+        m_MasterVolume = value;
+        SetBgmVolume(m_BGMVolume);
+        SetEffectVolume(m_EffectVolume);
+    }
+
     /// <summary>
     /// bgm의 볼륨을 조정합니다.
     /// </summary>
     /// <param name="value"></param>
     public void SetBgmVolume(float value)
-    {
+    {   
         AudioSource bgmAudioSource = _audioSources[(int)SoundType.Bgm];
-        bgmAudioSource.volume = value;
+        bgmAudioSource.volume = value * m_MasterVolume;
     }
 
     /// <summary>
@@ -193,6 +206,6 @@ public class SoundManager : SingletonBase<SoundManager>
     public void SetEffectVolume(float value)
     {
         AudioSource bgmAudioSource = _audioSources[(int)SoundType.Effect];
-        bgmAudioSource.volume = value;
+        bgmAudioSource.volume = value * m_MasterVolume;
     }
 }
