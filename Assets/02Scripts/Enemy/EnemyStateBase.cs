@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public enum State
 {
+    Init,
     Idle,
     Move,
     Attack,
@@ -10,11 +11,6 @@ public enum State
     Hurt,
     AvoidWater,
     Die,
-}
-
-public enum State_Special
-{
-
 }
 
 

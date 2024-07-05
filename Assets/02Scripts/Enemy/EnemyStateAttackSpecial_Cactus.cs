@@ -33,16 +33,10 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
-                    Debug.Log("공격 상태 들어옴");
-                    animLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                    //animator.speed = animLength / enemyCharacter.SpecialAttackTime;
+                   
                     animator.Play("attack_special");
-
                    
                     _currentStep++;
-
-
-
                 }
                 break;
             case StepInState.Playing:
@@ -56,9 +50,6 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
                         _currentStep++;
 
                     }
-               
-
-
 
                 }
                 break;

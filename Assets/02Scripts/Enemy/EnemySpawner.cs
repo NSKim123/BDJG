@@ -47,8 +47,6 @@ public class EnemySpawner : MonoBehaviour
     private Coroutine normalSpawnCoroutine;
     private Coroutine specialSpawnCoroutine;
 
-    private bool _isFullNormalEnemy = false;
-
     private int _currentLevel = 0;
 
     public void ChangeLevelOfSpawn(int level)
@@ -297,7 +295,7 @@ public class EnemySpawner : MonoBehaviour
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-
+                        Debug.Log(newEnemy.transform.position);
                         EnemyInit(newEnemy, enemydata);
                         ++_mushroomSpawnedCount;
                         ++TotalEnemyCount;

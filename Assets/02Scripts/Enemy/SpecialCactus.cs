@@ -42,6 +42,7 @@ public class SpecialCactus : Enemy
 
         stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
         {
+            {State.Init, new EnemyStateInit(stateMachine)},
             {State.Idle, new EnemyStateIdle(stateMachine) },
             {State.Move, new EnemyStateMove(stateMachine)},
             {State.Attack, new EnemyStateAttack(stateMachine)},
