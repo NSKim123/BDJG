@@ -129,7 +129,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            Debug.Log(_currentLevel);
+            //Debug.Log(_currentLevel);
 
             switch (_currentLevel)
             {
@@ -267,8 +267,8 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            Debug.Log(_mushroomSpawnedCount + " 버섯 스폰된 개수");
-            Debug.Log(_cactusSpawnedCount + " 선인장 스폰된 개수");
+            //Debug.Log(_mushroomSpawnedCount + " 버섯 스폰된 개수");
+            //Debug.Log(_cactusSpawnedCount + " 선인장 스폰된 개수");
 
             if (_mushroomSpawnedCount >= mushroomSpawnInfo[0].MaxEnemyCount)
             {

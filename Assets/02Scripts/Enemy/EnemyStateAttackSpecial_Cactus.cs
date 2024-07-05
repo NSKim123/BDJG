@@ -35,12 +35,10 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
                 {
                     Debug.Log("공격 상태 들어옴");
                     animLength = animator.GetCurrentAnimatorStateInfo(0).length;
-                    animator.speed = animLength / enemyCharacter.SpecialAttackTime;
-                    //animator.Play("attack_special");
+                    //animator.speed = animLength / enemyCharacter.SpecialAttackTime;
+                    animator.Play("attack_special");
 
-                    Transform thornTrans = cactus.transform.GetChild(1).transform;
-                    GameObject.Instantiate(cactus.thornArea, thornTrans.position, Quaternion.identity);
-
+                   
                     _currentStep++;
 
 
@@ -50,13 +48,15 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
             case StepInState.Playing:
                 {
                    
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
                     {
-                        //_currentStep++;
+                        Transform thornTrans = cactus.transform.GetChild(1).transform;
+                        GameObject.Instantiate(cactus.thornArea, thornTrans.position, Quaternion.identity);
+
+                        _currentStep++;
 
                     }
-                    // temp
-                    _currentStep++;
+               
 
 
 
