@@ -12,6 +12,8 @@ using UnityEngine;
 /// 이동 부분
 public partial class PlayerMovement : MonoBehaviour
 {
+    private static string SOUNDNAME_MOVE = "Effect_Slime_Move";
+
     [Header("# 이동 관련")]
     [Header("이동 속력")]
     public float m_Speed = 3.5f;
@@ -141,7 +143,7 @@ public partial class PlayerMovement : MonoBehaviour
         CheckAboveEnemy();
 
         // 중력값
-        float gravity = Physics.gravity.y * Time.fixedDeltaTime * 2.0f;
+        float gravity = Physics.gravity.y * Time.fixedDeltaTime * 3.0f;
 
         // 땅에 닿아있다면 y 축 방향에 대한 속도를 0으로 설정합니다.
         if(_IsGrounded)
@@ -199,6 +201,11 @@ public partial class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void PlayMoveSound()
+    {
+        SoundManager.Instance.PlaySound(SOUNDNAME_MOVE, SoundType.Effect);
+    }
+
     /// <summary>
     /// 이동 가능 여부를 설정합니다.
     /// </summary>
@@ -247,12 +254,18 @@ public partial class PlayerMovement : MonoBehaviour
 /// </summary>
 public partial class PlayerMovement
 {
+    private static string SOUNDNAME_GIANTSLIME_LAND = "Effect_Slime_GiantLand";
+    private static string SOUNDNAME_SLIME_JUMP = "Effect_Slime_Jump";
+
     [Header("# 점프 관련")]
     [Header("점프력")]
-    public float m_JumpForce = 8.0f;
+    public float m_JumpForce = 15.0f;
 
     [Header("점프 쿨타임")]
     public float m_JumpReuseTime = 1.0f;
+
+    [Header("# 거대화 슬라임일때 착지 시 이펙트")]
+    public GameObject m_Effect_GiantSlimeLand;
 
     [Header("------------------------------------------------------------------------------")]
 
@@ -265,6 +278,8 @@ public partial class PlayerMovement
     /// 땅에 닿아있는지를 나타냅니다.
     /// </summary>
     private bool _IsGrounded = false;
+
+    private float _CurrentJumpForce;
 
     /// <summary>
     /// 점프 쿨타임 게이지 객체
@@ -342,6 +357,7 @@ public partial class PlayerMovement
                         maxDistance,
                         1 << LayerMask.NameToLayer("Enemy")))
         {
+            _CurrentJumpForce = m_JumpForce * 0.5f;
             _IsJumpInput = true;
         }
 
@@ -372,6 +388,8 @@ public partial class PlayerMovement
 
         // 받았음을 저장합니다.
         _IsJumpInput = true;
+
+        _CurrentJumpForce = m_JumpForce;
     }
 
     /// <summary>
@@ -380,7 +398,7 @@ public partial class PlayerMovement
     private void Jump()
     {
         // 점프 시킵니다.
-        _TargetVelocity.y = m_JumpForce;
+        _TargetVelocity.y = _CurrentJumpForce;
         _IsJumpInput = false;
 
         // 점프 애니메이션을 실행합니다.
@@ -388,6 +406,22 @@ public partial class PlayerMovement
 
         // 쿨타임을 돌리기 시작합니다.
         _JumpReuseTimeGauge.currentValue = _JumpReuseTimeGauge.max;
+
+        // 점프 사운드 플레이
+        SoundManager.Instance.PlaySound(SOUNDNAME_SLIME_JUMP, SoundType.Effect);
+    }
+
+
+    public void InstantiateLandEffect()
+    {
+        GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
+
+        effect.transform.position = transform.position + Vector3.down * characterController.height / 2.0f * transform.lossyScale.y;
+    }
+
+    public void PlayGiantSlimeLandSound()
+    {
+        SoundManager.Instance.PlaySound(SOUNDNAME_GIANTSLIME_LAND, SoundType.Effect, 2.0f);
     }
 
 
@@ -411,6 +445,8 @@ public partial class PlayerMovement
 /// </summary>
 public partial class PlayerMovement
 {
+    private static string SOUNDNAME_DAMAGED = "Effect_Damaged";
+
     [Header("# 피격 관련")]
     [Header("넉백 계수(넉백 계산식에서 데미지값에 곱해지는 수)")]
     public float m_KnockBackCoefficient = 5.0f;
@@ -531,6 +567,31 @@ public partial class PlayerMovement
 
         // 피격 애니메이션을 실행합니다.
         if(damage > 0.0f)
+        {
             _OwnerCharacter.animController.TriggerDamagedParam();
+            SoundManager.Instance.PlaySound(SOUNDNAME_DAMAGED, SoundType.Effect);
+        }
+    }
+}
+
+
+public partial class PlayerMovement
+{
+    public void OnStartGiant()
+    {
+        // 면역 상태 설정
+        SetImmuneState(true);
+
+        // 적과의 충돌을 무시합니다.
+        characterController.excludeLayers += LayerMask.GetMask("Enemy");
+    }
+
+    public void OnFinishGiant()
+    {
+        // 면역 상태 해제
+        SetImmuneState(false);
+
+        // 적 충돌 무시 해제
+        characterController.excludeLayers -= LayerMask.GetMask("Enemy");
     }
 }

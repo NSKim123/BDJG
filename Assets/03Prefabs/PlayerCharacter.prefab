@@ -49,8 +49,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336f54937b9b84f40bf6bc6b3e081dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Effect_GiantSlimeLand: {fileID: 3868056870837121786, guid: 352dbbec2f3283a4ca1bf50aba15602c,
-    type: 3}
   m_UIEffect_GiantStarted: {fileID: 3644070780026344229, guid: d5ffcb5312089b74b910d6ec78fd5329,
     type: 3}
   m_Effect_Hit: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
@@ -71,6 +69,7 @@ MonoBehaviour:
   m_RotateSpeedInDegree: 30
   m_JumpForce: 8
   m_JumpReuseTime: 1
+  m_Effect_GiantSlimeLand: {fileID: 0}
   m_KnockBackCoefficient: 5
 --- !u!114 &5665393383030774994
 MonoBehaviour:
@@ -116,6 +115,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_LevelUpEffects:
+  - m_Level: 1
+    m_Effect: {fileID: 0}
+  - m_Level: 2
+    m_Effect: {fileID: 4867090460220967752, guid: 67c388c62f47c3f4ca207985c0f68d07,
+      type: 3}
+  - m_Level: 3
+    m_Effect: {fileID: 5255264087100019781, guid: d3cec05682640504790fe921fb5496b3,
+      type: 3}
+  - m_Level: 4
+    m_Effect: {fileID: 8595756729057065323, guid: 5f6056157ccb8e940b5e3bb5b6211653,
+      type: 3}
   m_MinScale: 1
   m_ScaleCoefficient: 0.1
 --- !u!143 &1658636450394371182

@@ -76,11 +76,19 @@ public class ConfigurationUI : MonoBehaviour
     {
         // 메인 화면 버튼 클릭 이벤트 <-- 바인딩 -- 메인 화면 버튼 클릭 시 떠야하는 UI 객체 활성화 함수
         m_Button_MainScene.onClick.AddListener(() => m_PopUpOnClickMainSceneButton.gameObject.SetActive(true));
+        m_Button_MainScene.onClick.AddListener(PlayClickSound);
 
         // 게임 종료 버튼 클릭 이벤트 <-- 바인딩 -- 게임 종료 버튼 클릭 시 떠야하는 UI 객체 활성화 함수
         m_Button_QuitGame.onClick.AddListener(() => m_PopUpOnClickQuitGameButton.gameObject.SetActive(true));
+        m_Button_QuitGame.onClick.AddListener(PlayClickSound);
 
         // 취소 버튼 클릭 이벤트 <-- 바인딩 -- 환경 설정 UI 비활성화 함수
         m_Button_Cancel.onClick.AddListener(() => gameObject.SetActive(false));
+        m_Button_Cancel.onClick.AddListener(PlayClickSound);
+    }
+
+    private void PlayClickSound()
+    {
+        SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect);
     }
 }

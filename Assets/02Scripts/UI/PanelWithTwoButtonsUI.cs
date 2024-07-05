@@ -20,10 +20,19 @@ public class PanelWithTwoButtonsUI : MonoBehaviour
         BindButtonsEvents();
     }
 
+    protected void PlayClickSound()
+    {
+        SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect);
+    }
+
     /// <summary>
     /// 버튼 이벤트를 바인딩하는 메서드입니다.
     /// </summary>
-    protected virtual void BindButtonsEvents() { }
+    protected virtual void BindButtonsEvents()
+    {
+        BindButton1Events(PlayClickSound);
+        BindButton2Events(PlayClickSound);
+    }
 
     /// <summary>
     /// 첫 번째 버튼의 클릭 이벤트에 함수를 바인딩하는 메서드입니다.
@@ -60,4 +69,6 @@ public class PanelWithTwoButtonsUI : MonoBehaviour
     {
         m_Button2.onClick.RemoveListener(addEvent);
     }
+
+    
 }

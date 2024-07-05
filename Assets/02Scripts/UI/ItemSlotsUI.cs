@@ -21,6 +21,13 @@ public class ItemSlotsUI : MonoBehaviour
     {
         if (_ItemIconScriptableObject == null)
             _ItemIconScriptableObject = Resources.Load<ItemIconScriptableObject>("ScriptableObject/ItemIcons/ItemIconScriptableObject");
+
+        BindClickEvent(PlayClickSound);
+    }
+
+    private void PlayClickSound()
+    {
+        SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect);
     }
 
     public void BindClickEvent(UnityAction addFunction)

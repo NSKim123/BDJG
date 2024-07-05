@@ -168,7 +168,17 @@ public class BuffSystem
         }
     }
 
-   
+    public void Clear()
+    {
+        foreach (Buff FinishedBuff in _BuffList)
+        {
+            // 해당 버프가 끝날 때 실행되어야하는 동작을 실행합니다.
+            FinishedBuff.OnFinishedBuff();
+            onBuffFinished?.Invoke(FinishedBuff);
+        }
+
+        _BuffList.Clear();
+    }
 }
 
 

@@ -26,6 +26,8 @@ public class Shell : Bullet
             }
         }
 
+        PlaySound(collider);
+
         // 이 투사체를 제거합니다.
         Destroy(this.gameObject);
     }

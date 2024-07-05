@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,8 +18,14 @@ public enum SlimeModelType
 /// 모델 관련 부분
 public partial class PlayerModel : MonoBehaviour
 {
-    [Header("탄환 프래팹")]
+    [Header("# 탄환 프래팹")]
     public Bullet m_Bullet;
+
+    [Header("# 레벨 업 이펙트")]
+    public List<LevelUpEffectInfo> m_LevelUpEffects;
+
+    [Header("# 기관총 효과 시 이펙트")]
+    public GameObject m_Effect_MachineGun;
 
     /// <summary>
     /// 로드할 PlayerModelScriptableObject 객체
@@ -34,6 +41,8 @@ public partial class PlayerModel : MonoBehaviour
     /// 현재 모델
     /// </summary>
     private GameObject _CurrentModel;
+
+    private GameObject _InstantiatedEffect;
 
     /// <summary>
     /// 현재 모델에 대한 읽기 전용 프로퍼티입니다.
@@ -84,13 +93,42 @@ public partial class PlayerModel : MonoBehaviour
         m_Bullet.GetComponentInChildren<Renderer>().material = _CurrentModel.GetComponentInChildren<Renderer>().material;
     }
 
-    public void OnGiantStart()
+    private void InstantiateLevelUpEffectByLevel(int level)
+    {
+        LevelUpEffectInfo effectInfo = m_LevelUpEffects.Find((effectInfo) => effectInfo.m_Level == level);
+
+        if (effectInfo == null || effectInfo.m_Effect == null) return;
+
+        GameObject effect = Instantiate(effectInfo.m_Effect);
+        effect.transform.position = _CurrentModel.transform.position;
+        effect.transform.SetParent(transform);
+    }
+
+    public void OnStartGiant()
     {
         // 새로운 모델을 불러옵니다.
         GameObject newModel = _ModelScriptableObject.FindModelByLevel(4);
 
         // 모델을 교체합니다.
         ChangeModel(newModel);
+    }
+
+    public void OnStartMachineGun()
+    {
+        _InstantiatedEffect = Instantiate(m_Effect_MachineGun);
+
+        _InstantiatedEffect.transform.position = transform.position;
+        //_InstantiatedEffect.transform.SetParent(transform);
+    }
+
+    public void OnFinishMachineGun()
+    {
+        ParticleSystem.MainModule newMain;
+        foreach(ParticleSystem particleSystem in _InstantiatedEffect.GetComponentsInChildren<ParticleSystem>())
+        {
+            newMain = particleSystem.main;
+            newMain.loop = false;
+        }
     }
 
     /// <summary>
@@ -104,6 +142,8 @@ public partial class PlayerModel : MonoBehaviour
 
         // 모델을 교체합니다.
         ChangeModel(newModel);
+
+        InstantiateLevelUpEffectByLevel(level);
     }
 }
 
@@ -158,4 +198,11 @@ public partial class PlayerModel
     {
         _TargetScale = CalculateScaleByBullets(bullets);
     }
+}
+
+[Serializable]
+public class LevelUpEffectInfo
+{
+    public int m_Level;
+    public GameObject m_Effect;
 }
