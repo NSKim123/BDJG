@@ -123,14 +123,14 @@ public class SoundManager : SingletonBase<SoundManager>
             
             audioSource.clip = audioClip;
             audioSource.pitch = pitch;
-            audioSource.volume = volume;
+            audioSource.volume = volume * m_MasterVolume * m_BGMVolume;
             audioSource.Play();
         }
         else
         {
             AudioSource audioSource = _audioSources[(int)SoundType.Effect];
             audioSource.pitch = pitch;
-            audioSource.volume = volume;
+            audioSource.volume = volume * m_MasterVolume * m_EffectVolume;
             audioSource.PlayOneShot(audioClip);  // 중첩가능하게 재생
         }
     }
@@ -195,6 +195,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <param name="value"></param>
     public void SetBgmVolume(float value)
     {   
+        m_BGMVolume = value;
         AudioSource bgmAudioSource = _audioSources[(int)SoundType.Bgm];
         bgmAudioSource.volume = value * m_MasterVolume;
     }
@@ -205,6 +206,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <param name="value"></param>
     public void SetEffectVolume(float value)
     {
+        m_EffectVolume = value;
         AudioSource bgmAudioSource = _audioSources[(int)SoundType.Effect];
         bgmAudioSource.volume = value * m_MasterVolume;
     }
