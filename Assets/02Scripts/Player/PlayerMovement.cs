@@ -357,7 +357,7 @@ public partial class PlayerMovement
                         maxDistance,
                         1 << LayerMask.NameToLayer("Enemy")))
         {
-            _CurrentJumpForce = m_JumpForce * 0.5f;
+            _CurrentJumpForce = m_JumpForce * 0.6f;
             _IsJumpInput = true;
         }
 
@@ -563,7 +563,7 @@ public partial class PlayerMovement
 
         // 데미지 및 넉백 속도 계산
         float damage = CalculateDamage(distance);
-        _KnockBackVelocity += (damage * m_KnockBackCoefficient) * direction;
+        _KnockBackVelocity = (damage * m_KnockBackCoefficient) * direction;
 
         // 피격 애니메이션을 실행합니다.
         if(damage > 0.0f)

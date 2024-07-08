@@ -24,6 +24,9 @@ public class Bullet : GuidedProjectile
         // 플레이어와의 충돌은 무시합니다.
         if (collider.gameObject.tag == "Player") return;
 
+        // 지형과의 충돌도 무시합니다,
+        if (collider.gameObject.layer == LayerMask.GetMask("Ground")) return;
+
         // 이 투사체가 적에게 닿으면
         if (collider.gameObject.TryGetComponent<IHit>(out IHit hitEnemy))
         {
@@ -32,10 +35,10 @@ public class Bullet : GuidedProjectile
             hitEnemy.OnDamaged(_AttackPower, _Direction);
 
             PlaySound(collider);
-        }
 
-        // 이 투사체를 제거합니다.
-        Destroy(this.gameObject);
+            // 이 투사체를 제거합니다.
+            Destroy(this.gameObject);
+        }
     }
 
     protected virtual float CalculateSoundPitch(Collider other)
