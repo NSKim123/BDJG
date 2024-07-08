@@ -30,6 +30,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _FaceDilate: 0
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
@@ -39,5 +40,6 @@ Material:
     - _UnderlayOffsetX: 0.24
     - _UnderlaySoftness: 0
     m_Colors:
+    - _FaceColor: {r: 6.3541465, g: 6.3541465, b: 6.3541465, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
