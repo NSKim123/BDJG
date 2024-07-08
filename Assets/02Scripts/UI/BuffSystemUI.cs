@@ -74,7 +74,7 @@ public class BuffSystemUI : MonoBehaviour
         if(updatedBuff.notMuchLeft)
         {
             // 아이콘 점멸 시작
-            //buffIconUI.StartBlink();
+            buffIconUI.StartBlink();
         }
     }
 
