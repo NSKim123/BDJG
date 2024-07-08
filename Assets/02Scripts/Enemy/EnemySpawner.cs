@@ -132,13 +132,16 @@ public class EnemySpawner : MonoBehaviour
             {
                 case 0:
                     {
-                        _specialSpawnTime = 20.0f;
+                        _specialSpawnTime = 3.0f;
 
                         EnemySpawnInfoData spawndata;
                         EnemyInfoData enemydata;
 
-                        enemydata = mushroomData[1];
-                        spawndata = mushroomSpawnInfo[1];
+                        //enemydata = mushroomData[1];
+                        //spawndata = mushroomSpawnInfo[1];
+
+                        enemydata = cactusData[1];
+                        spawndata = cactusSpawnInfo[1];
 
                         Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 

@@ -21,6 +21,12 @@ public class CactusAIController : EnemyAIController
 
         //AttackDetected = Physics.OverlapSphereNonAlloc(transform.position, _enemyCharacter.AttackRange, AttackDetect);
 
+        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow scarecrow))
+        {
+            _stateMachine.ChangeState(State.Move);
+            isDetected = true;
+        }
+
         if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == State.Idle)
         {
             isDetected = true;

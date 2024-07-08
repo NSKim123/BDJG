@@ -75,23 +75,17 @@ public class EnemyStateAttack : EnemyStateBase
                     {
                         if (enemyController.AttackDetect.Length > 0)
                         {
+                            
                             // 플레이어에게 데미지 주는 함수 호출
-                            enemyController.AttackDetect[0].GetComponent<IHit>().OnDamaged(20.0f, (enemyCharacter.transform.forward + Vector3.up).normalized);
-                            //Debug.Log("attack");
+                            if (enemyController.AttackDetect[0].TryGetComponent(out IHit hit))
+                            {
+                                hit.OnDamaged(20.0f, (enemyCharacter.transform.forward + Vector3.up).normalized);
+                            }
 
                         }
 
                         _currentStep++;
                     }
-
-                    //if (enemyController.attackDetect.Length > 0)
-                    //{
-                    //    // 플레이어에게 데미지 주는 함수 호출
-                    //    enemyController.attackDetect[0].GetComponent<IHit>().OnDamaged(15.0f, enemyCharacter.transform.forward);
-                    //    //Debug.Log("attack");
-
-                    //}
-                    //_currentStep++;
 
 
                 }

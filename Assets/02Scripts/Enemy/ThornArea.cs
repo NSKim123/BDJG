@@ -13,7 +13,7 @@ public class ThornArea : MonoBehaviour
 
     private void Start()
     {
-        desiredPos = transform.position.y + 0.8f;
+        desiredPos = transform.position.y + 0.5f;
     }
 
     private void Update()

@@ -20,13 +20,17 @@ public class SpecialCactusAIController : EnemyAIController
     {
         dis = Vector3.Distance(transform.position, target.transform.position);
 
+        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow scarecrow))
+        {
+            _stateMachine.ChangeState(State.Move);
+            isDetected = true;
+        }
+
         if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == State.Idle)
         {
             isDetected = true;
             _stateMachine.ChangeState(State.Move);
         }
-
-        
 
         // 특수공격 쿨타임 계산
         if (coolTimeStart)
