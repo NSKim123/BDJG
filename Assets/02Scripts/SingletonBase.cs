@@ -8,7 +8,7 @@ using UnityEngine;
 public class SingletonBase<T> : MonoBehaviour
        where T : MonoBehaviour
 {
-    private static T _instance;
+    protected static T _instance;
 
     public static T Instance
     {
@@ -22,11 +22,22 @@ public class SingletonBase<T> : MonoBehaviour
                 {
                     GameObject obj = new GameObject (typeof(T).ToString());
                     _instance = obj.AddComponent<T>();
-                    DontDestroyOnLoad(obj);
                 }
             }
 
             return _instance;
+        }
+    }
+
+    protected virtual void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this as T;
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
         }
     }
 }

@@ -11,9 +11,6 @@ public enum Wave
 }
 public class EnemyManager : SingletonBase<EnemyManager>
 {
-
-    // 특수 개체 공격 생성
-
     public EnemySpawner spawner;
     public ItemSpawner itemSpawner;
     public MapController mapController;
@@ -34,10 +31,19 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private float delayTime = 0.3f;
     private GameObject instantiatedBrokenUIEffect;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
 
     private void Start()
     {
         mapController.OnChangeWave += spawner.ChangeLevelOfSpawn;
+
+        //spawner = GameObject.FindAnyObjectByType<EnemySpawner>();
+        //itemSpawner = GameObject.FindAnyObjectByType<ItemSpawner>();
+        //mapController = GameObject.FindAnyObjectByType<MapController>();
     }
 
 
@@ -65,7 +71,6 @@ public class EnemyManager : SingletonBase<EnemyManager>
              {
                 if (currTime > delayTime)
                 {
-                    Debug.Log("움직임");
                     StartCloudAttack();
                     currTime = 0;
                 }
@@ -123,13 +128,11 @@ public class EnemyManager : SingletonBase<EnemyManager>
         float newSpeedrate = originDuration / currentDuration;
         particle.simulationSpeed = newSpeedrate;
         
-
-        Debug.Log(currentDuration + "현재 남은 시간");
     }
 
     public void ResetElements()
     {
-        GameObject[] removeList = isItemExistInMap();
+        GameObject[] removeList = IsItemExistInMap();
         if (removeList != null)
         {
             foreach (var item in removeList)
@@ -139,7 +142,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
         }
     }
 
-    private GameObject[] isItemExistInMap()
+    private GameObject[] IsItemExistInMap()
     {
         GameObject[] items = GameObject.FindGameObjectsWithTag("specialAttack");
         if (items.Length > 0)

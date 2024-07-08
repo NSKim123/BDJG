@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 
 public enum SoundType
@@ -25,8 +26,13 @@ public class SoundManager : SingletonBase<SoundManager>
     public float m_EffectVolume = 1.0f;
 
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+       if(_instance == this)
+       {
+            DontDestroyOnLoad(gameObject);
+       }
         Init();
     }
 
