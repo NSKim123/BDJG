@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EnemySpawnTurn
@@ -145,9 +144,6 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        Debug.Log("1레벨 스폰");
-
-                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
 
                         EnemyInit_Special(newEnemy, enemydata);
@@ -170,10 +166,7 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        Debug.Log("2레벨 스폰");
-
-
-                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
+                        
                         GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
                         GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
 
@@ -198,10 +191,7 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        Debug.Log("3레벨 스폰");
-
-
-                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
+                        
                         GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
                         GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
 
@@ -226,8 +216,7 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        Debug.Log("4레벨 스폰");
-
+                        
 
                         GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
                         GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
@@ -265,9 +254,7 @@ public class EnemySpawner : MonoBehaviour
                 yield return null;
             }
 
-            //Debug.Log(_mushroomSpawnedCount + " 버섯 스폰된 개수");
-            //Debug.Log(_cactusSpawnedCount + " 선인장 스폰된 개수");
-
+         
             if (_mushroomSpawnedCount >= mushroomSpawnInfo[0].MaxEnemyCount)
             {
                 MoveNextTurn();
@@ -295,7 +282,7 @@ public class EnemySpawner : MonoBehaviour
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
-                        Debug.Log(newEnemy.transform.position);
+
                         EnemyInit(newEnemy, enemydata);
                         ++_mushroomSpawnedCount;
                         ++TotalEnemyCount;
@@ -313,7 +300,6 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        //Vector3 cactusRotation = cactusSpawnAxis.position - randomPosition;
                         GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
 
                         EnemyInit(newEnemy, enemydata);

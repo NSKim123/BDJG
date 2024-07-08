@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -158,6 +158,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_Shell: {fileID: 0}
+  m_Effect_Fire: {fileID: 0}
   m_BulletSpeed: 20
   m_PushPowerMultiplier: 1
   m_AttackReuseTime: 0.75
@@ -187,6 +189,7 @@ MonoBehaviour:
   m_RotateSpeedInDegree: 30
   m_JumpForce: 8
   m_JumpReuseTime: 1
+  m_Effect_GiantSlimeLand: {fileID: 0}
   m_KnockBackCoefficient: 5
 --- !u!114 &3287012
 MonoBehaviour:
@@ -200,8 +203,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 336f54937b9b84f40bf6bc6b3e081dd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Effect_GiantSlimeLand: {fileID: 3868056870837121786, guid: 352dbbec2f3283a4ca1bf50aba15602c,
-    type: 3}
   m_UIEffect_GiantStarted: {fileID: 3644070780026344229, guid: d5ffcb5312089b74b910d6ec78fd5329,
     type: 3}
   m_Effect_Hit: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
@@ -261,6 +262,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Bullet: {fileID: 8276814193193167859, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
     type: 3}
+  m_LevelUpEffects: []
+  m_Effect_MachineGun: {fileID: 0}
   m_MinScale: 1
   m_ScaleCoefficient: 0.1
 --- !u!114 &124692530 stripped
@@ -830,74 +833,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da05fc84e85cb404d803b522a48d114d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &1456954571
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3756507485386414248, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_Name
-      value: TempItem_giant
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.798876
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.015515327
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8856944298950910460, guid: f1e1993c01153414daa69c342aebd900,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f1e1993c01153414daa69c342aebd900, type: 3}
 --- !u!1 &1512525297
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,4 +1237,3 @@ SceneRoots:
   - {fileID: 2011261903284675309}
   - {fileID: 1512525300}
   - {fileID: 2022106719}
-  - {fileID: 1456954571}
