@@ -373,6 +373,8 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
 
 public partial class PlayerCharacter
 {
+    public bool isAbleToUseItem => movementComponent.isGrounded && !attackComponent.bulletGauge.isOverburden;
+
     public void AddItem(int itemBuffCode)
     {
         // 저장된 아이템이 2개 이상이라면 호출 종료
@@ -387,6 +389,8 @@ public partial class PlayerCharacter
     {
         // 아이템이 없다면 호출 종료
         if (_ItemSlots.Count == 0) return;
+
+        if (!isAbleToUseItem) return;
 
         // 아이템 버프 타입의 버프가 존재한다면 호출 종료
         if (_BuffSystem.IsOtherItemBuffActive()) return;
