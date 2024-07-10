@@ -468,6 +468,7 @@ GameObject:
   - component: {fileID: -2067093970339422863}
   - component: {fileID: 5065108996695724798}
   - component: {fileID: 6219671864067072920}
+  - component: {fileID: 4573696292898162353}
   m_Layer: 8
   m_Name: Mushroom
   m_TagString: Enemy
@@ -630,6 +631,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   _attacked: 0
+--- !u!114 &4573696292898162353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4737009380193390080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cbe1314aafa617438c6839608d00128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPoolType: 2
 --- !u!1 &5277990282237911245
 GameObject:
   m_ObjectHideFlags: 0

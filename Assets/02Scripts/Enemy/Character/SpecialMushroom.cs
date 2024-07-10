@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 public class SpecialMushroom : Enemy
 {
+
     public override float MoveSpeed { get; set; }
     public override float AttackRange { get;  set; }
 

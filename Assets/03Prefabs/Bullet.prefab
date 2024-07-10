@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 843281068946310538}
   - component: {fileID: 8276814193193167859}
   - component: {fileID: -4492203466203757767}
+  - component: {fileID: 2981638702016303209}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -180,3 +181,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &2981638702016303209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8109867407821187086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cbe1314aafa617438c6839608d00128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myPoolType: 1

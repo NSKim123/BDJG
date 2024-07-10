@@ -49,7 +49,8 @@ public abstract class Enemy : MonoBehaviour, IHit
     public virtual void OnDamaged(float distance, Vector3 direction)
     {
         // 피격 이펙트 생성
-        GameObject effect = Instantiate(Effect_Hit);
+        //GameObject effect = Instantiate(Effect_Hit);
+        GameObject effect = ObjectPoolManager.Instance.GetFromPool(PoolType.Effect_Hit);
         effect.transform.position = transform.position + Vector3.up * GetComponent<CapsuleCollider>().height * 0.5f;
         effect.transform.SetParent(transform);        
     }
