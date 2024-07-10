@@ -273,10 +273,10 @@ public partial class PlayerAttack : MonoBehaviour
     /// </summary>
     private void InstantiateBullet()
     {
-        //Bullet bullet = Instantiate(_CurrentBullet);
-        GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
-        obj.SetActive(true);
-        Bullet bullet = obj.GetComponent<Bullet>();
+        Bullet bullet = Instantiate(_CurrentBullet);
+        //GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
+        //obj.SetActive(true);
+        //Bullet bullet = obj.GetComponent<Bullet>();
         bullet.transform.position = _StartPosition.position;
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
