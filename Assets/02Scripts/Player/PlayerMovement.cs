@@ -602,4 +602,25 @@ public partial class PlayerMovement
         // 적 충돌 무시 해제
         characterController.excludeLayers -= LayerMask.GetMask("Enemy");
     }
+
+    public void OnStartMachineGun()
+    {
+        // 적과의 충돌을 무시합니다.
+        characterController.excludeLayers += LayerMask.GetMask("Enemy");
+    }
+
+    public void OnUpdateMachineGun()
+    {
+        SetMovable(false);
+        SetImmuneState(true);
+    }
+
+    public void OnFinishMachineGun()
+    {
+        SetMovable(true);
+        SetImmuneState(false);
+
+        // 적 충돌 무시 해제
+        characterController.excludeLayers -= LayerMask.GetMask("Enemy");
+    }
 }
