@@ -10,6 +10,7 @@ using UnityEngine;
 public partial class PlayerCharacter : PlayerCharacterBase, IHit
 {
     private static string SOUNDNAME_LEVELUP = "Effect_Slime_Upgrade";
+    private static string SOUNDNAME_MACHINEGUN = "Effect_MachineGun";
 
     [Header("# 거대화 시작 시 생성될 UI 이펙트")]
     public GameObject m_UIEffect_GiantStarted;
@@ -373,6 +374,8 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
 
 public partial class PlayerCharacter
 {
+    public bool isAbleToUseItem => movementComponent.isGrounded && !attackComponent.bulletGauge.isOverburden;
+
     public void AddItem(int itemBuffCode)
     {
         // 저장된 아이템이 2개 이상이라면 호출 종료
@@ -387,6 +390,8 @@ public partial class PlayerCharacter
     {
         // 아이템이 없다면 호출 종료
         if (_ItemSlots.Count == 0) return;
+
+        if (!isAbleToUseItem) return;
 
         // 아이템 버프 타입의 버프가 존재한다면 호출 종료
         if (_BuffSystem.IsOtherItemBuffActive()) return;
@@ -448,22 +453,21 @@ public partial class PlayerCharacter
         _AbleToLevelUp = false;
 
         attackComponent.OnStartMachineGun();
+        movementComponent.OnStartMachineGun();
         modelComponent.OnStartMachineGun();
+
+        SoundManager.Instance.PlaySound(SOUNDNAME_MACHINEGUN, SoundType.Effect);
     }
 
     public void OnUpdateMachineGun()
     {
-        movementComponent.SetMovable(false);
-        movementComponent.SetImmuneState(true);
+        movementComponent.OnUpdateMachineGun();
     }
 
     public void OnFinishMachinGun()
     {
         attackComponent.OnFinishMachineGun();
-
-        movementComponent.SetMovable(true);
-        movementComponent.SetImmuneState(false);
-
+        movementComponent.OnFinishMachineGun();
         modelComponent.OnFinishMachineGun();
 
         _AbleToLevelUp = true;

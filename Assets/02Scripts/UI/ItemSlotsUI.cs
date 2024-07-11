@@ -17,6 +17,8 @@ public class ItemSlotsUI : MonoBehaviour
     [Header("# 아이템 이미지 2")]
     public Image m_ItemImage2;
 
+    private bool _Interactable = true;
+
     private void Awake()
     {
         if (_ItemIconScriptableObject == null)
@@ -27,7 +29,7 @@ public class ItemSlotsUI : MonoBehaviour
 
     private void PlayClickSound()
     {
-        SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect);
+        SoundManager.Instance.PlaySound(_Interactable ? Constants.SOUNDNAME_CLICK_ABLEBUTTON : Constants.SOUNDNAME_CLICK_DISABLEBUTTON, SoundType.Effect);
     }
 
     public void BindClickEvent(UnityAction addFunction)
@@ -56,5 +58,10 @@ public class ItemSlotsUI : MonoBehaviour
 
         m_ItemImage2.sprite = sprite2;
         m_ItemImage2.color = m_ItemImage2.sprite != null ? Color.white : Color.clear;
+    }
+
+    public void OnToggleChanged(bool toggleSwitch)
+    {
+        _Interactable = toggleSwitch;
     }
 }

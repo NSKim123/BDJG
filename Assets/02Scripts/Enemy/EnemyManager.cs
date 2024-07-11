@@ -61,6 +61,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
                 isCountingProhibit = false;
 
                 Destroy(instantiatedBrokenUIEffect);
+                instantiatedBrokenUIEffect = null;
             }
         }
 
@@ -89,13 +90,18 @@ public class EnemyManager : SingletonBase<EnemyManager>
         isCountingProhibit = true;
         holdingtimeGauge = 5.0f;
 
-        instantiatedBrokenUIEffect = Instantiate(brokenUIEffect);
-        instantiatedBrokenUIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
-        (instantiatedBrokenUIEffect.transform as RectTransform).anchorMin = Vector2.zero;
-        (instantiatedBrokenUIEffect.transform as RectTransform).anchorMax = Vector2.one;
-        (instantiatedBrokenUIEffect.transform as RectTransform).localScale = Vector2.one * 1.5f;
-        (instantiatedBrokenUIEffect.transform as RectTransform).offsetMin = Vector2.zero;
-        (instantiatedBrokenUIEffect.transform as RectTransform).offsetMax = Vector2.zero;
+
+        if(!instantiatedBrokenUIEffect)
+        {
+            instantiatedBrokenUIEffect = Instantiate(brokenUIEffect);
+            instantiatedBrokenUIEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform);
+            (instantiatedBrokenUIEffect.transform as RectTransform).anchorMin = Vector2.zero;
+            (instantiatedBrokenUIEffect.transform as RectTransform).anchorMax = Vector2.one;
+            (instantiatedBrokenUIEffect.transform as RectTransform).localScale = Vector2.one * 1.5f;
+            (instantiatedBrokenUIEffect.transform as RectTransform).offsetMin = Vector2.zero;
+            (instantiatedBrokenUIEffect.transform as RectTransform).offsetMax = Vector2.zero;
+        }
+        
     }
 
     public void StartCloud(GameObject cloud, GameObject other)

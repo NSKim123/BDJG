@@ -92,5 +92,7 @@ public class GameSceneUI : MonoBehaviour
         // 점프 버튼 갱신
         m_JumpButtonUI.SetRatio(playerCharacter.movementComponent.jumpResueTimeGauge.ratio);
         m_JumpButtonUI.OnToggleChanged(playerCharacter.movementComponent.isJumpable);
+
+        m_ItemSlotsUI.OnToggleChanged(playerCharacter.isAbleToUseItem);
     }
 }

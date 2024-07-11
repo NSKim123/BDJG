@@ -140,7 +140,7 @@ public partial class PlayerMovement : MonoBehaviour
         // 땅에 닿아있는지 체크합니다.
         _IsGrounded = CheckGrounded();
 
-        CheckAboveEnemy();
+        _IsAboveEnemy = CheckAboveEnemy();
 
         // 중력값
         float gravity = Physics.gravity.y * Time.fixedDeltaTime * 3.0f;
@@ -279,6 +279,8 @@ public partial class PlayerMovement
     /// </summary>
     private bool _IsGrounded = false;
 
+    private bool _IsAboveEnemy = false;
+
     private float _CurrentJumpForce;
 
     /// <summary>
@@ -295,6 +297,8 @@ public partial class PlayerMovement
     /// 땅에 닿아있는지에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
     public bool isGrounded => _IsGrounded;
+
+    public bool IsAboveEnemy => _IsAboveEnemy;
 
     /// <summary>
     /// 점프 쿨타임 게이지 객체에 대한 읽기 전용 프로파티입니다.
@@ -335,31 +339,35 @@ public partial class PlayerMovement
         return result;
     }
 
-    private void CheckAboveEnemy()
+    private bool CheckAboveEnemy()
     {
-        if ( ((LayerMask.GetMask("Enemy")) & characterController.excludeLayers.value) > 0) return;
+        if ( ((LayerMask.GetMask("Enemy")) & characterController.excludeLayers.value) > 0) return false;
 
         // Box cast 시작 지점 설정
         Vector3 center = characterController.center + transform.position;
 
         // Box cast 크기 설정
-        Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y * 0.33f;
+        Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y * 0.35f;
 
         // Box cast 최대 길이 설정
         float maxDistance = (characterController.height * 0.5f + characterController.skinWidth) * transform.lossyScale.y;
 
-        if (Physics.BoxCast(
+        bool result = Physics.BoxCast(
                         center,
                         half,
                         Vector3.down,
                         out RaycastHit hitResult,
                         Quaternion.identity,
                         maxDistance,
-                        1 << LayerMask.NameToLayer("Enemy")))
+                        1 << LayerMask.NameToLayer("Enemy"));
+
+        if (result)
         {
             _CurrentJumpForce = m_JumpForce * 0.6f;
-            _IsJumpInput = true;
+            _IsJumpInput = true;            
         }
+
+        return result;
 
     }
 
@@ -589,6 +597,27 @@ public partial class PlayerMovement
     public void OnFinishGiant()
     {
         // 면역 상태 해제
+        SetImmuneState(false);
+
+        // 적 충돌 무시 해제
+        characterController.excludeLayers -= LayerMask.GetMask("Enemy");
+    }
+
+    public void OnStartMachineGun()
+    {
+        // 적과의 충돌을 무시합니다.
+        characterController.excludeLayers += LayerMask.GetMask("Enemy");
+    }
+
+    public void OnUpdateMachineGun()
+    {
+        SetMovable(false);
+        SetImmuneState(true);
+    }
+
+    public void OnFinishMachineGun()
+    {
+        SetMovable(true);
         SetImmuneState(false);
 
         // 적 충돌 무시 해제

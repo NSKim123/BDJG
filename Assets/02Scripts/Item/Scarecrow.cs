@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Scarecrow : MonoBehaviour, IHit
 {
+    [Header("# µµπﬂ ¿Ã∆Â∆Æ")]
+    public GameObject m_Effect_Provocation;
+
     private float _LastProvocationTime;
 
     private Rigidbody _Rigidbody;
@@ -37,6 +40,9 @@ public class Scarecrow : MonoBehaviour, IHit
         }
 
         _LastProvocationTime = Time.time;
+
+        GameObject effect = Instantiate(m_Effect_Provocation);
+        effect.transform.position = transform.position;
     }
 
     private void OnDestroy()

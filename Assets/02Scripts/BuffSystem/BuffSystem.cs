@@ -75,7 +75,7 @@ public class BuffSystem
             {
                 { 100000, new SampleSpeedChangeBuff(100000, null, BuffType.None, 0.2f, 10.0f) },
                 { 100001, new GiantBuff(100001, null, BuffType.Item, 10.0f, true) },
-                { 100002, new AreaDeploymentBuff(100002, null, BuffType.Item, 4.0f, true) },
+                { 100002, new AreaDeploymentBuff(100002, null, BuffType.Item, 1.0f, true) },
                 { 100003, new MachineGunBuff(100003, null, BuffType.Item, 10.0f, true) },
                 { 100004, new ShellBuff(100004, null, BuffType.Item, 10.0f, true) },
                 { 100005, new ScarecrowBuff(100005, null, BuffType.Item, 10.0f, true) },
