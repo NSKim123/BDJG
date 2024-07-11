@@ -39,7 +39,7 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
                     {
                         Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
                         GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
