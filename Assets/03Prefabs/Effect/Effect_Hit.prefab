@@ -4976,9 +4976,10 @@ GameObject:
   - component: {fileID: 8672298416351423396}
   - component: {fileID: 544409808972917690}
   - component: {fileID: 4312003935474479729}
+  - component: {fileID: 6793468497289696214}
   m_Layer: 0
   m_Name: Effect_Hit
-  m_TagString: Untagged
+  m_TagString: HitEffect
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5010,7 +5011,7 @@ ParticleSystem:
   serializedVersion: 8
   lengthInSec: 1
   simulationSpeed: 1
-  stopAction: 2
+  stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
@@ -9868,6 +9869,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myPoolType: 6
+--- !u!114 &6793468497289696214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7728366230342544413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71fd734c6f506804e87f04a7ed2c1cd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8782049943966033279
 GameObject:
   m_ObjectHideFlags: 0

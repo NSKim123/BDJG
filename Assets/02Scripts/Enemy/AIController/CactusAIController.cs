@@ -14,6 +14,11 @@ public class CactusAIController : EnemyAIController
 
     void Update()
     {
+        if (Time.timeScale == 0.0f)
+        {
+            return;
+        }
+
         dis = Vector3.Distance(transform.position, target.transform.position);
 
         // 수정하기

@@ -64,8 +64,10 @@ public class EnemyStateDie : EnemyStateBase
             enemyCharacter.dieRenderer.material.color = ColorAlhpa;
             yield return new WaitForSeconds(0.1f);
         }
-        //ObjectPoolManager.Instance.ReturnToPool(enemyCharacter.gameObject);
-        GameObject.Destroy(enemyCharacter.gameObject);
+        
+        ObjectPoolManager.Instance.ReturnToPool(enemyCharacter.gameObject);
+        
+        //GameObject.Destroy(enemyCharacter.gameObject);
     }
 
 }

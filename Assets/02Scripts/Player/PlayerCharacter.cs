@@ -345,7 +345,10 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
         movementComponent.OnHit(distance, direction);
 
         // 피격 이펙트 생성
-        GameObject effect = Instantiate(m_Effect_Hit);
+        //GameObject effect = Instantiate(m_Effect_Hit);
+        GameObject effect = ObjectPoolManager.Instance.GetFromPool(PoolType.Effect_Hit);
+        effect.SetActive(true);
+
         effect.transform.position = transform.position;
         effect.transform.SetParent(transform);
     }

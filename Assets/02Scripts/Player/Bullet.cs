@@ -14,17 +14,33 @@ public class Bullet : GuidedProjectile
     /// </summary>
     protected float _AttackPower;
 
+    private float _destroyTime = 5.0f;
+
+
     protected virtual void Awake()
     {
-        Destroy(this.gameObject, 5.0f);
-        //Invoke("DestroyBullet", 5.0f);
+        //Destroy(this.gameObject, 5.0f);
+        
     }
 
-    //private void OnEnable()
-    //{
-    //    Invoke("DestroyBullet", 5.0f);
+    private void OnEnable()
+    {
+        //if (this.gameObject.activeInHierarchy)
+        //{
+        //    Invoke("DestroyBullet", 5.0f);
+        //}
+        _destroyTime = 5.0f;
 
-    //}
+    }
+
+    private void Update()
+    {
+        _destroyTime -= Time.deltaTime;
+        if (_destroyTime < 0)
+        {
+            DestroyBullet();
+        }
+    }
 
 
     protected virtual void OnTriggerEnter(Collider collider)
@@ -45,14 +61,15 @@ public class Bullet : GuidedProjectile
             PlaySound(collider);
 
             // 이 투사체를 제거합니다.
-            Destroy(this.gameObject);
-            //DestroyBullet();
+            //Destroy(this.gameObject);
+            DestroyBullet();
+
         }
     }
 
     private void DestroyBullet()
     {
-        Debug.Log("삭제", this);
+        //Debug.Log("삭제");
         ObjectPoolManager.Instance.ReturnToPool(this.gameObject);
     }
 

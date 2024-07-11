@@ -5,17 +5,50 @@ using UnityEngine;
 public class ItemSpawner : MonoBehaviour
 {
     private float rate;
-    private float normalRate = 0.2f;
-    private float specialRate = 0.5f;
+    private float normalRate = 1.0f;
+    private float specialRate = 1.0f;
 
     private float itemSpawnRadius = 8.0f;
     [SerializeField] private Transform itemSpawnAxis;
     [SerializeField] private GameObject randomItem;
-  
+    private int _currentItemCount = 0;
+    private int _maxItemCount = 4;
+
+ 
+    private void ItemCountDecrease()
+    {
+        _currentItemCount--;
+    }
+
+    private void ItemCountIncrease()
+    {
+        _currentItemCount++;
+    }
+
+    private bool IsItemsFullInMap()
+    {
+        return _currentItemCount >= _maxItemCount;
+    }
+
+    private void Update()
+    {
+        if (Time.timeScale == 0.0f)
+        {
+            return;
+        }
+        //Debug.Log(_currentItemCount + " 개");
+        //Debug.Log(IsItemsFullInMap());
+    }
+
 
     public void ItemSpawnByPercentage(EnemyType type)
     {
         rate = UnityEngine.Random.Range(0.0f, 1.0f);
+
+        if (IsItemsFullInMap())
+        {
+            return;
+        }
 
         // 일반 개체
         if ((int)type == 0 || (int)type == 1)
@@ -23,7 +56,8 @@ public class ItemSpawner : MonoBehaviour
             if (rate >= 0 && rate <= normalRate)
             {
                 Vector3 spawnPos = GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
-                Instantiate(randomItem, spawnPos, Quaternion.identity);
+                GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
+                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
             }
 
         }
@@ -33,9 +67,13 @@ public class ItemSpawner : MonoBehaviour
             if (rate>=0 || rate <= specialRate)
             {
                 Vector3 spawnPos = GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
-                Instantiate(randomItem, spawnPos, Quaternion.identity);
+                GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
+                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
+
             }
         }
+
+        ItemCountIncrease();
 
     }
 
@@ -50,6 +88,8 @@ public class ItemSpawner : MonoBehaviour
                 Destroy(item);
             }
         }
+
+        _currentItemCount = 0;
     }
 
     // 아이템이 맵 안에 있는지 확인합니다.

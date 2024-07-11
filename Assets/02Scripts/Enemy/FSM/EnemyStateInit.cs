@@ -17,7 +17,19 @@ public class EnemyStateInit : EnemyStateBase
         {
             case StepInState.None:
                 {
+                    if (!enemyAgent.enabled)
+                    {
+                        enemyAgent.enabled = true;
+
+                    }
+                    if (!rigid.useGravity)
+                    {
+                        rigid.useGravity = true;
+                    }
+
                     _currentStep++;
+
+
                 }
                 break;
             case StepInState.Start:

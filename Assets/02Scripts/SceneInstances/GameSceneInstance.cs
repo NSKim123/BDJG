@@ -100,6 +100,9 @@ public class GameSceneInstance : SceneInstanceBase
         // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
         _EnemySpawner.ResetForRestart();
 
+        // 오브젝트 풀 초기화
+        ObjectPoolManager.Instance.ResetObjectPools();
+
         // 맵 초기화 (위치 원래대로)
         _MapController.StartMapSetting();
 

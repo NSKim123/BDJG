@@ -14,6 +14,11 @@ public class ThornArea : MonoBehaviour
     public Terrain terrain;
     public Vector3 worldPosition; // 터레인 상의 월드 위치
 
+    private void Awake()
+    {
+        terrain = GameObject.FindAnyObjectByType<Terrain>();
+    }
+
 
     private void Start()
     {
@@ -30,7 +35,7 @@ public class ThornArea : MonoBehaviour
         // 특정 위치에서 법선 벡터를 얻음
         Vector3 normal = terrain.terrainData.GetInterpolatedNormal(normalizedX, normalizedZ);
 
-        // 법선 벡터와 세계 좌표의 위쪽 벡터 사이의 회전 계산
+        // 법선 벡터와 월드 좌표의 위쪽 벡터 사이의 회전 계산
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
         transform.rotation = rotation;
@@ -38,8 +43,8 @@ public class ThornArea : MonoBehaviour
         //GameObject instantiatedObject = Instantiate(objectPrefab, worldPosition, rotation);
 
         // 오브젝트의 위치를 터레인 높이에 맞춤
-        float terrainHeight = terrain.SampleHeight(worldPosition) + terrain.transform.position.y;
-        transform.position = new Vector3(worldPosition.x, terrainHeight, worldPosition.z);
+        //float terrainHeight = terrain.SampleHeight(worldPosition) + terrain.transform.position.y;
+        //transform.position = new Vector3(worldPosition.x, terrainHeight, worldPosition.z);
 
 
     }

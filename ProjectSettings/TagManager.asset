@@ -8,6 +8,8 @@ TagManager:
   - Boundary
   - Item
   - specialAttack
+  - Bullet
+  - HitEffect
   layers:
   - Default
   - TransparentFX

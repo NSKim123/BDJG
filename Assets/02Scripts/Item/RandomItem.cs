@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,12 @@ public class RandomItem : MonoBehaviour
 
     private float _InstantiatedTime;
 
+    public event Action onItemCountDecrease;
+
     private void Awake()
     {
-        Destroy(this.gameObject, 20.0f);
+        Invoke("DestroyItem", 20.0f);
+        //Destroy(this.gameObject, 20.0f);
         _InstantiatedTime = Time.time;
     }
 
@@ -55,7 +59,13 @@ public class RandomItem : MonoBehaviour
 
             choosedItem?.GetItem(other);
 
-            Destroy(gameObject);
+            DestroyItem();
         }
+    }
+
+    private void DestroyItem()
+    {
+        onItemCountDecrease?.Invoke();
+        Destroy(gameObject);
     }
 }
