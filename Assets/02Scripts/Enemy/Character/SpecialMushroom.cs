@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 public class SpecialMushroom : Enemy
 {
+
     public override float MoveSpeed { get; set; }
     public override float AttackRange { get;  set; }
 
@@ -58,5 +59,20 @@ public class SpecialMushroom : Enemy
             {State.Die, new EnemyStateDie(stateMachine)},
         });
 
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
+        {
+            {State.Init, new EnemyStateInit(stateMachine)},
+            {State.Idle, new EnemyStateIdle(stateMachine) },
+            {State.Move, new EnemyStateMove(stateMachine)},
+            {State.Attack, new EnemyStateAttack(stateMachine)},
+            {State.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
+            {State.Hurt, new EnemyStateHurt(stateMachine)},
+            {State.Die, new EnemyStateDie(stateMachine)},
+        });
     }
 }

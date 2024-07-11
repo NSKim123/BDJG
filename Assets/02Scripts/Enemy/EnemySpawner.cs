@@ -132,22 +132,27 @@ public class EnemySpawner : MonoBehaviour
             {
                 case 0:
                     {
-                        _specialSpawnTime = 3.0f;
+                        _specialSpawnTime = 20.0f;
 
                         EnemySpawnInfoData spawndata;
                         EnemyInfoData enemydata;
 
-                        //enemydata = mushroomData[1];
-                        //spawndata = mushroomSpawnInfo[1];
+                        enemydata = mushroomData[1];
+                        spawndata = mushroomSpawnInfo[1];
 
-                        enemydata = cactusData[1];
-                        spawndata = cactusSpawnInfo[1];
+                        //enemydata = cactusData[1];
+                        //spawndata = cactusSpawnInfo[1];
 
                         Vector3 randomPosition = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        //GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        newEnemy.transform.position = randomPosition;
+                        newEnemy.transform.rotation = Quaternion.identity;
+                        newEnemy.SetActive(true);
+
 
                         EnemyInit_Special(newEnemy, enemydata);
                     }
@@ -169,9 +174,21 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        
-                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
-                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        //GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        //GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        newEnemy_mush.transform.position = randomPosition1;
+                        newEnemy_mush.transform.rotation = Quaternion.identity;
+                        newEnemy_mush.SetActive(true);
+
+
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        newEnemy_cac.transform.position = randomPosition2;
+                        newEnemy_cac.transform.rotation = Quaternion.identity;
+                        newEnemy_cac.SetActive(true);
+
 
                         EnemyInit_Special(newEnemy_mush, enemydata[0]);
                         EnemyInit_Special(newEnemy_cac, enemydata[1]);
@@ -194,9 +211,20 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        
-                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
-                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        //GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        //GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        newEnemy_mush.transform.position = randomPosition1;
+                        newEnemy_mush.transform.rotation = Quaternion.identity;
+                        newEnemy_mush.SetActive(true);
+
+
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        newEnemy_cac.transform.position = randomPosition2;
+                        newEnemy_cac.transform.rotation = Quaternion.identity;
+                        newEnemy_cac.SetActive(true);
 
                         EnemyInit_Special(newEnemy_mush, enemydata[0]);
                         EnemyInit_Special(newEnemy_cac, enemydata[1]);
@@ -219,10 +247,21 @@ public class EnemySpawner : MonoBehaviour
                         Vector3 randomPosition2 = GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
-                        
 
-                        GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
-                        GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        //GameObject newEnemy_mush = Instantiate(spawndata[0].EnemyPrefab, randomPosition1, Quaternion.identity);
+                        //GameObject newEnemy_cac = Instantiate(spawndata[1].EnemyPrefab, randomPosition2, Quaternion.identity);
+
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        newEnemy_mush.transform.position = randomPosition1;
+                        newEnemy_mush.transform.rotation = Quaternion.identity;
+                        newEnemy_mush.SetActive(true);
+
+
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        newEnemy_cac.transform.position = randomPosition2;
+                        newEnemy_cac.transform.rotation = Quaternion.identity;
+                        newEnemy_cac.SetActive(true);
 
                         EnemyInit_Special(newEnemy_mush, enemydata[0]);
                         EnemyInit_Special(newEnemy_cac, enemydata[1]);
@@ -284,7 +323,11 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        //GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Mushroom);
+                        newEnemy.transform.position = randomPosition;
+                        newEnemy.transform.rotation = Quaternion.identity;
+                        newEnemy.SetActive(true);
 
                         EnemyInit(newEnemy, enemydata);
                         ++_mushroomSpawnedCount;
@@ -303,7 +346,11 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        //GameObject newEnemy = Instantiate(spawndata.EnemyPrefab, randomPosition, Quaternion.identity);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Cactus);
+                        newEnemy.transform.position = randomPosition;
+                        newEnemy.transform.rotation = Quaternion.identity;
+                        newEnemy.SetActive(true);
 
                         EnemyInit(newEnemy, enemydata);
                         ++_cactusSpawnedCount;
@@ -335,16 +382,7 @@ public class EnemySpawner : MonoBehaviour
             specialSpawnCoroutine = null;
         }
 
-        // 맵 내에 있는 적들 모두 파괴
-        GameObject[] removeList = isEnemyExistInMap();
-        if (removeList != null)
-        {
-            foreach (var item in removeList)
-            {
-                Destroy(item);
-            }
-        }
-
+        
         _mushroomSpawnedCount = 0;
         _cactusSpawnedCount = 0;
 
@@ -364,6 +402,8 @@ public class EnemySpawner : MonoBehaviour
     private GameObject[] isEnemyExistInMap()
     {
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
+
+        
 
         if (enemys.Length > 0)
         {

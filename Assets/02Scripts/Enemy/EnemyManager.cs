@@ -41,9 +41,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     {
         mapController.OnChangeWave += spawner.ChangeLevelOfSpawn;
 
-        //spawner = GameObject.FindAnyObjectByType<EnemySpawner>();
-        //itemSpawner = GameObject.FindAnyObjectByType<ItemSpawner>();
-        //mapController = GameObject.FindAnyObjectByType<MapController>();
+       
     }
 
 

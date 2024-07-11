@@ -28,6 +28,18 @@ public abstract class EnemyAIController : MonoBehaviour
         //_mapManager.OnChangeDestination += ChangeDestination;
     }
 
+    private void OnEnable()
+    {
+        target = GameObject.FindGameObjectWithTag("Player");
+        _stateMachine = GetComponent<StateMachine>();
+        _enemyCharacter = GetComponent<Enemy>();
+        _mapManager = FindAnyObjectByType<MapController>();
+    }
+
+    private void OnDisable()
+    {
+        
+    }
 }
 
 

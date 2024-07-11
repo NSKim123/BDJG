@@ -64,4 +64,20 @@ public class Mushroom : Enemy
         });
 
     }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
+        {
+            {State.Init, new EnemyStateInit(stateMachine)},
+            {State.Idle, new EnemyStateIdle(stateMachine) },
+            {State.Move, new EnemyStateMove(stateMachine)},
+            {State.Attack, new EnemyStateAttack(stateMachine)},
+            {State.Hurt, new EnemyStateHurt(stateMachine)},
+            {State.Die, new EnemyStateDie(stateMachine)},
+        });
+    }
+
+
 }

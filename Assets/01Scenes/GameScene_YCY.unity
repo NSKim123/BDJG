@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22276047, g: 0.34945214, b: 0.54595894, a: 1}
+  m_IndirectSpecularColor: {r: 0.22276042, g: 0.3494519, b: 0.5459574, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1921,6 +1921,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 853668381}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1440496316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440496318}
+  - component: {fileID: 1440496317}
+  m_Layer: 0
+  m_Name: ObjectPoolManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1440496317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440496316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a19caef0e155df34d87b3c65c49dcfe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectDatum:
+  - type: 1
+    prefab: {fileID: 8109867407821187086, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
+      type: 3}
+    initialCount: 40
+    maxCount: 100
+  - type: 2
+    prefab: {fileID: 4737009380193390080, guid: 983be5481a4418942b98c80bf54b3476,
+      type: 3}
+    initialCount: 20
+    maxCount: 30
+  - type: 3
+    prefab: {fileID: 5663144762638574183, guid: 54732879ed64d70409697d62904abf84,
+      type: 3}
+    initialCount: 20
+    maxCount: 30
+  - type: 4
+    prefab: {fileID: 4737009380193390080, guid: aa7c155c6e49276408d65f3e3abdbc18,
+      type: 3}
+    initialCount: 30
+    maxCount: 40
+  - type: 5
+    prefab: {fileID: 5663144762638574183, guid: 906a71fe0e0495b498e605542bb39ff1,
+      type: 3}
+    initialCount: 30
+    maxCount: 40
+  - type: 6
+    prefab: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
+      type: 3}
+    initialCount: 60
+    maxCount: 100
+--- !u!4 &1440496318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440496316}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1466343434
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2796,3 +2871,4 @@ SceneRoots:
   - {fileID: 753366849}
   - {fileID: 1624405127}
   - {fileID: 1068489477}
+  - {fileID: 1440496318}

@@ -33,7 +33,6 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    //Debug.Log("die");
                     
                     if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {
@@ -65,7 +64,10 @@ public class EnemyStateDie : EnemyStateBase
             enemyCharacter.dieRenderer.material.color = ColorAlhpa;
             yield return new WaitForSeconds(0.1f);
         }
-        GameObject.Destroy(enemyCharacter.gameObject);
+        
+        ObjectPoolManager.Instance.ReturnToPool(enemyCharacter.gameObject);
+        
+        //GameObject.Destroy(enemyCharacter.gameObject);
     }
 
 }

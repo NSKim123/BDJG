@@ -32,6 +32,9 @@ public abstract class Enemy : MonoBehaviour, IHit
     [Header("# 피격 이펙트")]
     public GameObject Effect_Hit;
 
+    [Header("# 기존 머터리얼")]
+    [SerializeField] private Material defaultMat;
+
     [Header("# 사망 시 변경될 머터리얼")]
     public Material changeMat;
 
@@ -46,12 +49,24 @@ public abstract class Enemy : MonoBehaviour, IHit
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
+    protected virtual void OnEnable()
+    {
+        stateMachine = GetComponent<StateMachine>();
+
+        dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
+    }
+
     public virtual void OnDamaged(float distance, Vector3 direction)
     {
         // 피격 이펙트 생성
-        GameObject effect = Instantiate(Effect_Hit);
+        //GameObject effect = Instantiate(Effect_Hit);
+        GameObject effect = ObjectPoolManager.Instance.GetFromPool(PoolType.Effect_Hit);
+      
+        effect.SetActive(true);
+
         effect.transform.position = transform.position + Vector3.up * GetComponent<CapsuleCollider>().height * 0.5f;
-        effect.transform.SetParent(transform);        
+        effect.transform.SetParent(transform);
+
     }
 
     public virtual void OnDead()
@@ -59,6 +74,12 @@ public abstract class Enemy : MonoBehaviour, IHit
         onDead?.Invoke();
         OnRequestSpawnItem?.Invoke(Type);
 
+    }
+
+    private void OnDisable()
+    {
+        stateMachine.currentStateType = State.Init;
+        dieRenderer.material = defaultMat;
     }
 
 }
