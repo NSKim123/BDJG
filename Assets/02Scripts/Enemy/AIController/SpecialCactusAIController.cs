@@ -14,6 +14,10 @@ public class SpecialCactusAIController : EnemyAIController
     public override Collider[] AttackDetect { get { return _attackDetect; } }
     private Collider[] _attackDetect;
 
+    private void OnDisable()
+    {
+        isDetected = false;
+    }
 
 
     void Update()

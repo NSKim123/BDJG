@@ -19,9 +19,6 @@ public partial class PlayerAttack : MonoBehaviour
     private static string SOUNDNAME_FIRE_SHELL = "Effect_FireShell";
 
     [Header("# 탄환 발사 관련")]
-    [Header("탄환 프래팹")]
-    public Bullet m_Bullet;
-
     [Header("포탄 프래팹")]
     public Bullet m_Shell;
 
@@ -102,7 +99,7 @@ public partial class PlayerAttack : MonoBehaviour
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
-    private Bullet _CurrentBullet;
+    private BulletType _CurrentBullet;
 
     /// <summary>
     /// 공격 가능한 상황인지를 나타내는 읽기전용 프로퍼티입니다.
@@ -273,17 +270,26 @@ public partial class PlayerAttack : MonoBehaviour
     /// </summary>
     private void InstantiateBullet()
     {
-        //Bullet bullet = Instantiate(_CurrentBullet);
-        GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
-        obj.SetActive(true);
-        Bullet bullet = obj.GetComponent<Bullet>();
+        Bullet bullet = null;
+
+        switch (_CurrentBullet)
+        {
+            case BulletType.Basic:
+                GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
+                bullet = obj.GetComponent<Bullet>();                
+                obj.SetActive(true);
+                break;
+            case BulletType.Shell:
+                bullet = Instantiate(m_Shell);                
+                break;
+        }
+
         bullet.transform.position = _StartPosition.position;
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
 
-        // 타겟팅 중인 객체가 있다면 탄환의 목표 Transform 을 설정해줍니다.
-        if(_TargetingSystem.currentTargetTransform != null)
-            bullet.SetTarget(_TargetingSystem.currentTargetTransform);
+        // 탄환의 목표 Transform 을 설정해줍니다.
+        bullet.SetTarget(_TargetingSystem.currentTargetTransform);                   
     }
 
     private void InstantiateEffect()
@@ -345,14 +351,14 @@ public partial class PlayerAttack : MonoBehaviour
 
     public void ChangeBullet(BulletType newBulletType)
     {
+        _CurrentBullet = newBulletType;
+
         switch (newBulletType)
         {
-            case BulletType.Basic:
-                _CurrentBullet = m_Bullet;
+            case BulletType.Basic:                
                 _CurrentFireSoundName = SOUNDNAME_FIRE_BASIC;
                 break;
             case BulletType.Shell:
-                _CurrentBullet = m_Shell;
                 _CurrentFireSoundName = SOUNDNAME_FIRE_SHELL;
                 break;
         }

@@ -13,6 +13,7 @@ public class SpecialMushroomAIController : EnemyAIController
 
     private Collider[] _attackDetect;
 
+  
 
     protected void Update()
     {

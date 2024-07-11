@@ -90,7 +90,8 @@ public partial class PlayerModel : MonoBehaviour
         onModelChanged?.Invoke();
 
         // 탄환의 머터리얼도 바꿉니다.
-        m_Bullet.GetComponentInChildren<Renderer>().material = _CurrentModel.GetComponentInChildren<Renderer>().material;
+        //m_Bullet.GetComponentInChildren<Renderer>().material = _CurrentModel.GetComponentInChildren<Renderer>().material;
+        ObjectPoolManager.Instance.ChangeBulletMaterial(_CurrentModel.GetComponentInChildren<Renderer>().material);
     }
 
     private void InstantiateLevelUpEffectByLevel(int level)

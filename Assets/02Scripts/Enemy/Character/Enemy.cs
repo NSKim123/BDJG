@@ -42,6 +42,8 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public event Action<EnemyType> OnRequestSpawnItem;
 
+    public bool isReused = false;
+
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -52,7 +54,6 @@ public abstract class Enemy : MonoBehaviour, IHit
     protected virtual void OnEnable()
     {
         stateMachine = GetComponent<StateMachine>();
-
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
@@ -79,7 +80,7 @@ public abstract class Enemy : MonoBehaviour, IHit
     private void OnDisable()
     {
         stateMachine.currentStateType = State.Init;
-        dieRenderer.material = defaultMat;
+        dieRenderer.material = defaultMat;        
     }
 
 }

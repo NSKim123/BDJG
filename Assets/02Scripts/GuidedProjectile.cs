@@ -10,7 +10,7 @@ public class GuidedProjectile : Projectile
     /// <summary>
     /// 따라갈 목표 Transform 입니다.
     /// </summary>
-    private Transform _TargetTransform;
+    protected Transform _TargetTransform;
 
     /// <summary>
     /// 이동하는 메서드입니다.

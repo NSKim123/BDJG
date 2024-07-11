@@ -62,7 +62,7 @@ public class SpecialCactus : Enemy
             {State.Idle, new EnemyStateIdle(stateMachine) },
             {State.Move, new EnemyStateMove(stateMachine)},
             {State.Attack, new EnemyStateAttack(stateMachine)},
-            {State.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
+            {State.AttackSpecial, new EnemyStateAttackSpecial_Cactus(stateMachine)},
             {State.Hurt, new EnemyStateHurt(stateMachine)},
             {State.Die, new EnemyStateDie(stateMachine)},
         });

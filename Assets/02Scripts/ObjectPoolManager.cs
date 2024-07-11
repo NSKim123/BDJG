@@ -46,6 +46,27 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
 
     }
 
+    public void ChangeBulletMaterial(Material newMaterial)
+    {
+        dataOfType[PoolType.Bullet].prefab.GetComponentInChildren<Renderer>().material = newMaterial;
+
+        foreach (var item in pools[PoolType.Bullet])
+        {
+            item.GetComponentInChildren<Renderer>().material = newMaterial;
+        }
+
+        GameObject[] bullets = IsElementsExistInMap("Bullet");
+        if (bullets != null)
+        {
+            foreach (var item in bullets)
+            {
+                item.GetComponentInChildren<Renderer>().material = newMaterial;
+            }
+        }
+        
+
+    }
+
     private void CreatePool(ObjectData data)
     {
         if (poolList.ContainsKey(data.type))
@@ -81,16 +102,6 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
         }
 
         GameObject obj = null;
-
-        //foreach (var spawnObj in poolList[type])
-        //{
-        //    if (!spawnObj.activeInHierarchy)
-        //    {
-        //        return spawnObj;
-        //    }
-
-        //}
-
 
 
         if (pools[type].Count > 0)
@@ -144,9 +155,9 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
 
     public void ResetObjectPools()
     {
-        ReturnRemainedObject(isElementsExistInMap("Enemy"));
-        ReturnRemainedObject(isElementsExistInMap("Bullet"));
-        ReturnRemainedObject(isElementsExistInMap("HitEffect"));
+        ReturnRemainedObject(IsElementsExistInMap("Enemy"));
+        ReturnRemainedObject(IsElementsExistInMap("Bullet"));
+        ReturnRemainedObject(IsElementsExistInMap("HitEffect"));
     }
 
     private void ReturnRemainedObject(GameObject[] objects)
@@ -155,15 +166,12 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
         {
             foreach (var item in objects)
             {
-                if (item.activeInHierarchy)
-                {
-                    ObjectPoolManager.Instance.ReturnToPool(item);
-                }
+                ObjectPoolManager.Instance.ReturnToPool(item);
             }
         }
     }
 
-    private GameObject[] isElementsExistInMap(string tag)
+    private GameObject[] IsElementsExistInMap(string tag)
     {
         GameObject[] elements = GameObject.FindGameObjectsWithTag(tag);
 

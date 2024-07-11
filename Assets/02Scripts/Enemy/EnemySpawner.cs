@@ -48,9 +48,16 @@ public class EnemySpawner : MonoBehaviour
 
     private int _currentLevel = 0;
 
+    
+
     public void ChangeLevelOfSpawn(int level)
     {
        _currentLevel = level;
+    }
+
+    private void IncreaseScore()
+    {
+        onEnemyDead?.Invoke(1);
     }
 
     /// <summary>
@@ -69,8 +76,14 @@ public class EnemySpawner : MonoBehaviour
         e.AttackSpeed = data.AttackSpeed;
         e.AttackRange = data.AttackRange;
         e.Type = data.Type;
-        e.onDead += () => onEnemyDead?.Invoke(1);
-        e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+
+        if (!e.isReused)
+        {
+            e.isReused = true;
+            e.onDead += IncreaseScore;
+            e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+        }
+        
     }
 
 
@@ -87,8 +100,14 @@ public class EnemySpawner : MonoBehaviour
         e.SpecialAttackRange = data.SpecialAttackRange;
         e.SpecialAttackTime = data.SpecialAttackTime;
         e.Type = data.Type;
-        e.onDead += () => onEnemyDead?.Invoke(1);
-        e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+
+        if (!e.isReused)
+        {
+            e.isReused = true;
+            e.onDead += IncreaseScore;
+            e.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+        }
+        
     }
 
 

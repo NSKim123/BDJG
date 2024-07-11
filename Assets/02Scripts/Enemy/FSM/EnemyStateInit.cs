@@ -27,6 +27,11 @@ public class EnemyStateInit : EnemyStateBase
                         rigid.useGravity = true;
                     }
 
+                    if (!rigid.isKinematic)
+                    {
+                        rigid.isKinematic = true;
+                    }
+
                     _currentStep++;
 
 
