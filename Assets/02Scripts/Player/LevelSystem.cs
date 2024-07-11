@@ -56,13 +56,13 @@ public class LevelSystem
         switch(level)
         {
             case 1:
-                newTargetKillCount = 3;
+                newTargetKillCount = 10;
                 break;
             case 2:
-                newTargetKillCount = 5;
+                newTargetKillCount = 20;
                 break;
             case 3:
-                newTargetKillCount = 10;
+                newTargetKillCount = 30;
                 break;
             default:
                 newTargetKillCount = 0;
@@ -85,13 +85,13 @@ public class LevelSystem
         switch (level)
         {
             case 1:
-                newTargetSurvivalTime = 20.0f;
+                newTargetSurvivalTime = 30.0f;
                 break;
             case 2:
-                newTargetSurvivalTime = 60.0f;
+                newTargetSurvivalTime = 100.0f;
                 break;
             case 3:
-                newTargetSurvivalTime = 120.0f;
+                newTargetSurvivalTime = 150.0f;
                 break;
             default:
                 newTargetSurvivalTime = 0.0f;
