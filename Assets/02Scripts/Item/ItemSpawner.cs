@@ -49,6 +49,7 @@ public class ItemSpawner : MonoBehaviour
         {
             return;
         }
+        //Debug.Log("아이템 생성 시도" + rate);
 
         // 일반 개체
         if ((int)type == 0 || (int)type == 1)
@@ -58,22 +59,29 @@ public class ItemSpawner : MonoBehaviour
                 Vector3 spawnPos = GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
                 obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
+                ItemCountIncrease();
+
+
+                //Debug.Log("아이템 생성 일반" + rate);
+
             }
 
         }
         //특수 개체
         else if ((int)type == 2 || (int)type == 3)
         {
-            if (rate>=0 || rate <= specialRate)
+            if (rate>=0 && rate <= specialRate)
             {
                 Vector3 spawnPos = GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
                 obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
+                ItemCountIncrease();
+
+                //Debug.Log("아이템 생성 특수" + rate);
 
             }
         }
 
-        ItemCountIncrease();
 
     }
 

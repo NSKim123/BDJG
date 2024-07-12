@@ -42,7 +42,7 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
             case StepInState.Playing:
                 {
                    
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.7f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
                     {
                         Transform thornTrans = cactus.transform.GetChild(1).transform;
                         GameObject.Instantiate(cactus.thornArea, thornTrans.position, Quaternion.identity);
