@@ -9,5 +9,7 @@ public class MainSceneInstance : SceneInstanceBase
         Time.timeScale = 1.0f;
 
         base.Awake();
+
+        SoundManager.Instance.PlaySound("bgm", SoundType.Bgm, 1.0f, 0.3f);
     }
 }

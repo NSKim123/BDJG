@@ -257,13 +257,11 @@ public class WindBuff : TimerBuff
 
     protected override void onUpdateBuffContext()
     {
-        _PlayerCharacter.movementComponent.SetMovable(false);
+        
     }
 
     protected override void onFinishBuffContext()
     {
-        _PlayerCharacter.movementComponent.SetMovable(true);
-
         GameObject.Destroy(_InstantiatedPrefab);
 
         // 이펙트 제거
