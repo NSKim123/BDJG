@@ -25,7 +25,7 @@ public class GameOverUI : PanelWithTwoButtonsUI
         base.BindButtonsEvents();
 
         // 메인 화면 버튼 클릭 이벤트 바인딩
-        BindButton2Events(() => SceneManager.LoadScene(0));
+        BindButton2Events(MoveToMainScene);
     }
 
     /// <summary>
@@ -42,5 +42,11 @@ public class GameOverUI : PanelWithTwoButtonsUI
 
         // 점수 결과 텍스트 설정
         m_Text_ScoreResult.text = scoreResult.ToString();
+    }
+
+    private void MoveToMainScene()
+    {
+        GameData.Instance.m_NextSceneName = Constants.SCENENAME_MAINSCENE;
+        SceneManager.LoadScene(Constants.SCENENAME_LOADINGSCENE);
     }
 }

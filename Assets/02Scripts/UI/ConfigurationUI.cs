@@ -57,7 +57,7 @@ public class ConfigurationUI : MonoBehaviour
     private void BindPopUpOnClickMainSceneEvents()
     {
         // 메인 화면으로 돌아가는 이벤트 바인딩
-        m_PopUpOnClickMainSceneButton.BindButton1Events(() => SceneManager.LoadScene(0));
+        m_PopUpOnClickMainSceneButton.BindButton1Events(MoveToMainScene);
 
         // 취소 버튼
         m_PopUpOnClickMainSceneButton.BindButton2Events(() => m_PopUpOnClickMainSceneButton.gameObject.SetActive(false));
@@ -99,5 +99,11 @@ public class ConfigurationUI : MonoBehaviour
     private void PlayClickSound()
     {
         SoundManager.Instance.PlaySound(Constants.SOUNDNAME_CLICK_ABLEBUTTON, SoundType.Effect);
+    }
+
+    private void MoveToMainScene()
+    {
+        GameData.Instance.m_NextSceneName = Constants.SCENENAME_MAINSCENE;
+        SceneManager.LoadScene(Constants.SCENENAME_LOADINGSCENE);
     }
 }
