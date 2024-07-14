@@ -78,7 +78,13 @@ public class AreaDeploymentBuff : TimerBuff
     private IEnumerator C_AreaDeployment()
     {
         Time.timeScale = 0.0f;
-        GameObject.Instantiate(effect);
+        GameObject instantiatedEffect = GameObject.Instantiate(effect);
+
+        (instantiatedEffect.transform as RectTransform).anchorMin = Vector2.zero;
+        (instantiatedEffect.transform as RectTransform).anchorMax = Vector2.one;
+        (instantiatedEffect.transform as RectTransform).localScale = Vector2.one * 2.0f;
+        (instantiatedEffect.transform as RectTransform).offsetMin = Vector2.zero;
+        (instantiatedEffect.transform as RectTransform).offsetMax = Vector2.zero;
 
         yield return new WaitForSecondsRealtime(3.3f);
 

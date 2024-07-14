@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AreaDeploymentEffect : MonoBehaviour
 {
     private static string SOUNDNAME_AREADEPLOYMENT_INIT = "Effect_AreaDeployment_step1";
     private static string SOUNDNAME_AREADEPLOYMENT_CHARACTER = "Effect_Slime_GiantLand";
     private static string SOUNDNAME_AREADEPLOYMENT_FINISH = "Effect_AreaDeployment_step2";
+
+    public Image m_Image_Background;
 
     public float m_Time;
 
@@ -18,17 +21,18 @@ public class AreaDeploymentEffect : MonoBehaviour
         RectTransform gameSceneUI = FindAnyObjectByType<Canvas>().transform as RectTransform;
         (transform as RectTransform).localScale = gameSceneUI.localScale * 2.0f;
         transform.SetParent(gameSceneUI);
-        (transform as RectTransform).anchoredPosition = Vector3.zero;        
+        (transform as RectTransform).anchoredPosition = Vector3.zero;
     }
 
     private void Update()
     {   
-        m_AreaDeploymentEffectMaterial.SetFloat("_Boundary", m_Time * 2.0f);
-    }        
+        //m_AreaDeploymentEffectMaterial.SetFloat("_Grayscale", m_Time * 2.0f);
+    }
+
 
     private void OnDestroy()
     {
-        m_AreaDeploymentEffectMaterial.SetFloat("_Boundary", 0.0f);
+        m_AreaDeploymentEffectMaterial.SetFloat("_Grayscale", 0.0f);
     }
 
     public void PlaySound_Init()
