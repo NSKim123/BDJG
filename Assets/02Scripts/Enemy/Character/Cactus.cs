@@ -40,16 +40,7 @@ public class Cactus : Enemy
     protected override void Start()
     {
         base.Start();
-        //stateMachine.StateInit(new List<EnemyStateBase>()
-        //{
-        //    new EnemyStateIdle(stateMachine),
-        //    new EnemyStateMove(stateMachine),
-        //    new EnemyStateAttack(stateMachine),
-        //    new EnemyStateHurt(stateMachine),
-        //    new EnemyStateAvoidWater(stateMachine),
-        //    new EnemyStateDie(stateMachine)
-        //});
-
+        
         stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
         {
             {State.Init, new EnemyStateInit(stateMachine)},

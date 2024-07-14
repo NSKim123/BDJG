@@ -20,6 +20,6 @@ MonoBehaviour:
   _attackRange: 1
   _attackSpeed: 1
   _attackTime: 1
-  _specialAttackCoolTime: 10
+  _specialAttackCoolTime: 20
   _specialAttackRange: 3
   _specialAttackTime: 2

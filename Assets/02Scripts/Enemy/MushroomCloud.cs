@@ -8,8 +8,20 @@ using UnityEngine;
 public class MushroomCloud : MonoBehaviour
 {
     [SerializeField] private GameObject screenEffect;
+    private float _desiredPos;
 
-  
+    private void Start()
+    {
+        _desiredPos = transform.position.z + 2f;    
+    }
+
+    private void FixedUpdate()
+    {
+        if (transform.position.z < _desiredPos)
+        {
+            transform.position += transform.forward * Time.fixedDeltaTime * 0.15f;
+        }
+    }
 
     private void OnParticleCollision(GameObject other)
     {

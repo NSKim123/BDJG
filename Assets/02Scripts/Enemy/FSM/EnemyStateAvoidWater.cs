@@ -8,8 +8,6 @@ public class EnemyStateAvoidWater : EnemyStateBase
 
     public EnemyStateAvoidWater(StateMachine stateMachine) : base(stateMachine)
     {
-
-
     }
 
     public override bool canExecute() => true;

@@ -12,7 +12,7 @@ public class ThornArea : MonoBehaviour
     float desiredPos;
 
     public Terrain terrain;
-    public Vector3 worldPosition; // 터레인 상의 월드 위치
+    public Vector3 worldPosition;
 
     private void Awake()
     {
@@ -39,14 +39,7 @@ public class ThornArea : MonoBehaviour
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
         transform.rotation = rotation;
-        // 오브젝트 생성 및 회전 적용
-        //GameObject instantiatedObject = Instantiate(objectPrefab, worldPosition, rotation);
-
-        // 오브젝트의 위치를 터레인 높이에 맞춤
-        //float terrainHeight = terrain.SampleHeight(worldPosition) + terrain.transform.position.y;
-        //transform.position = new Vector3(worldPosition.x, terrainHeight, worldPosition.z);
-
-
+        
     }
 
     private void Update()
@@ -54,7 +47,6 @@ public class ThornArea : MonoBehaviour
         if (transform.position.y >= desiredPos)
         {
             currentTime += Time.deltaTime;
-
         }
 
 
@@ -69,7 +61,7 @@ public class ThornArea : MonoBehaviour
     {
         if (transform.position.y < desiredPos)
         {
-            transform.position += Vector3.up * Time.fixedDeltaTime * 0.2f;
+            transform.position += Vector3.up * Time.fixedDeltaTime * 0.15f;
         }
     }
 

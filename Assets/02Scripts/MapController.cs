@@ -88,8 +88,7 @@ public class MapController : MonoBehaviour
 
                 yield return new WaitForSeconds(0.1f);
             }
-            _navMeshMap.BuildNavMesh();
-
+           
         }
  
     }
@@ -98,7 +97,7 @@ public class MapController : MonoBehaviour
     /// 코루틴을 중단하고 다시 시작하는 메서드입니다.
     /// 게임 시작 시 호출합니다.
     /// </summary>
-    public void StartMapSetting()
+    public void ResetMapSetting()
     {
         if (_waterCoroutine != null)
         {

@@ -25,11 +25,17 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private float currentDuration;
     private float decreaseOffset = 0.2f;
     private bool isStartCloud;
+
+
     private GameObject particleObj;
     private ParticleSystem.MainModule particle;
+
     private float currTime = 0;
     private float delayTime = 0.3f;
+
     private GameObject instantiatedBrokenUIEffect;
+    [SerializeField] private GameObject thornArea;
+    [SerializeField] private GameObject cloud;
 
     protected override void Awake()
     {
@@ -40,8 +46,6 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private void Start()
     {
         mapController.OnChangeWave += spawner.ChangeLevelOfSpawn;
-
-       
     }
 
 
@@ -68,19 +72,32 @@ public class EnemyManager : SingletonBase<EnemyManager>
         {
              if (player.movementComponent.normalizedZXSpeed > 0)
              {
-                if (currTime > delayTime)
-                {
-                    StartCloudAttack();
-                    currTime = 0;
-                }
                 currTime += Time.deltaTime;
 
-             }
+                if (currTime > delayTime)
+                {
+                    DecreaseCloudDuration();
+                    currTime = 0;
+                }
+            }
         }
-
-        
     }
 
+    /// <summary>
+    /// 가시 함정을 생성합니다.
+    /// </summary>
+    /// <param name="cactus"></param>
+    public void CreateThornArea(SpecialCactus cactus)
+    {
+        Transform thornTransform = cactus.transform.GetChild(1).transform;
+        Instantiate(thornArea, thornTransform.position, Quaternion.identity);
+
+    }
+
+    /// <summary>
+    /// 가시 함정에 닿았을 때 데미지를 적용합니다.
+    /// </summary>
+    /// <param name="other"></param>
     public void StartThornAttack(Collider other)
     {
         player = other.GetComponent<PlayerCharacter>();
@@ -102,6 +119,21 @@ public class EnemyManager : SingletonBase<EnemyManager>
         
     }
 
+    /// <summary>
+    /// 포자 구름을 생성합니다.
+    /// </summary>
+    /// <param name="mushroom"></param>
+    public void CreateCloud(SpecialMushroom mushroom)
+    {
+        Vector3 pos = mushroom.transform.position + new Vector3(0, 1.0f, 1.5f);
+        Instantiate(cloud, pos, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// 포자구름에 닿았을 때 공격을 시작합니다.(파티클의 지속시간을 줄이기 위한 초기화 작업)
+    /// </summary>
+    /// <param name="cloud"></param>
+    /// <param name="other"></param>
     public void StartCloud(GameObject cloud, GameObject other)
     {
         isStartCloud = true;
@@ -111,12 +143,13 @@ public class EnemyManager : SingletonBase<EnemyManager>
 
         originDuration = particle.duration;
         currentDuration = originDuration;
-
     }
 
-    public void StartCloudAttack()
+    /// <summary>
+    /// 포자구름 파티클의 지속시간을 줄입니다.
+    /// </summary>
+    public void DecreaseCloudDuration()
     {
-
         currentDuration = Mathf.Max(currentDuration - decreaseOffset, 0.1f);
 
         if (currentDuration <= 0.1f)
@@ -131,33 +164,14 @@ public class EnemyManager : SingletonBase<EnemyManager>
         }
         float newSpeedrate = originDuration / currentDuration;
         particle.simulationSpeed = newSpeedrate;
-        
     }
 
-    public void ResetElements()
+    /// <summary>
+    /// 게임 시작 시 특수공격이 남아있다면 파괴합니다.
+    /// </summary>
+    public void ResetSpecialAttack()
     {
-        GameObject[] removeList = IsItemExistInMap();
-        if (removeList != null)
-        {
-            foreach (var item in removeList)
-            {
-                Destroy(item);
-            }
-        }
+        UtilReset.DestroyActivatedItems("specialAttack");
     }
-
-    private GameObject[] IsItemExistInMap()
-    {
-        GameObject[] items = GameObject.FindGameObjectsWithTag("specialAttack");
-        if (items.Length > 0)
-        {
-            return items;
-        }
-        else
-        {
-            return null;
-        }
-    }
-
 
 }

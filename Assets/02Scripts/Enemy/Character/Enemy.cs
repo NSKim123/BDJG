@@ -41,13 +41,14 @@ public abstract class Enemy : MonoBehaviour, IHit
     public event System.Action onDead;
 
     public event Action<EnemyType> OnRequestSpawnItem;
+    public event Action<SpecialCactus> OnRequestThornAttack;
+    public event Action<SpecialMushroom> OnRequestCloudAttack;
 
     public bool isReused = false;
 
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
-
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
     }
 
@@ -70,17 +71,26 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     }
 
+    public void RequestCloudAttack(SpecialMushroom mushroom)
+    {
+        OnRequestCloudAttack?.Invoke(mushroom);
+    }
+
+    public void RequestSpecialAttack(SpecialCactus cactus)
+    {
+        OnRequestThornAttack?.Invoke(cactus);
+    }
+
     public virtual void OnDead()
     {
         onDead?.Invoke();
         OnRequestSpawnItem?.Invoke(Type);
-
     }
 
     private void OnDisable()
     {
         stateMachine.currentStateType = State.Init;
-        dieRenderer.material = defaultMat;        
+        dieRenderer.material = defaultMat;
     }
 
 }

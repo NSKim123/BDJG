@@ -6,8 +6,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
 {
-    private float animLength;
-
     public EnemyStateAttackSpecial_Cactus(StateMachine stateMachine) : base(stateMachine)
     {
     }
@@ -18,10 +16,8 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
     public override State MoveNextStep()
     {
         State nextState = State.AttackSpecial;
-
         SpecialCactus cactus = enemyCharacter as SpecialCactus;
-  
-        
+
         //Debug.Log(_currentStep);
 
         switch (_currentStep)
@@ -33,31 +29,23 @@ public class EnemyStateAttackSpecial_Cactus : EnemyStateBase
                 break;
             case StepInState.Start:
                 {
-                   
                     animator.Play("attack_special");
-                   
                     _currentStep++;
                 }
                 break;
             case StepInState.Playing:
                 {
                    
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
-                        Transform thornTrans = cactus.transform.GetChild(1).transform;
-                        GameObject.Instantiate(cactus.thornArea, thornTrans.position, Quaternion.identity);
-
+                        enemyCharacter.RequestSpecialAttack(cactus);
                         _currentStep++;
-
                     }
-
                 }
                 break;
             case StepInState.End:
                 {
-                    
                     nextState = State.Move;
-
                 }
                 break;
             default:

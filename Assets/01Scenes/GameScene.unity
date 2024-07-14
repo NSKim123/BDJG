@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.22276047, g: 0.34945214, b: 0.54595894, a: 1}
+  m_IndirectSpecularColor: {r: 0.22276042, g: 0.3494519, b: 0.5459574, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1250,6 +1250,9 @@ MonoBehaviour:
   mapController: {fileID: 843712207}
   brokenUIEffect: {fileID: 2347769631120698245, guid: cd1635a3aaabc6d4cbe837ab4b99baea,
     type: 3}
+  thornArea: {fileID: 2758007761011041935, guid: c8c4aaba995dfad4f920bdf36383364e,
+    type: 3}
+  cloud: {fileID: 6813416509558619124, guid: e890e8f1a54b3a448b220d81be25f4da, type: 3}
 --- !u!4 &911747145
 Transform:
   m_ObjectHideFlags: 0

@@ -6,7 +6,6 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyStateAttackSpecial_Mush : EnemyStateBase
 {
-    private float animLength;
 
     public EnemyStateAttackSpecial_Mush(StateMachine stateMachine) : base(stateMachine)
     { 
@@ -20,7 +19,7 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
     {
         State nextState = State.AttackSpecial;
 
-        SpecialMushroom mush = enemyCharacter as SpecialMushroom;
+        SpecialMushroom mushroom = enemyCharacter as SpecialMushroom;
 
 
         switch (_currentStep)
@@ -39,16 +38,12 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
                 break;
             case StepInState.Playing:
                 {
-                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
+                    if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
-                        Vector3 pos = mush.transform.position + new Vector3(0, 1, 1);
-                        GameObject cloud = GameObject.Instantiate(mush.cloud, pos, Quaternion.identity);
-
-                        cloud.transform.position += mush.transform.up * 0.5f;
+                        enemyCharacter.RequestCloudAttack(mushroom);
                         _currentStep++;
-
                     }
-         
+
                 }
                 break;
             case StepInState.End:

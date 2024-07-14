@@ -28,8 +28,6 @@ public class SpecialMushroom : Enemy
     public override float SpecialAttackTime { get; set; }
     #endregion
 
-    public GameObject cloud;
-
     public override void OnDamaged(float distance, Vector3 direction)
     {
         base.OnDamaged(distance, direction);

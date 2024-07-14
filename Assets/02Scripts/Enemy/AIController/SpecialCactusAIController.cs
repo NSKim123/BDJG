@@ -49,12 +49,11 @@ public class SpecialCactusAIController : EnemyAIController
         }
 
 
-        // 특수공격이 가능하다면
         if (isDetected)
         {
+            // 특수공격이 가능하다면
             if (isAvailableSpecialAttack)
             {
-
                 _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange, _targetLayer);
 
                 if (_attackDetect.Length > 0 && !_attacked)
@@ -64,8 +63,7 @@ public class SpecialCactusAIController : EnemyAIController
                     coolTimeStart = true;
                     coolTime = 0;
                     _stateMachine.ChangeState(State.AttackSpecial);
-                    
-
+        
                 }
 
                 

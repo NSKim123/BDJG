@@ -97,21 +97,21 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.ResetPlayerCharacter();
         playerController.controlledCharacter.movementComponent.InitPosition(m_PlayerSpawnPosition.transform.position);
 
-        // 적 스폰 초기화 + (재시작한다고 했을 때, 적 객체 모두 없애야함)
-        _EnemySpawner.ResetForRestart();
-
         // 오브젝트 풀 초기화
         ObjectPoolManager.Instance.ResetObjectPools();
 
+        // 아이템 남아있다면 없애서 초기화
+        _ItemSpawner.ResetItems();
+
+        // 특수공격 남아있다면 없애서 초기화
+        EnemyManager.Instance.ResetSpecialAttack();
+
+        // 적 스폰 초기화
+        _EnemySpawner.InitEnemySpawnSetting();
+
         // 맵 초기화 (위치 원래대로)
-        _MapController.StartMapSetting();
-
-        // 아이템 초기화 (아이템 남아있다면 없앰)
-        _ItemSpawner.ResetItem();
-
-        // 특수공격 남아있다면 없앰
-        EnemyManager.Instance.ResetElements();
-
+        _MapController.ResetMapSetting();
+        
         // 3초 카운트 ( 코루틴 )        
         yield return Count3sBeforeGameStart();
 

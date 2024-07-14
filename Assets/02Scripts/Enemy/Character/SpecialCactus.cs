@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,6 @@ public class SpecialCactus : Enemy
     public override float SpecialAttackTime { get; set; }
     #endregion
 
-    public GameObject thornArea;
 
     public override void OnDamaged(float distance, Vector3 direction)
     {
