@@ -1,19 +1,13 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
 /// <summary>
 /// 플레이어의 캐릭터의 이동, 점프, 피격(밀려남)을 수행하는 컴포넌트입니다.
 /// </summary>
-/// 이동 부분
+/// 이동 부분 + 유니티 이벤트 함수 부분
 public partial class PlayerMovement : MonoBehaviour
 {
-    private static string SOUNDNAME_MOVE = "Effect_Slime_Move";
-
     [Header("# 이동 관련")]
     [Header("이동 속력")]
     public float m_Speed = 3.5f;
@@ -74,7 +68,7 @@ public partial class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // 쿨타임을 갱신합니다.
+        // 점프 쿨타임을 갱신합니다.
         UpdateJumpReuseTimeGauge();
     }
 
@@ -104,6 +98,7 @@ public partial class PlayerMovement : MonoBehaviour
     /// </summary>
     private void CalculateTargetYawAngle()
     {
+        // 이동 입력을 받지 않은 상태라면 목표 회전값 설정을 건너뜁니다.
         if(_InputDirection == Vector2.zero) return;
 
         // 목표 회전값을 설정합니다.
@@ -111,13 +106,14 @@ public partial class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// XZ 평면 상의 속도를 계산합니다.
+    /// XZ 평면 상의 속도를 계산하는 메서드입니다.
     /// </summary>
     private void CalculateXZVelocity()
     {
         // 새로 설정할 속도 벡터
         Vector3 newTargetVelocity = Vector3.zero;
 
+        // 이동할 수 있는 상태라면 속도 벡터를 설정합니다.
         if (_AbleToMove)
         {
             // 입력받은 이동 방향을 새로 설정할 속도 벡터에 저장합니다.
@@ -133,13 +129,14 @@ public partial class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Y 축 상의 속도를 계산합니다.
+    /// Y 축 상의 속도를 계산하는 메서드입니다.
     /// </summary>
     private void CalculateYVelocity()
     {
         // 땅에 닿아있는지 체크합니다.
         _IsGrounded = CheckGrounded();
 
+        // 적 머리 위에 위에 있는지 체크합니다.
         _IsAboveEnemy = CheckAboveEnemy();
 
         // 중력값
@@ -156,23 +153,23 @@ public partial class PlayerMovement : MonoBehaviour
             _TargetVelocity.y += gravity;
         }
 
-        // 만약 점프 입력을 받은 상태라면 y 축 방향에 대한 속도값을 설정해 점프를 실시합니다.
-        if (_IsJumpInput)
+        // 만약 점프 트리거가 활성화되어있는 상태라면 y 축 방향에 대한 속도값을 설정해 점프를 실시합니다.
+        if (_IsJumpTrigger)
         {
             Jump();
         }
-
-
     }
 
     /// <summary>
-    /// 계산한 속도를 토대로 이동시킵니다.
+    /// 계산한 속도를 토대로 이동시키는 메서드입니다.
     /// </summary>
     private void Move()
     {
         // 이동이 가능한 상태라면 이동시킵니다.
         if(_AbleToMove)
-            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);  
+            characterController.Move(_TargetVelocity * Time.fixedDeltaTime);
+
+        // 그렇지 않다면 Y 축 상의 이동만 실행시킵니다.
         else
             characterController.Move(Vector3.up * _TargetVelocity.y * Time.fixedDeltaTime);
     }
@@ -192,22 +189,25 @@ public partial class PlayerMovement : MonoBehaviour
         transform.rotation = newRotation;
     }   
     
-    public void InitPosition(Vector3 initPosition)
+    /// <summary>
+    /// Movement 컴포넌트를 리셋하는 동작을 정의한 메서드입니다.
+    /// </summary>
+    /// <param name="initPosition"></param>
+    public void ResetMovementComponent(Vector3 initPosition)
     {
+        // 넉백 속도를 영벡터로 초기화합니다.
         _KnockBackVelocity = Vector3.zero;
-        for(int i = 0; i < 5; ++i)
+
+        // 게임 시작 시의 위치로 이동시킵니다.
+        // 한 번의 Move 함수 호출로는 의도한 위치로 가지 않는 경우가 있어, 여러 차례 Move 함수를 호출하였습니다.
+        for (int i = 0; i < 5; ++i)
         {
             characterController.Move(initPosition - transform.position);
         }
     }
 
-    public void PlayMoveSound()
-    {
-        SoundManager.Instance.PlaySound(SOUNDNAME_MOVE, SoundType.Effect);
-    }
-
     /// <summary>
-    /// 이동 가능 여부를 설정합니다.
+    /// 이동 가능 여부를 설정하는 메서드입니다.
     /// </summary>
     /// <param name="movable"> 이동 가능은 참, 이동 불가능은 거짓</param>
     public void SetMovable(bool movable)
@@ -219,20 +219,10 @@ public partial class PlayerMovement : MonoBehaviour
     /// 이동 입력을 받을 시 호출되는 메서드입니다.
     /// 입력받은 이동 방향 값을 저장합니다.
     /// </summary>
-    /// <param name="inputDirection"></param>
+    /// <param name="inputDirection"> 입력 방향</param>
     public void OnMoveInput(Vector2 inputDirection)
     {
         _InputDirection = inputDirection;
-    }
-
-    /// <summary>
-    /// 회전 입력을 받을 시 호출되는 메서드입니다.
-    /// 목표 Yaw 회전값을 설정합니다.
-    /// </summary>
-    /// <param name="deltaYawAngle"></param>
-    public void OnTurnInput(float deltaYawAngle)
-    {
-        //_TargetYawAngle += deltaYawAngle * m_RotateSpeedInDegree * Time.fixedDeltaTime;
     }    
 
 #if UNITY_EDITOR
@@ -246,11 +236,8 @@ public partial class PlayerMovement : MonoBehaviour
 }
 
 
-
-
-
 /// <summary>
-/// 점프 관련
+/// 점프 관련 부분
 /// </summary>
 public partial class PlayerMovement
 {
@@ -270,17 +257,23 @@ public partial class PlayerMovement
     [Header("------------------------------------------------------------------------------")]
 
     /// <summary>
-    /// 점프 입력을 받았는지를 나타냅니다.
+    /// 점프 트리거가 활성화되어있는지를 나타냅니다.
     /// </summary>
-    private bool _IsJumpInput = false;
+    private bool _IsJumpTrigger = false;
 
     /// <summary>
     /// 땅에 닿아있는지를 나타냅니다.
     /// </summary>
     private bool _IsGrounded = false;
 
+    /// <summary>
+    /// 적 머리 위에 있는지를 나타냅니다.
+    /// </summary>
     private bool _IsAboveEnemy = false;
 
+    /// <summary>
+    /// 현재 점프에 적용해야하는 점프력의 크기입니다.
+    /// </summary>
     private float _CurrentJumpForce;
 
     /// <summary>
@@ -298,15 +291,13 @@ public partial class PlayerMovement
     /// </summary>
     public bool isGrounded => _IsGrounded;
 
-    public bool IsAboveEnemy => _IsAboveEnemy;
-
     /// <summary>
     /// 점프 쿨타임 게이지 객체에 대한 읽기 전용 프로파티입니다.
     /// </summary>
     public FloatGauge jumpResueTimeGauge => _JumpReuseTimeGauge;
 
     /// <summary>
-    /// 땅에 닿아있는지를 체크합니다.
+    /// 땅에 닿아있는지를 체크하는 메서드입니다.
     /// </summary>
     /// <returns> 땅에 닿아있다면 참을 반환합니다.</returns>
     private bool CheckGrounded()
@@ -339,8 +330,13 @@ public partial class PlayerMovement
         return result;
     }
 
+    /// <summary>
+    /// 적 머리 위에 있는지를 체크하는 메서드입니다.
+    /// </summary>
+    /// <returns> 적 머리 위에 있다면 참을 반환합니다.</returns>
     private bool CheckAboveEnemy()
     {
+        // 만약 CharacterController 의 감지 제외 레이어에 Enemy 레이어가 있다면 이 체크 과정을 건너뜁니다.
         if ( ((LayerMask.GetMask("Enemy")) & characterController.excludeLayers.value) > 0) return false;
 
         // Box cast 시작 지점 설정
@@ -349,9 +345,10 @@ public partial class PlayerMovement
         // Box cast 크기 설정
         Vector3 half = new Vector3(1.0f, 0.0f, 1.0f) * characterController.radius * transform.lossyScale.y * 0.35f;
 
-        // Box cast 최대 길이 설정
+        // Box cast 최대 길이 설정 + 캐릭터의 맨 밑부분까지만 검사합니다.
         float maxDistance = (characterController.height * 0.5f + characterController.skinWidth) * transform.lossyScale.y;
 
+        // Box cast 실행
         bool result = Physics.BoxCast(
                         center,
                         half,
@@ -361,18 +358,22 @@ public partial class PlayerMovement
                         maxDistance,
                         1 << LayerMask.NameToLayer("Enemy"));
 
+        // 만약 적이 감지되었다면, 강도가 작은 강제 점프를 하도록 설정합니다.
         if (result)
         {
+            // 점프력 설정
             _CurrentJumpForce = m_JumpForce * 0.6f;
-            _IsJumpInput = true;            
+
+            // 검프 프리거 강제 설정
+            _IsJumpTrigger = true;            
         }
 
+        // 결과 반환
         return result;
-
     }
 
     /// <summary>
-    /// 점프 쿨타임을 갱신합니다.
+    /// 점프 쿨타임을 갱신하는 메서드입니다.
     /// </summary>
     private void UpdateJumpReuseTimeGauge()
     {
@@ -381,6 +382,15 @@ public partial class PlayerMovement
 
         // 쿨타임 감소
         _JumpReuseTimeGauge.currentValue -= Time.deltaTime;
+    }
+
+    /// <summary>
+    /// 점프 입력인 가능한 조건인지 체크하는 메서드입니다.
+    /// </summary>
+    /// <returns></returns>
+    private bool CheckJumpable()
+    {
+        return !isKnockBack && !CheckStunned() && !CheckDead();
     }
 
     /// <summary>
@@ -395,8 +405,9 @@ public partial class PlayerMovement
         if (!CheckJumpable()) return;
 
         // 받았음을 저장합니다.
-        _IsJumpInput = true;
+        _IsJumpTrigger = true;
 
+        // 점프력 설정
         _CurrentJumpForce = m_JumpForce;
     }
 
@@ -407,31 +418,37 @@ public partial class PlayerMovement
     {
         // 점프 시킵니다.
         _TargetVelocity.y = _CurrentJumpForce;
-        _IsJumpInput = false;
 
-        // 점프 애니메이션을 실행합니다.
+        // 점프 트리거 해제
+        _IsJumpTrigger = false;
+
+        // 점프 애니메이션을 실행
         _OwnerCharacter.animController.TriggerJumpParam();
 
-        // 쿨타임을 돌리기 시작합니다.
+        // 쿨타임을 설정
         _JumpReuseTimeGauge.currentValue = _JumpReuseTimeGauge.max;
 
         // 점프 사운드 플레이
         SoundManager.Instance.PlaySound(SOUNDNAME_SLIME_JUMP, SoundType.Effect);
     }
 
-
-    public void InstantiateLandEffect()
+    /// <summary>
+    /// 거대화 슬라임의 착지 이펙트를 발생시키는 메서드입니다.
+    /// </summary>
+    public void InstantiateGiantSlimeLandEffect()
     {
         GameObject effect = Instantiate(m_Effect_GiantSlimeLand);
 
         effect.transform.position = transform.position + Vector3.down * characterController.height / 2.0f * transform.lossyScale.y;
     }
 
+    /// <summary>
+    /// 거대화 슬라임의 착지 사운드를 재생하는 메서드입니다.
+    /// </summary>
     public void PlayGiantSlimeLandSound()
     {
         SoundManager.Instance.PlaySound(SOUNDNAME_GIANTSLIME_LAND, SoundType.Effect, 2.0f);
     }
-
 
     /// <summary>
     /// 점프 입력을 받을 시 호출되는 메서드입니다.
@@ -441,11 +458,6 @@ public partial class PlayerMovement
         TryJump();
     }
 }
-
-
-
-
-
 
 
 /// <summary>
@@ -469,6 +481,9 @@ public partial class PlayerMovement
     /// </summary>
     private float _MaxDefence;
 
+    /// <summary>
+    /// 피격 면역 상태를 나타냅니다.
+    /// </summary>
     private bool _IsImmune;
 
     /// <summary>
@@ -482,29 +497,30 @@ public partial class PlayerMovement
     public bool isKnockBack => _KnockBackVelocity.sqrMagnitude > 0.0f;
 
     /// <summary>
-    /// 데미지를 계산합니다. (데미지 = 상대 공격력 - 내 방어력)
+    /// 데미지를 계산하는 메서드입니다. (데미지 = 상대 공격력 - 내 방어력)
     /// </summary>
     /// <param name="attack"> 받은 공격력</param>
-    /// <returns></returns>
+    /// <returns> 결과 데미지</returns>
     private float CalculateDamage(float attack)
     {
+        // 데미지 = 상대 공격력 - 내 방어력
         float damage = attack - _Defence;
 
         return (damage >= 0.0f) ? damage : 0.0f;
     }
 
     /// <summary>
-    /// 넉백 속도를 계산하여 넉백을 적용합니다.
+    /// 넉백 속도를 계산하여 넉백을 적용하는 메서드입니다.
     /// </summary>
     private void KnockBack()
     {
         // 넉백 상태가 아니라면 호출 종료합니다.
         if (!isKnockBack) return;
 
-        // 대쉬 속도를 적용하여 객체를 이동시킵니다.
+        // 넉백 속도를 적용하여 객체를 이동시킵니다.
         _CharacterController.Move(_KnockBackVelocity * Time.fixedDeltaTime);
 
-        // 대쉬 속도를 줄입니다.
+        // 넉백 속도를 점차 줄입니다.
         _KnockBackVelocity = Vector3.MoveTowards(_KnockBackVelocity, Vector3.zero, 100.0f * Time.fixedDeltaTime);
         if (_KnockBackVelocity.magnitude < 0.1f) _KnockBackVelocity = Vector3.zero;
     }
@@ -525,19 +541,10 @@ public partial class PlayerMovement
     private bool CheckDead()
     {
         return _OwnerCharacter.isDead;
-    }
+    }    
 
     /// <summary>
-    /// 점프 입력인 가능한 조건인지 체크하는 메서드입니다.
-    /// </summary>
-    /// <returns></returns>
-    private bool CheckJumpable()
-    {
-        return !isKnockBack && !CheckStunned() && !CheckDead();
-    }
-
-    /// <summary>
-    /// 방어력을 갱신합니다.
+    /// 방어력을 갱신하는 메서드입니다.
     /// </summary>
     /// <param name="ratio"> 적용할 최대 방어력의 비율</param>
     public void UpdateDefence(float ratio)
@@ -545,6 +552,10 @@ public partial class PlayerMovement
         _Defence = _MaxDefence * ratio;
     }
     
+    /// <summary>
+    /// 면역 상태를 설정하는 메서드입니다.
+    /// </summary>
+    /// <param name="immune"> 설정할 면역 상태</param>
     public void SetImmuneState(bool immune)
     {
         _IsImmune = immune;
@@ -556,6 +567,7 @@ public partial class PlayerMovement
     /// <param name="level"> 달성 레벨</param>
     public void OnLevelUp(int level)
     {
+        // 최대 방어력 설정
         _MaxDefence = 10.0f + level * 2.0f;
     }
 
@@ -569,8 +581,10 @@ public partial class PlayerMovement
         // 면역 상태일 경우 함수 종료
         if (_IsImmune) return;
 
-        // 데미지 및 넉백 속도 계산
-        float damage = CalculateDamage(distance);
+        // 데미지 계산
+        float damage = CalculateDamage(distance);        
+
+        // 넉백 속도 계산 ( 최종 넉백량 = 데미지량 * 넉백 계수 )
         _KnockBackVelocity = (damage * m_KnockBackCoefficient) * direction;
 
         // 피격 애니메이션을 실행합니다.
@@ -583,8 +597,15 @@ public partial class PlayerMovement
 }
 
 
+
+/// <summary>
+/// 아이템 효과 관련 부분
+/// </summary>
 public partial class PlayerMovement
 {
+    /// <summary>
+    /// 거대화 사용 시작시 Movement 컴포넌트에서 수행되어야하는 내용
+    /// </summary>
     public void OnStartGiant()
     {
         // 면역 상태 설정
@@ -594,6 +615,9 @@ public partial class PlayerMovement
         characterController.excludeLayers += LayerMask.GetMask("Enemy");
     }
 
+    /// <summary>
+    /// 거대화 사용 종료시 Movement 컴포넌트에서 수행되어야하는 내용
+    /// </summary>
     public void OnFinishGiant()
     {
         // 면역 상태 해제
@@ -603,24 +627,41 @@ public partial class PlayerMovement
         characterController.excludeLayers -= LayerMask.GetMask("Enemy");
     }
 
+    /// <summary>
+    /// 기관총 사용 시작시 Movement 컴포넌트에서 수행되어야하는 내용
+    /// </summary>
     public void OnStartMachineGun()
     {
         // 적과의 충돌을 무시합니다.
         characterController.excludeLayers += LayerMask.GetMask("Enemy");
     }
 
+    /// <summary>
+    /// 기관총 아이템 사용 중 프레임마다 Movement 컴포넌트에서 수행되어야하는 내용
+    /// </summary>
     public void OnUpdateMachineGun()
     {
+        // 움직임 제한
         SetMovable(false);
+
+        // 면역 상태 설정
         SetImmuneState(true);
     }
 
+    /// <summary>
+    /// 기관총 사용 종료시 Movement 컴포넌트에서 수행되어야하는 내용
+    /// </summary>
     public void OnFinishMachineGun()
     {
+        // 움직임 제한 해제
         SetMovable(true);
+
+        // 면역 상태 해제
         SetImmuneState(false);
 
         // 적 충돌 무시 해제
         characterController.excludeLayers -= LayerMask.GetMask("Enemy");
     }
 }
+
+

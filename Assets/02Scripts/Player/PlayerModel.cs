@@ -9,7 +9,7 @@ using UnityEngine;
 public enum SlimeModelType
 {
     Type1 = 1,  // 기본 슬라임
-    Type2,
+    Type2,      // 추후 추가될 슬라임 타입
 }
 
 /// <summary>
@@ -42,6 +42,9 @@ public partial class PlayerModel : MonoBehaviour
     /// </summary>
     private GameObject _CurrentModel;
 
+    /// <summary>
+    /// 
+    /// </summary>
     private GameObject _InstantiatedEffect;
 
     /// <summary>

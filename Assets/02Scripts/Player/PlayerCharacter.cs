@@ -414,8 +414,8 @@ public partial class PlayerCharacter
         movementComponent.OnStartGiant();
 
         // 점프 애니메이션 이벤트 바인딩
-        animController.onLand += attackComponent.AttackAround;
-        animController.onLand += movementComponent.InstantiateLandEffect;
+        animController.onLand += attackComponent.GiantSlimeLandAttack;
+        animController.onLand += movementComponent.InstantiateGiantSlimeLandEffect;
         animController.onLand += movementComponent.PlayGiantSlimeLandSound;
         animController.onLand += FollowCamera.ShakeCamera;        
 
@@ -434,8 +434,8 @@ public partial class PlayerCharacter
         _AbleToLevelUp = true;
 
         // 점프 애니메이션 이벤트 언바인딩
-        animController.onLand -= attackComponent.AttackAround;
-        animController.onLand -= movementComponent.InstantiateLandEffect;
+        animController.onLand -= attackComponent.GiantSlimeLandAttack;
+        animController.onLand -= movementComponent.InstantiateGiantSlimeLandEffect;
         animController.onLand -= movementComponent.PlayGiantSlimeLandSound;
         animController.onLand -= FollowCamera.ShakeCamera;
 

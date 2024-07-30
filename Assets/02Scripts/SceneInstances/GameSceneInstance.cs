@@ -95,7 +95,7 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 플레이어 캐릭터 초기화 및 위치 조정
         playerController.controlledCharacter.ResetPlayerCharacter();
-        playerController.controlledCharacter.movementComponent.InitPosition(m_PlayerSpawnPosition.transform.position);
+        playerController.controlledCharacter.movementComponent.ResetMovementComponent(m_PlayerSpawnPosition.transform.position);
 
         // 오브젝트 풀 초기화
         ObjectPoolManager.Instance.ResetObjectPools();

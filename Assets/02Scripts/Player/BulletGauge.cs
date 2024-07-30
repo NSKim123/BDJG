@@ -40,6 +40,9 @@ public class BulletGauge : IntGauge
     /// </summary>
     private bool _IsOverburden = true;
 
+    /// <summary>
+    /// 회복 불가 상태를 나타냅니다.
+    /// </summary>
     private bool _ProhibitRecover = false;
     
     /// <summary>
