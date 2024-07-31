@@ -74,12 +74,12 @@ public class BuffSystem
             _BuffDictionary = new Dictionary<int, Buff>
             {
                 { 100000, new SampleSpeedChangeBuff(100000, null, BuffType.None, 0.2f, 10.0f) },
-                { 100001, new GiantBuff(100001, null, BuffType.Item, 10.0f, true) },
-                { 100002, new AreaDeploymentBuff(100002, null, BuffType.Item, 1.0f, true) },
-                { 100003, new MachineGunBuff(100003, null, BuffType.Item, 10.0f, true) },
-                { 100004, new ShellBuff(100004, null, BuffType.Item, 10.0f, true) },
-                { 100005, new ScarecrowBuff(100005, null, BuffType.Item, 10.0f, true) },
-                { 100006, new WindBuff(100006, null, BuffType.Item, 3.0f, true) },
+                { 100001,             new GiantBuff(100001, null, BuffType.Item, 10.0f, true) },
+                { 100002,    new AreaDeploymentBuff(100002, null, BuffType.Item, 1.0f, true) },
+                { 100003,        new MachineGunBuff(100003, null, BuffType.Item, 10.0f, true) },
+                { 100004,             new ShellBuff(100004, null, BuffType.Item, 10.0f, true) },
+                { 100005,         new ScarecrowBuff(100005, null, BuffType.Item, 10.0f, true) },
+                { 100006,              new WindBuff(100006, null, BuffType.Item, 3.0f, true) },
             };
         }     
     }
@@ -146,6 +146,10 @@ public class BuffSystem
         FinishBuffs(finishedBuffList);
     }
 
+    /// <summary>
+    /// 이미 버프 리스트에 아이템과 관련된 버프가 존재하는지를 반환하는 메서드입니다.
+    /// </summary>
+    /// <returns> 버프 리스트에 아이템과 관련된 버프가 존재한다면 true, 아니라면 false 반환 </returns>
     public bool IsOtherItemBuffActive()
     {
         return buffList.Exists((buff) => buff.buffType == BuffType.Item);
@@ -168,6 +172,9 @@ public class BuffSystem
         }
     }
 
+    /// <summary>
+    /// 버프 리스트를 초기화합니다.
+    /// </summary>
     public void Clear()
     {
         foreach (Buff FinishedBuff in _BuffList)
@@ -181,17 +188,19 @@ public class BuffSystem
     }
 }
 
-
+/// <summary>
+/// 버프의 종류
+/// </summary>
 public enum BuffType
 {
     None,
-    Item,
+    Item,   // 아이템과 관련된 버프
 }
 
 /// <summary>
 /// 하나의 버프를 정의한 클래스입니다.
 /// 스택형 버프를 기본적인 버프 클래스로 정의하였습니다.
-/// 스택형 버프가 아닌 버프를 만들고 싶다면 생성자의 maxStack 매개변수에 1을 전달하여 최대 스택을 1로 설정하세요.( 매개변수 기본값도 1로 설정되어있습니다.
+/// 스택형 버프가 아닌 버프를 만들고 싶다면 생성자의 maxStack 매개변수에 1을 전달하여 최대 스택을 1로 설정하세요.( 매개변수 기본값도 1로 설정되어있습니다. )
 /// </summary>
 public abstract class Buff
 {
@@ -230,6 +239,9 @@ public abstract class Buff
     /// </summary>
     public bool isFinished { get; protected set; }
 
+    /// <summary>
+    /// 이 버프의 종류
+    /// </summary>
     public BuffType buffType { get; protected set; }
 
     /// <summary>
@@ -252,7 +264,7 @@ public abstract class Buff
     /// 버프 사전에서 찾은 버프를 복제하는 용도로 사용합니다.
     /// </summary>
     /// <param name="owner"> 설정할 버프의 소유주</param>
-    /// <returns></returns>
+    /// <returns> 복제된 버프 객체</returns>
     public abstract Buff Clone(GameObject owner);    
 
     /// <summary>
@@ -266,7 +278,7 @@ public abstract class Buff
     /// <summary>
     /// 버프가 시작될 때의 동작을 나타내는 메서드입니다.
     /// </summary>
-    public virtual void OnStartBuff()
+    public void OnStartBuff()
     {
         // 스택 증가
         IncreaseStack();
@@ -299,13 +311,13 @@ public abstract class Buff
     /// <summary>
     /// 버프가 끝날 때의 동작을 나타내는 메서드입니다.
     /// </summary>
-    public virtual void OnFinishedBuff()
+    public void OnFinishedBuff()
     {
         // 버프 해제 내용 실행
         onFinishBuffContext();
     }
 
-    // =============== 실제 버프 효과들은 이 추상 메서드에 구현시키시면 됩니다. ================================
+    // ===================== 실제 버프 효과들은 이 추상 메서드에 구현시키시면 됩니다. ================================ //
 
     /// <summary>
     /// 버프 시작 내용에 대한 메서드입니다.
@@ -327,7 +339,7 @@ public abstract class Buff
     /// </summary>
     protected abstract void onFinishBuffContext();
 
-    // ===========================================================================================================
+    // ============================================================================================================== //
 }
 
 /// <summary>

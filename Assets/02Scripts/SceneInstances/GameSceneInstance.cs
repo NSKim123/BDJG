@@ -45,7 +45,6 @@ public class GameSceneInstance : SceneInstanceBase
     /// </summary>
     private ItemSpawner _ItemSpawner;
 
-
     /// <summary>
     /// 이 씬에 생성된 플레이어 컨트롤러 객체
     /// </summary>
@@ -69,7 +68,7 @@ public class GameSceneInstance : SceneInstanceBase
         BindEvents();
 
         // 게임을 시작합니다.
-        StartCoroutine(GameStartProcess());
+        StartGame();
     }
 
 
@@ -83,7 +82,7 @@ public class GameSceneInstance : SceneInstanceBase
     }
 
     /// <summary>
-    /// 게임 알고리즘을 시작하는 메서드입니다.
+    /// 게임 시작 알고리즘 코루틴입니다.
     /// </summary>
     private IEnumerator GameStartProcess()
     {
@@ -94,8 +93,7 @@ public class GameSceneInstance : SceneInstanceBase
         InitGameInfo();
 
         // 플레이어 캐릭터 초기화 및 위치 조정
-        playerController.controlledCharacter.ResetPlayerCharacter();
-        playerController.controlledCharacter.movementComponent.ResetMovementComponent(m_PlayerSpawnPosition.transform.position);
+        ResetPlayerCharacter();
 
         // 오브젝트 풀 초기화
         ObjectPoolManager.Instance.ResetObjectPools();
@@ -115,7 +113,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 3초 카운트 ( 코루틴 )        
         yield return Count3sBeforeGameStart();
 
-        // 입력 권한 부여
+        // 조작 권한 부여
         SetUpControl(true);
 
         // 배경음악 플레이
@@ -123,14 +121,24 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 게임을 재개합니다.
         ContinueGame();
-
     }
 
+    /// <summary>
+    /// 게임을 시작하는 메서드입니다.
+    /// </summary>
     private void StartGame()
     {
         StartCoroutine(GameStartProcess());
     }
 
+    /// <summary>
+    /// 플레이어 캐릭터를 초기화하는 메서드입니다.
+    /// </summary>
+    private void ResetPlayerCharacter()
+    {
+        playerController.controlledCharacter.ResetPlayerCharacter();
+        playerController.controlledCharacter.movementComponent.ResetMovementComponent(m_PlayerSpawnPosition.transform.position);
+    }
 
     /// <summary>
     /// 게임 재개 전 3초를 카운트하는 코루틴입니다.
@@ -138,6 +146,7 @@ public class GameSceneInstance : SceneInstanceBase
     /// <returns></returns>
     private IEnumerator Count3sBeforeGameStart()
     {
+        // 게임 오버 UI를 제거합니다.
         m_GameSceneUI.m_GameOverUI.gameObject.SetActive(false);
 
         // 경고UI를 활성화합니다.
@@ -145,12 +154,14 @@ public class GameSceneInstance : SceneInstanceBase
 
         // 게임 시작 전 띄우는 UI를 활성화합니다.
         m_GameSceneUI.m_PanelBeforeGame.SetActive(true);
+
+        // 준비를 알리는 text를 띄웁니다.
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "준비";
 
         // 3초 대기 코루틴
         yield return new WaitForSecondsRealtime(3.0f);
 
-        // UI 에 Start를 띄웁니다.
+        // 시작을 알리는 text를 띄웁니다.
         m_GameSceneUI.m_PanelBeforeGame.GetComponentInChildren<TMP_Text>().text = "시작!";
 
         // 1초 대기 코루틴
@@ -210,6 +221,7 @@ public class GameSceneInstance : SceneInstanceBase
         // 플레이어 객체의 대리자에 함수들을 바인드시킵니다.
         BindPlayerEvents();
 
+        // 적 객체의 대리자에 함수들을 바인드시킵니다.
         BindEnemyEvents();
     }
 
@@ -248,12 +260,19 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenEnter += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(false);
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
 
+        // 아이템 슬롯에 변화가 생길 시 실행되는 이벤트에 함수를 바인드합니다.
         playerController.controlledCharacter.onItemSlotsChanged += m_GameSceneUI.m_ItemSlotsUI.OnItemSlotChanged;
     }
 
+    /// <summary>
+    /// 적 객체의 대리자에 함수를 바인드합니다.
+    /// </summary>
     private void BindEnemyEvents()
     {
+        // 적 객체 사망 이벤트 <-- 바인드 -- 점수 증가 함수
         _EnemySpawner.onEnemyDead += AddScore;
+
+        // 적 객체 사망 이벤트 <-- 바인드 -- 플레이어의 킬 수 증가 함수
         _EnemySpawner.onEnemyDead += playerController.controlledCharacter.levelSystem.IncreaseKillCount;
     }
 
@@ -301,6 +320,9 @@ public class GameSceneInstance : SceneInstanceBase
     {
         // 게임을 일시 정지 시킵니다.
         PauseGame();
+
+        // 조작 권한 해제
+        SetUpControl(false);
 
         // 게임 오버 UI를 활성화시키고, UI에 게임 정보를 전달합니다.
         m_GameSceneUI.m_GameOverUI.gameObject.SetActive(true);
