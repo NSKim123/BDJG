@@ -1,16 +1,26 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 슬라임 타입을 나타내는 열겨형식입니다.
+/// 슬라임 모델 타입을 나타내는 열겨형식입니다.
 /// </summary>
 public enum SlimeModelType
 {
     Type1 = 1,  // 기본 슬라임
     Type2,      // 추후 추가될 슬라임 타입
 }
+
+/// <summary>
+/// 달성 레벨에 따른 레벨업 이펙트를 나타내는 클래스입니다.
+/// </summary>
+[Serializable]
+public class LevelUpEffectInfo
+{
+    public int m_Level;
+    public GameObject m_Effect;
+}
+
 
 /// <summary>
 /// 캐릭터의 모델 및 스케일을 관리하는 컴포넌트입니다.
@@ -43,9 +53,9 @@ public partial class PlayerModel : MonoBehaviour
     private GameObject _CurrentModel;
 
     /// <summary>
-    /// 
+    /// 복사 생성된 기관총 오로라 이펙트
     /// </summary>
-    private GameObject _InstantiatedEffect;
+    private GameObject _InstantiatedMachineGunEffect;
 
     /// <summary>
     /// 현재 모델에 대한 읽기 전용 프로퍼티입니다.
@@ -70,7 +80,7 @@ public partial class PlayerModel : MonoBehaviour
     }
 
     /// <summary>
-    /// 새로운 모델로 교체합니다.
+    /// 새로운 모델로 교체하는 메서드입니다.
     /// </summary>
     /// <param name="newModel"> 새로운 모델 오브젝트</param>
     private void ChangeModel(GameObject newModel)
@@ -93,47 +103,28 @@ public partial class PlayerModel : MonoBehaviour
         onModelChanged?.Invoke();
 
         // 탄환의 머터리얼도 바꿉니다.
-        //m_Bullet.GetComponentInChildren<Renderer>().material = _CurrentModel.GetComponentInChildren<Renderer>().material;
         ObjectPoolManager.Instance.ChangeBulletMaterial(_CurrentModel.GetComponentInChildren<Renderer>().material);
     }
 
+    /// <summary>
+    /// 레벨업 이펙트를 생성하는 메서드입니다.
+    /// </summary>
+    /// <param name="level"> 달성 레벨</param>
     private void InstantiateLevelUpEffectByLevel(int level)
     {
+        // 달성 레벨에 맞는 레벨업 이펙트 정보를 가져옵니다.
         LevelUpEffectInfo effectInfo = m_LevelUpEffects.Find((effectInfo) => effectInfo.m_Level == level);
 
+        // 이펙트 정보가 없었거나, 이펙트가 등록되지 않은 경우 함수 호출 종료
         if (effectInfo == null || effectInfo.m_Effect == null) return;
 
+        // 이펙트 생성
         GameObject effect = Instantiate(effectInfo.m_Effect);
         effect.transform.position = _CurrentModel.transform.position;
         effect.transform.SetParent(transform);
     }
 
-    public void OnStartGiant()
-    {
-        // 새로운 모델을 불러옵니다.
-        GameObject newModel = _ModelScriptableObject.FindModelByLevel(4);
-
-        // 모델을 교체합니다.
-        ChangeModel(newModel);
-    }
-
-    public void OnStartMachineGun()
-    {
-        _InstantiatedEffect = Instantiate(m_Effect_MachineGun);
-
-        _InstantiatedEffect.transform.position = transform.position;
-        //_InstantiatedEffect.transform.SetParent(transform);
-    }
-
-    public void OnFinishMachineGun()
-    {
-        ParticleSystem.MainModule newMain;
-        foreach(ParticleSystem particleSystem in _InstantiatedEffect.GetComponentsInChildren<ParticleSystem>())
-        {
-            newMain = particleSystem.main;
-            newMain.loop = false;
-        }
-    }
+    
 
     /// <summary>
     /// 레벨 업 시 호출되는 메서드입니다.
@@ -147,14 +138,10 @@ public partial class PlayerModel : MonoBehaviour
         // 모델을 교체합니다.
         ChangeModel(newModel);
 
+        // 레벨업 이펙트 생성
         InstantiateLevelUpEffectByLevel(level);
     }
 }
-
-
-
-
-
 
 
 /// <summary>
@@ -189,7 +176,7 @@ public partial class PlayerModel
     /// </summary>
     /// <param name="bullets"> 남은 탄환 수</param>
     /// <returns> 크기를 반환합니다.</returns>
-    private float CalculateScaleByBullets(int bullets)
+    private float CalculateScaleByBulletGauge(int bullets)
     {
         return m_MinScale + 0.1f * bullets;
     }
@@ -200,13 +187,61 @@ public partial class PlayerModel
     /// <param name="bullets"> 남은 탄환 수</param>
     public void UpdateTargetScale(int bullets)
     {
-        _TargetScale = CalculateScaleByBullets(bullets);
+        _TargetScale = CalculateScaleByBulletGauge(bullets);
     }
 }
 
-[Serializable]
-public class LevelUpEffectInfo
+
+/// <summary>
+/// 아이템 효과 관련 부분
+/// </summary>
+public partial class PlayerModel
 {
-    public int m_Level;
-    public GameObject m_Effect;
+    /// <summary>
+    /// 기관총 오로라 이펙트를 생성하는 메서드입니다.
+    /// </summary>
+    private void InstantiateMachineGunEffect()
+    {
+        _InstantiatedMachineGunEffect = Instantiate(m_Effect_MachineGun);
+
+        _InstantiatedMachineGunEffect.transform.position = transform.position;
+    }
+
+    /// <summary>
+    /// 기관총 오로라 이펙트의 loop를 해제함으로써 이펙트를 사라지게 합니다.
+    /// </summary>
+    private void FinishLoopOfMachineGunEffect()
+    {
+        ParticleSystem.MainModule newMain;
+
+        // loop 해제
+        foreach (ParticleSystem particleSystem in _InstantiatedMachineGunEffect.GetComponentsInChildren<ParticleSystem>())
+        {
+            newMain = particleSystem.main;
+            newMain.loop = false;
+        }
+
+        _InstantiatedMachineGunEffect = null;
+    }
+
+    /// <summary>
+    /// 기관총 아이템 효과 시작 시의 동작을 나타낸 메서드입니다.
+    /// </summary>
+    public void OnStartMachineGun()
+    {
+        // 기관총 오로라 이펙트 생성
+        InstantiateMachineGunEffect();
+    }
+
+    /// <summary>
+    /// 기관총 아이템 효과 종료 시의 동작을 나타낸 메서드입니다.
+    /// </summary>
+    public void OnFinishMachineGun()
+    {
+        // 기관총 오로라 이펙트 제거
+        FinishLoopOfMachineGunEffect();
+    }
 }
+
+
+

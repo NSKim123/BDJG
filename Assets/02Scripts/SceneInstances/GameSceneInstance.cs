@@ -249,11 +249,6 @@ public class GameSceneInstance : SceneInstanceBase
         playerController.controlledCharacter.attackComponent.bulletGauge.onOverburdenFinished += () => m_GameSceneUI.m_BulletGaugeUI.OnToggleChanged(true);
 
         playerController.controlledCharacter.onItemSlotsChanged += m_GameSceneUI.m_ItemSlotsUI.OnItemSlotChanged;
-
-
-
-
-
     }
 
     private void BindEnemyEvents()
