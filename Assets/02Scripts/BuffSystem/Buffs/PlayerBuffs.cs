@@ -8,7 +8,8 @@ using UnityEngine;
 
 public class GiantBuff : TimerBuff
 {
-    public GiantBuff(int buffCode, GameObject owner, BuffType buffType, float buffTime, bool visibility = false, int maxStack = 1) 
+    public GiantBuff(int buffCode, GameObject owner, BuffType buffType, 
+                        float buffTime, bool visibility = false, int maxStack = 1) 
         : base(buffCode, owner, buffType, buffTime, visibility, maxStack)
     {
     }
@@ -18,24 +19,24 @@ public class GiantBuff : TimerBuff
         return new GiantBuff(buffCode, owner, buffType, maxTime, visibility, maxStack);
     }
 
-    protected override void onFinishBuffContext()
+    protected override void onStartBuffContext()
     {
-        _Owner.GetComponent<PlayerCharacter>().OnFinishGiant();
-    }
+        _Owner.GetComponent<PlayerCharacter>().OnStartGiant();
+    }    
 
     protected override void onRenewBuffContext()
     {
         
-    }
-
-    protected override void onStartBuffContext()
-    {
-        _Owner.GetComponent<PlayerCharacter>().OnStartGiant();
-    }
+    }    
 
     protected override void onUpdateBuffContext()
     {
         
+    }
+
+    protected override void onFinishBuffContext()
+    {
+        _Owner.GetComponent<PlayerCharacter>().OnFinishGiant();
     }
 }
 

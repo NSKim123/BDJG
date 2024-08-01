@@ -502,6 +502,7 @@ public partial class PlayerAttack
     /// </summary>
     public void OnFinishGiant()
     {
+        OnLevelUp(_OwnerCharacter.levelSystem.level);
         _ProhibitFire = false;
     }
 
