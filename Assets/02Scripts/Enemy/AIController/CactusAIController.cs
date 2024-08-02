@@ -29,12 +29,14 @@ public class CactusAIController : EnemyAIController
 
         //AttackDetected = Physics.OverlapSphereNonAlloc(transform.position, _enemyCharacter.AttackRange, AttackDetect);
 
-        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow scarecrow))
+        // idle 상태이며 허수아비 아이템 사용 중일 때
+        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow _))
         {
             _stateMachine.ChangeState(State.Move);
             isDetected = true;
         }
 
+        
         if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == State.Idle)
         {
             isDetected = true;

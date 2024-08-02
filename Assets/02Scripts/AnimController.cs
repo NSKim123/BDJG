@@ -16,7 +16,7 @@ public class AnimController : MonoBehaviour
     /// 애니메이터 객체에 대한 읽기 전용 프로퍼티입니다.
     /// </summary>
     public Animator animator => _Animator ?? (_Animator = GetComponent<Animator>());
-
+    
     // 파리미터 설정 함수들
     public void SetFloat(string paramName, float newValue) => animator.SetFloat(paramName, newValue);
     public void SetInt(string paramName, int newValue) => animator.SetInteger(paramName, newValue);

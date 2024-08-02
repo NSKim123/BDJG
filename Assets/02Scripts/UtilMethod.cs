@@ -13,12 +13,13 @@ public static class UtilSpawn
     /// </summary>
     /// <param name="center">중심</param>
     /// <param name="radius">반지름</param>
-    /// <returns></returns>
+    /// <returns>랜덤 좌표</returns>
     public static Vector3 GetRandomPositionOnCircleEdge(Vector3 center, float radius)
     {
         float angle = UnityEngine.Random.Range(0, 360) * Mathf.Deg2Rad;
-        float x = center.x + radius * Mathf.Cos(angle);
-        float z = center.z + radius * Mathf.Sin(angle);
+        float randomRadius = UnityEngine.Random.Range(0, radius);
+        float x = center.x + randomRadius * Mathf.Cos(angle);
+        float z = center.z + randomRadius * Mathf.Sin(angle);
         return new Vector3(x, center.y, z);
     }
 }
@@ -46,7 +47,7 @@ public static class UtilReset
     /// 현재 게임 내에 활성화된 요소들을 찾아서 리턴합니다.
     /// </summary>
     /// <param name="tag">파괴할 오브젝트의 tag</param>
-    /// <returns></returns>
+    /// <returns>tag에 해당하는 활성화된 오브젝트 배열</returns>
     public static GameObject[] IsElementsExistInMap(string tag)
     {
         GameObject[] elements = GameObject.FindGameObjectsWithTag(tag);

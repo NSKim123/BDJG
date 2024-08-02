@@ -14,13 +14,13 @@ public class ItemSpawner : MonoBehaviour
     private int _currentItemCount = 0;
     private int _maxItemCount = 4;
 
- 
-    private void ItemCountDecrease()
+
+    private void DecreaseItemCount()
     {
         _currentItemCount--;
     }
 
-    private void ItemCountIncrease()
+    private void IncreaseItemCount()
     {
         _currentItemCount++;
     }
@@ -38,8 +38,11 @@ public class ItemSpawner : MonoBehaviour
         }
     }
 
-
-    public void ItemSpawnByPercentage(EnemyType type)
+    /// <summary>
+    /// 확률에 따라 아이템을 생성합니다.
+    /// </summary>
+    /// <param name="type">죽은 적의 타입</param>
+    public void SpawnItemByPercentage(EnemyType type)
     {
         rate = UnityEngine.Random.Range(0.0f, 1.0f);
 
@@ -56,8 +59,8 @@ public class ItemSpawner : MonoBehaviour
             {
                 Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
-                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
-                ItemCountIncrease();
+                obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
+                IncreaseItemCount();
             }
 
         }
@@ -68,12 +71,15 @@ public class ItemSpawner : MonoBehaviour
             {
                 Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
-                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
-                ItemCountIncrease();
+                obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
+                IncreaseItemCount();
             }
         }
     }
 
+    /// <summary>
+    /// 게임 시작(재시작 시) 맵에 아이템이 있다면 파괴합니다.
+    /// </summary>
     public void ResetItems()
     {
         UtilReset.DestroyActivatedItems("Item");

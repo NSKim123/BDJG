@@ -77,7 +77,7 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.isReused = true;
             newEnemy.onDead += IncreaseScore;
-            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.SpawnItemByPercentage;
         }
         
     }
@@ -105,7 +105,7 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.isReused = true;
             newEnemy.onDead += IncreaseScore;
-            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.SpawnItemByPercentage;
             newEnemy.OnRequestThornAttack += EnemyManager.Instance.CreateThornArea;
             newEnemy.OnRequestCloudAttack += EnemyManager.Instance.CreateCloud;
         }
