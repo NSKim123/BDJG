@@ -5,29 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// 원본 오브젝트 프리팹에 붙는 스크립트. 오브젝트풀타입을 지정합니다.
+/// 오브젝트풀로 회수할 때 필요합니다.
+/// </summary>
 public class KeyForObjectPool : MonoBehaviour
 {
-    public PoolType myPoolType = PoolType.None;
-
-    public KeyForObjectPool Clone()
-    {
-        GameObject go = Instantiate(gameObject);
-        if (!go.TryGetComponent(out KeyForObjectPool po))
-            po = go.AddComponent<KeyForObjectPool>();
-        go.SetActive(false);
-
-        return po;
-    }
-
-    /// <summary> 게임오브젝트 활성화 </summary>
-    public void Activate()
-    {
-        gameObject.SetActive(true);
-    }
-
-    /// <summary> 게임오브젝트 비활성화 </summary>
-    public void Deactivate()
-    {
-        gameObject.SetActive(false);
-    }
+    public PoolType myPoolType;
 }

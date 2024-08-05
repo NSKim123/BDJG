@@ -16,7 +16,7 @@ public class MapController : MonoBehaviour
     //물 높이를 단계별로 저장한 배열
     private float[] _heightOfWater;
 
-    // 물이 높아질 때 호출할 이벤트
+    // 물 높이가 변경될 때 호출할 이벤트
     public event Action<int> OnChangeWave;
 
     private Coroutine _waterCoroutine;

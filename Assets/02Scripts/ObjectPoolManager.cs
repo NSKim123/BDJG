@@ -121,10 +121,6 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
         if (pools[type].Count > 0)
         {
             obj = pools[type].Pop();
-            //if (obj == null)
-            //{
-            //    Debug.Log($"쾅 if null {type}, {pools[type]}");
-            //}
 
         }
         // 풀에 오브젝트가 없다면 새로 생성

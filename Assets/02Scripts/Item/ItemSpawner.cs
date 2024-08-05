@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    private float rate;
+    // 일반 개체 아이템 확률
     private float normalRate = 0.2f;
+    // 특수 개체 아이템 확률
     private float specialRate = 0.5f;
 
     private float itemSpawnRadius = 8.0f;
@@ -30,13 +31,6 @@ public class ItemSpawner : MonoBehaviour
         return _currentItemCount >= _maxItemCount;
     }
 
-    private void Update()
-    {
-        if (Time.timeScale == 0.0f)
-        {
-            return;
-        }
-    }
 
     /// <summary>
     /// 확률에 따라 아이템을 생성합니다.
@@ -44,20 +38,20 @@ public class ItemSpawner : MonoBehaviour
     /// <param name="type">죽은 적의 타입</param>
     public void SpawnItemByPercentage(EnemyType type)
     {
-        rate = UnityEngine.Random.Range(0.0f, 1.0f);
-
         // 스폰된 아이템이 이미 최대 개수만큼 있다면 리턴
         if (IsItemsFullInMap())
         {
             return;
         }
-        
+
+        float rate = Random.Range(0.0f, 1.0f);
+
         // 일반 개체
         if ((int)type == 0 || (int)type == 1)
         {
             if (rate >= 0 && rate <= normalRate)
             {
-                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
+                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircle(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
                 obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
                 IncreaseItemCount();
@@ -69,7 +63,7 @@ public class ItemSpawner : MonoBehaviour
         {
             if (rate>=0 && rate <= specialRate)
             {
-                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
+                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircle(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
                 obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
                 IncreaseItemCount();

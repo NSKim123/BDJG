@@ -13,9 +13,10 @@ public enum SoundType
 
 public class SoundManager : SingletonBase<SoundManager>
 {
-    // SoundType마다 1개씩 오디오소스를 가짐
+    // SoundType마다 오디오소스를 1개씩 가짐
     [SerializeField] private AudioSource[] _audioSources = new AudioSource[Enum.GetValues(typeof(SoundType)).Length];
 
+    // string : 음원 파일 이름, AudioClip : 음원 파일
     private Dictionary<string, AudioClip> _bgmAudioClips = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> _effectAudioClips = new Dictionary<string, AudioClip>();
 
@@ -84,7 +85,6 @@ public class SoundManager : SingletonBase<SoundManager>
         AudioClip clip = GetOrLoadAudioClip(audioName, type);
         
         Play(clip, type, pitch, volume);
-
     }
 
     /// <summary>

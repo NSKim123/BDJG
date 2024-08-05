@@ -14,7 +14,7 @@ public static class UtilSpawn
     /// <param name="center">중심</param>
     /// <param name="radius">반지름</param>
     /// <returns>랜덤 좌표</returns>
-    public static Vector3 GetRandomPositionOnCircleEdge(Vector3 center, float radius)
+    public static Vector3 GetRandomPositionOnCircle(Vector3 center, float radius)
     {
         float angle = UnityEngine.Random.Range(0, 360) * Mathf.Deg2Rad;
         float randomRadius = UnityEngine.Random.Range(0, radius);
@@ -34,7 +34,7 @@ public static class UtilReset
     public static void DestroyActivatedItems(string tag)
     {
         GameObject[] removeList = IsElementsExistInMap(tag);
-        if (removeList != null)
+        if (removeList != null       )
         {
             foreach (var item in removeList)
             {

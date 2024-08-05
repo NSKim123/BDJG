@@ -164,7 +164,7 @@ public class EnemySpawner : MonoBehaviour
                         //enemydata = cactusData[1];
                         //spawndata = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
@@ -191,8 +191,8 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
@@ -224,8 +224,8 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
@@ -257,8 +257,8 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
@@ -328,7 +328,7 @@ public class EnemySpawner : MonoBehaviour
                         enemydata = mushroomData[0];
                         spawndata = mushroomSpawnInfo[0];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
@@ -350,7 +350,7 @@ public class EnemySpawner : MonoBehaviour
                         enemydata = cactusData[0];
                         spawndata = cactusSpawnInfo[0];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(cactusSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
