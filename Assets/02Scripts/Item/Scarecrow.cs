@@ -36,7 +36,7 @@ public class Scarecrow : MonoBehaviour, IHit
 
         foreach(Collider enemy in enemys)
         {
-            enemy.GetComponent<EnemyAIController>().target = this.gameObject;
+            enemy.GetComponent<EnemyAIController>().Target = this.gameObject;
         }
 
         _LastProvocationTime = Time.time;
@@ -51,7 +51,7 @@ public class Scarecrow : MonoBehaviour, IHit
 
         foreach (Collider enemy in enemys)
         {
-            enemy.GetComponent<EnemyAIController>().target = _Owner.gameObject;
+            enemy.GetComponent<EnemyAIController>().Target = _Owner.gameObject;
         }
     }
 

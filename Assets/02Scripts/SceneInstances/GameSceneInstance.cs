@@ -58,7 +58,7 @@ public class GameSceneInstance : SceneInstanceBase
         _EnemySpawner = FindAnyObjectByType<EnemySpawner>();
 
         _MapController = FindAnyObjectByType<MapController>();
-        _MapController.warning = m_GameSceneUI.m_WarningUI;
+        _MapController.Warning = m_GameSceneUI.m_WarningUI;
 
         _ItemSpawner = FindAnyObjectByType<ItemSpawner>();
     }

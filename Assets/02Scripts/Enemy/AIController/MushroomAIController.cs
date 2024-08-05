@@ -9,23 +9,27 @@ public class MushroomAIController : EnemyAIController
 
     protected void Update()
     {
-        if (_stateMachine.currentStateType == State.Idle)
+        // 버섯은 idle 상태를 거치지않음. 바로 Move로 전환.
+        if (_stateMachine.currentStateType == EState.Idle)
         {
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
         }
 
-        _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
+        if (_stateMachine.currentStateType == EState.Move)
+        {
+            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
+        }
 
         // 타켓(플레이어) 감지
         if (_attackDetect.Length > 0 && !_attacked)
         {
             //Debug.Log("타겟 감지");
             _attacked = true;
-            _stateMachine.ChangeState(State.Attack);
+            _stateMachine.ChangeState(EState.Attack);
 
         }
 
-        if (_stateMachine.currentStateType == State.Move && _attacked)
+        if (_stateMachine.currentStateType == EState.Move && _attacked)
         {
             _attacked = false;
         }

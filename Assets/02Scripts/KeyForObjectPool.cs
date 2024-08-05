@@ -11,5 +11,5 @@ using UnityEngine;
 /// </summary>
 public class KeyForObjectPool : MonoBehaviour
 {
-    public PoolType myPoolType;
+    public EPoolType myPoolType;
 }

@@ -19,7 +19,7 @@ public class SpecialMushroom : Enemy
 
     public override float AttackTime { get; set; }
     public override float AttackSpeed { get; set; }
-    public override EnemyType Type { get; set; }
+    public override EEnemyType Type { get; set; }
 
 
     #region 특수개체의 특수공격용
@@ -33,28 +33,28 @@ public class SpecialMushroom : Enemy
         base.OnDamaged(distance, direction);
         Damage_Distance = distance;
         Damage_Direction = direction;
-        stateMachine.ChangeState_AllowSameState(State.Hurt);
+        stateMachine.ChangeState_AllowSameState(EState.Hurt);
     }
 
     public override void OnDead()
     {
         base.OnDead();
-        stateMachine.ChangeState(State.Die);
+        stateMachine.ChangeState(EState.Die);
     }
 
     protected override void Start()
     {
         base.Start();
         
-        stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
+        stateMachine.InitState(new Dictionary<EState, EnemyStateBase>()
         {
-            {State.Init, new EnemyStateInit(stateMachine)},
-            {State.Idle, new EnemyStateIdle(stateMachine)},
-            {State.Move, new EnemyStateMove(stateMachine)},
-            {State.Attack, new EnemyStateAttack(stateMachine)},
-            {State.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
-            {State.Hurt, new EnemyStateHurt(stateMachine)},
-            {State.Die, new EnemyStateDie(stateMachine)},
+            {EState.Init, new EnemyStateInit(stateMachine)},
+            {EState.Idle, new EnemyStateIdle(stateMachine)},
+            {EState.Move, new EnemyStateMove(stateMachine)},
+            {EState.Attack, new EnemyStateAttack(stateMachine)},
+            {EState.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
+            {EState.Hurt, new EnemyStateHurt(stateMachine)},
+            {EState.Die, new EnemyStateDie(stateMachine)},
         });
 
     }
@@ -62,15 +62,15 @@ public class SpecialMushroom : Enemy
     protected override void OnEnable()
     {
         base.OnEnable();
-        stateMachine.StateInit(new Dictionary<State, EnemyStateBase>()
+        stateMachine.InitState(new Dictionary<EState, EnemyStateBase>()
         {
-            {State.Init, new EnemyStateInit(stateMachine)},
-            {State.Idle, new EnemyStateIdle(stateMachine) },
-            {State.Move, new EnemyStateMove(stateMachine)},
-            {State.Attack, new EnemyStateAttack(stateMachine)},
-            {State.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
-            {State.Hurt, new EnemyStateHurt(stateMachine)},
-            {State.Die, new EnemyStateDie(stateMachine)},
+            {EState.Init, new EnemyStateInit(stateMachine)},
+            {EState.Idle, new EnemyStateIdle(stateMachine) },
+            {EState.Move, new EnemyStateMove(stateMachine)},
+            {EState.Attack, new EnemyStateAttack(stateMachine)},
+            {EState.AttackSpecial, new EnemyStateAttackSpecial_Mush(stateMachine)},
+            {EState.Hurt, new EnemyStateHurt(stateMachine)},
+            {EState.Die, new EnemyStateDie(stateMachine)},
         });
     }
 }

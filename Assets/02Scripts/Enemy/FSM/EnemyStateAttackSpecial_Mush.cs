@@ -12,31 +12,31 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
 
     }
 
-    public override bool canExecute() => stateMachine.currentStateType == State.Move;
+    public override bool CanExecute() => stateMachine.currentStateType == EState.Move;
 
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.AttackSpecial;
+        EState nextState = EState.AttackSpecial;
 
         SpecialMushroom mushroom = enemyCharacter as SpecialMushroom;
 
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     animator.Play("attack_special");
                     
                     _currentStep++;
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
@@ -46,9 +46,9 @@ public class EnemyStateAttackSpecial_Mush : EnemyStateBase
 
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
-                    nextState = State.Move;
+                    nextState = EState.Move;
 
                 }
                 break;

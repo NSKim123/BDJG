@@ -36,7 +36,7 @@ public class ItemSpawner : MonoBehaviour
     /// 확률에 따라 아이템을 생성합니다.
     /// </summary>
     /// <param name="type">죽은 적의 타입</param>
-    public void SpawnItemByPercentage(EnemyType type)
+    public void SpawnItemByPercentage(EEnemyType type)
     {
         // 스폰된 아이템이 이미 최대 개수만큼 있다면 리턴
         if (IsItemsFullInMap())

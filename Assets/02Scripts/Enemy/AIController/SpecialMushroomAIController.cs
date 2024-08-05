@@ -18,9 +18,9 @@ public class SpecialMushroomAIController : EnemyAIController
     protected void Update()
     {
         // idle 건너뜀
-        if (_stateMachine.currentStateType == State.Idle)
+        if (_stateMachine.currentStateType == EState.Idle)
         {
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
         }
 
         // 특수공격 쿨타임 계산
@@ -47,7 +47,7 @@ public class SpecialMushroomAIController : EnemyAIController
                 isAvailableSpecialAttack = false;
                 coolTimeStart = true;
                 coolTime = 0;
-                _stateMachine.ChangeState(State.AttackSpecial);
+                _stateMachine.ChangeState(EState.AttackSpecial);
                 
             }
             
@@ -59,12 +59,12 @@ public class SpecialMushroomAIController : EnemyAIController
             if (_attackDetect.Length > 0 && !_attacked)
             {
                 _attacked = true;
-                _stateMachine.ChangeState(State.Attack);
+                _stateMachine.ChangeState(EState.Attack);
             }
         }
 
 
-        if ((_stateMachine.currentStateType != State.Attack || _stateMachine.currentStateType != State.AttackSpecial)
+        if ((_stateMachine.currentStateType != EState.Attack || _stateMachine.currentStateType != EState.AttackSpecial)
             && _attacked)
         {
             _attacked = false;

@@ -168,7 +168,7 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         //GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
@@ -196,12 +196,12 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -229,13 +229,13 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -262,13 +262,13 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -332,7 +332,7 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Mushroom);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.Mushroom);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
                         newEnemy.SetActive(true);
@@ -354,7 +354,7 @@ public class EnemySpawner : MonoBehaviour
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Cactus);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.Cactus);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
                         newEnemy.SetActive(true);

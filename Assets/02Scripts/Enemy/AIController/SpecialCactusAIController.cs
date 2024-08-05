@@ -22,18 +22,18 @@ public class SpecialCactusAIController : EnemyAIController
 
     void Update()
     {
-        dis = Vector3.Distance(transform.position, target.transform.position);
+        dis = Vector3.Distance(transform.position, Target.transform.position);
 
-        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow scarecrow))
+        if (_stateMachine.currentStateType == EState.Idle && Target.TryGetComponent(out Scarecrow scarecrow))
         {
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
             isDetected = true;
         }
 
-        if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == State.Idle)
+        if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == EState.Idle)
         {
             isDetected = true;
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
         }
 
         // 특수공격 쿨타임 계산
@@ -62,7 +62,7 @@ public class SpecialCactusAIController : EnemyAIController
                     isAvailableSpecialAttack = false;
                     coolTimeStart = true;
                     coolTime = 0;
-                    _stateMachine.ChangeState(State.AttackSpecial);
+                    _stateMachine.ChangeState(EState.AttackSpecial);
         
                 }
 
@@ -75,14 +75,14 @@ public class SpecialCactusAIController : EnemyAIController
                 if (_attackDetect.Length > 0 && !_attacked)
                 {
                     _attacked = true;
-                    _stateMachine.ChangeState(State.Attack);
+                    _stateMachine.ChangeState(EState.Attack);
                 }
             }
 
         }
 
 
-        if ((_stateMachine.currentStateType != State.Attack || _stateMachine.currentStateType != State.AttackSpecial)
+        if ((_stateMachine.currentStateType != EState.Attack || _stateMachine.currentStateType != EState.AttackSpecial)
             && _attacked)
         {
             _attacked = false;

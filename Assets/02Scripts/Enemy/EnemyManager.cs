@@ -2,13 +2,6 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum Wave
-{
-    one,
-    two,
-    three,
-    four,
-}
 public class EnemyManager : SingletonBase<EnemyManager>
 {
     public EnemySpawner spawner;

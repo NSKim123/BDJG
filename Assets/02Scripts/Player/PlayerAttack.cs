@@ -275,7 +275,7 @@ public partial class PlayerAttack : MonoBehaviour
         switch (_CurrentBullet)
         {
             case BulletType.Basic:
-                GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
+                GameObject obj = ObjectPoolManager.Instance.GetFromPool(EPoolType.Bullet);
                 bullet = obj.GetComponent<Bullet>();                
                 obj.SetActive(true);
                 break;
