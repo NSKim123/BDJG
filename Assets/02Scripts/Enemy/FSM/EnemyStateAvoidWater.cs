@@ -10,31 +10,31 @@ public class EnemyStateAvoidWater : EnemyStateBase
     {
     }
 
-    public override bool canExecute() => true;
+    public override bool CanExecute() => true;
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.AvoidWater;
+        EState nextState = EState.AvoidWater;
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     //enemyAgent.SetDestination(EnemyManager.Instance.centerPos.position);
                     _currentStep++;
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     //Debug.Log("물 피함");
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 break;
             default:
                 break;

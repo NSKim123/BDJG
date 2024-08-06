@@ -15,33 +15,33 @@ public class EnemyStateMove : EnemyStateBase
         enemyAgent.speed = enemyCharacter.MoveSpeed;
     }
 
-    public override bool canExecute() => stateMachine.currentStateType != State.Die;
+    public override bool CanExecute() => stateMachine.currentStateType != EState.Die;
 
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Move;
+        EState nextState = EState.Move;
         //Debug.Log(enemyCharacter.GetType());
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     animator.Play("move");
                     _currentStep++;
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
-                    enemyAgent.SetDestination(enemyController.target.transform.position);
+                    enemyAgent.SetDestination(enemyController.Target.transform.position);
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
                 }
                 break;

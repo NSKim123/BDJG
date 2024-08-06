@@ -9,7 +9,7 @@ using UnityEngine.AI;
 // Enemy에 대한 정보. 값을 데이터로 받아오고 각각의 적이 상속받습니다.
 public abstract class Enemy : MonoBehaviour, IHit
 {
-    public abstract EnemyType Type { get; set; }
+    public abstract EEnemyType Type { get; set; }
     public abstract float MoveSpeed { get; set; }
     public abstract float AttackRange { get; set; }
     public abstract float AttackForce { get; set; }
@@ -40,7 +40,7 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public event System.Action onDead;
 
-    public event Action<EnemyType> OnRequestSpawnItem;
+    public event Action<EEnemyType> OnRequestSpawnItem;
     public event Action<SpecialCactus> OnRequestThornAttack;
     public event Action<SpecialMushroom> OnRequestCloudAttack;
 
@@ -62,7 +62,7 @@ public abstract class Enemy : MonoBehaviour, IHit
     {
         // 피격 이펙트 생성
         //GameObject effect = Instantiate(Effect_Hit);
-        GameObject effect = ObjectPoolManager.Instance.GetFromPool(PoolType.Effect_Hit);
+        GameObject effect = ObjectPoolManager.Instance.GetFromPool(EPoolType.Effect_Hit);
       
         effect.SetActive(true);
 
@@ -89,7 +89,7 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     private void OnDisable()
     {
-        stateMachine.currentStateType = State.Init;
+        stateMachine.currentStateType = EState.Init;
         dieRenderer.material = defaultMat;
     }
 

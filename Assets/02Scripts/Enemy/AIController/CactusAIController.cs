@@ -22,33 +22,32 @@ public class CactusAIController : EnemyAIController
             return;
         }
 
-        dis = Vector3.Distance(transform.position, target.transform.position);
+        dis = Vector3.Distance(transform.position, Target.transform.position);
 
-        // 수정하기
         _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
 
-        //AttackDetected = Physics.OverlapSphereNonAlloc(transform.position, _enemyCharacter.AttackRange, AttackDetect);
-
-        if (_stateMachine.currentStateType == State.Idle && target.TryGetComponent(out Scarecrow scarecrow))
+        // idle 상태이며 허수아비 아이템 사용 중일 때
+        if (_stateMachine.currentStateType == EState.Idle && Target.TryGetComponent(out Scarecrow _))
         {
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
             isDetected = true;
         }
 
-        if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == State.Idle)
+        
+        if (dis <= maxdis && !isDetected && _stateMachine.currentStateType == EState.Idle)
         {
             isDetected = true;
-            _stateMachine.ChangeState(State.Move);
+            _stateMachine.ChangeState(EState.Move);
         }
 
 
         if (_attackDetect.Length > 0 && !_attacked && isDetected)
         {
             _attacked = true;
-            _stateMachine.ChangeState(State.Attack);
+            _stateMachine.ChangeState(EState.Attack);
         }
 
-        if ((_stateMachine.currentStateType != State.Attack || _stateMachine.currentStateType != State.AttackSpecial) && _attacked)
+        if ((_stateMachine.currentStateType != EState.Attack || _stateMachine.currentStateType != EState.AttackSpecial) && _attacked)
         {
             _attacked = false;
         }

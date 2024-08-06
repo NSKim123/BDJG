@@ -1037,7 +1037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _waterGround: {fileID: 2097778241}
   _map: {fileID: 1164451482}
-  warning: {fileID: 1068489478}
+  Warning: {fileID: 0}
 --- !u!1001 &853668381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1672,12 +1672,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b11951f9cb5ef614b933fee4c2d6a3eb, type: 3}
---- !u!1 &1068489478 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 9123940578791228526, guid: b11951f9cb5ef614b933fee4c2d6a3eb,
-    type: 3}
-  m_PrefabInstance: {fileID: 1068489477}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1079319077
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2130,12 +2124,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a19caef0e155df34d87b3c65c49dcfe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectDatum:
+  _objectDatum:
   - type: 1
     prefab: {fileID: 8109867407821187086, guid: 3b7e35cbc7fcd3d45814861f861d9e41,
       type: 3}
-    initialCount: 40
-    maxCount: 100
+    initialCount: 20
+    maxCount: 30
   - type: 2
     prefab: {fileID: 4737009380193390080, guid: 983be5481a4418942b98c80bf54b3476,
       type: 3}
@@ -2159,8 +2153,8 @@ MonoBehaviour:
   - type: 6
     prefab: {fileID: 7728366230342544413, guid: 212ef1a41838ce044a9ac54994866708,
       type: 3}
-    initialCount: 60
-    maxCount: 100
+    initialCount: 50
+    maxCount: 80
 --- !u!4 &1440496318
 Transform:
   m_ObjectHideFlags: 0

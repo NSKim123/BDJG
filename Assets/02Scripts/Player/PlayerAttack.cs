@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// ½½¶óÀÓÀÌ ¹ß»çÇÏ´Â Åõ»çÃ¼ÀÇ Á¾·ù¸¦ ³ªÅ¸³»´Â ¿­°ÜÇü Å¸ÀÔÀÔ´Ï´Ù.
+/// ìŠ¬ë¼ì„ì´ ë°œì‚¬í•˜ëŠ” íˆ¬ì‚¬ì²´ì˜ ì¢…ë¥˜ë¥¼ ë‚˜íƒ€ë‚´ëŠ” ì—´ê²¨í˜• íƒ€ì…ì…ë‹ˆë‹¤.
 /// </summary>
 public enum BulletType
 {
@@ -11,249 +11,249 @@ public enum BulletType
 }
 
 /// <summary>
-/// ÇÃ·¹ÀÌ¾îÀÇ Ä³¸¯ÅÍÀÇ °ø°İÀ» ¼öÇàÇÏ´Â ÄÄÆ÷³ÍÆ®ÀÔ´Ï´Ù. 
-/// ¹ß»ç, ÅºÈ¯ °ÔÀÌÁö, Å¸°ÙÆÃ ½Ã½ºÅÛ °ü·Ã ºÎºĞÀÌ ÀÛ¼ºµÇ¾îÀÖ½À´Ï´Ù.
+/// í”Œë ˆì´ì–´ì˜ ìºë¦­í„°ì˜ ê³µê²©ì„ ìˆ˜í–‰í•˜ëŠ” ì»´í¬ë„ŒíŠ¸ì…ë‹ˆë‹¤. 
+/// ë°œì‚¬, íƒ„í™˜ ê²Œì´ì§€, íƒ€ê²ŸíŒ… ì‹œìŠ¤í…œ ê´€ë ¨ ë¶€ë¶„ì´ ì‘ì„±ë˜ì–´ìˆìŠµë‹ˆë‹¤.
 /// </summary>
-/// ÅºÈ¯ ¹ß»ç °ü·Ã ºÎºĞ
+/// íƒ„í™˜ ë°œì‚¬ ê´€ë ¨ ë¶€ë¶„
 public partial class PlayerAttack : MonoBehaviour
 {
     private static string SOUNDNAME_FIRE_BASIC = "Effect_FIre_ver2";
     private static string SOUNDNAME_FIRE_SHELL = "Effect_FireShell";
 
-    [Header("# ÅºÈ¯ ¹ß»ç °ü·Ã")]
-    [Header("Æ÷Åº ÇÁ¸®ÆÕ")]
+    [Header("# íƒ„í™˜ ë°œì‚¬ ê´€ë ¨")]
+    [Header("í¬íƒ„ í”„ë¦¬íŒ¹")]
     public Bullet m_Shell;
 
-    [Header("¹ß»ç ÀÌÆåÆ®")]
+    [Header("ë°œì‚¬ ì´í™íŠ¸")]
     public GameObject m_Effect_Fire;
 
-    [Header("¹ß»ç ¼Ó·Â")]
+    [Header("ë°œì‚¬ ì†ë ¥")]
     public float m_BulletSpeed = 20.0f;
 
-    [Header("¹Ğ¾î³»´Â Èû °è¼ö")]
+    [Header("ë°€ì–´ë‚´ëŠ” í˜ ê³„ìˆ˜")]
     public float m_PushPowerMultiplier = 1.0f;
 
-    [Header("°ø°İ ÄğÅ¸ÀÓ")]
+    [Header("ê³µê²© ì¿¨íƒ€ì„")]
     public float m_AttackReuseTime = 0.2f;
 
     [Header("------------------------------------------------------------------------------")]
 
     /// <summary>
-    /// °ø°İ·Â ( ¹Ì´Â Èû. ·¹º§¿¡ µû¶ó ¼ºÀå )
+    /// ê³µê²©ë ¥ ( ë¯¸ëŠ” í˜. ë ˆë²¨ì— ë”°ë¼ ì„±ì¥ )
     /// </summary>
     private float _AttackForce;
 
     /// <summary>
-    /// ¹ß»ç¸¦ °­Á¦·Î Á¦ÇÑÇÏ´ÂÁö¸¦ ³ªÅ¸³À´Ï´Ù.
+    /// ë°œì‚¬ë¥¼ ê°•ì œë¡œ ì œí•œí•˜ëŠ”ì§€ë¥¼ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
     /// </summary>
     private bool _ProhibitFire;
 
     /// <summary>
-    /// ÇöÀç ¹ß»ç »ç¿îµåÀÇ ÀÌ¸§À» ³ªÅ¸³À´Ï´Ù.
+    /// í˜„ì¬ ë°œì‚¬ ì‚¬ìš´ë“œì˜ ì´ë¦„ì„ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
     /// </summary>
     private string _CurrentFireSoundName;
 
     /// <summary>
-    /// ¹ß»ç ½ÃÀÛ À§Ä¡
+    /// ë°œì‚¬ ì‹œì‘ ìœ„ì¹˜
     /// </summary>
     private Transform _StartPosition;
 
     /// <summary>
-    /// ÄğÅ¸ÀÓ °ÔÀÌÁö °´Ã¼
+    /// ì¿¨íƒ€ì„ ê²Œì´ì§€ ê°ì²´
     /// </summary>
     private FloatGauge _ReuseTimeGuage;    
 
     /// <summary>
-    /// Å¸°ÙÆÃ ½Ã½ºÅÛ °´Ã¼
+    /// íƒ€ê²ŸíŒ… ì‹œìŠ¤í…œ ê°ì²´
     /// </summary>
     private TargetingSystem _TargetingSystem;
 
     /// <summary>
-    /// ÀÌ °ø°İ ÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖ´Â PlayerCharacter °´Ã¼ÀÔ´Ï´Ù.
+    /// ì´ ê³µê²© ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆëŠ” PlayerCharacter ê°ì²´ì…ë‹ˆë‹¤.
     /// </summary>
     private PlayerCharacter _OwnerCharacter;
 
     /// <summary>
-    /// ÇöÀç »ç¿ëÇÏ´Â ÅºÈ¯ Á¾·ù
+    /// í˜„ì¬ ì‚¬ìš©í•˜ëŠ” íƒ„í™˜ ì¢…ë¥˜
     /// </summary>
     private BulletType _CurrentBullet;
 
     /// <summary>
-    /// °ø°İ °¡´ÉÇÑ »óÈ²ÀÎÁö¸¦ ³ªÅ¸³»´Â ÀĞ±âÀü¿ë ÇÁ·ÎÆÛÆ¼ÀÔ´Ï´Ù.
+    /// ê³µê²© ê°€ëŠ¥í•œ ìƒí™©ì¸ì§€ë¥¼ ë‚˜íƒ€ë‚´ëŠ” ì½ê¸°ì „ìš© í”„ë¡œí¼í‹°ì…ë‹ˆë‹¤.
     /// </summary>
     public bool isAttacktable => CheckFire();
 
     /// <summary>
-    /// ÄğÅ¸ÀÓ °ÔÀÌÁö¿¡ ´ëÇÑ ÀĞ±â Àü¿ë ÇÁ·ÎÆÛÆ¼ÀÔ´Ï´Ù.
+    /// ì¿¨íƒ€ì„ ê²Œì´ì§€ì— ëŒ€í•œ ì½ê¸° ì „ìš© í”„ë¡œí¼í‹°ì…ë‹ˆë‹¤.
     /// </summary>
     public FloatGauge reuseTimeGauge => _ReuseTimeGuage;
     
 
     private void Awake()
     {
-        // ÄğÅ¸ÀÓ °ÔÀÌÁö °´Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.
+        // ì¿¨íƒ€ì„ ê²Œì´ì§€ ê°ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
         _ReuseTimeGuage = new FloatGauge(m_AttackReuseTime);
 
-        // ÅºÈ¯ °ÔÀÌÁö¸¦ »ı¼ºÇÕ´Ï´Ù.
+        // íƒ„í™˜ ê²Œì´ì§€ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
         _BulletGauge = new BulletGauge(m_BulletGaugeRecoverAmount, m_BulletGaugeRecoverCycle, m_BulletGaugeStartRecoverTime, 10);
                 
-        // Å¸°ÙÆÃ ½Ã½ºÅÛÀ» »ı¼ºÇÕ´Ï´Ù.
+        // íƒ€ê²ŸíŒ… ì‹œìŠ¤í…œì„ ìƒì„±í•©ë‹ˆë‹¤.
         _TargetingSystem = new TargetingSystem(m_SenceLayer, m_SencerDistance, m_SencerWidth, m_SencerHeight);               
         
-        // ÀÌ °ø°İ ÄÄÆ÷³ÍÆ®¸¦ °¡Áö°í ÀÖ´Â PlayerCharacter °´Ã¼¸¦ Ã£½À´Ï´Ù.
+        // ì´ ê³µê²© ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì§€ê³  ìˆëŠ” PlayerCharacter ê°ì²´ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
         _OwnerCharacter = GetComponent<PlayerCharacter>();
 
-        // ÇöÀç ÅºÈ¯À» ±âº» ÅºÈ¯À¸·Î ¼³Á¤ÇÕ´Ï´Ù.
+        // í˜„ì¬ íƒ„í™˜ì„ ê¸°ë³¸ íƒ„í™˜ìœ¼ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
         ChangeBullet(BulletType.Basic);
     }
 
     private void Update()
     {
-        // ÄğÅ¸ÀÓÀ» °»½ÅÇÕ´Ï´Ù.
+        // ì¿¨íƒ€ì„ì„ ê°±ì‹ í•©ë‹ˆë‹¤.
         UpdateResueTimeGauge();
 
-        // ÅºÈ¯ °ÔÀÌÁö¸¦ °»½ÅÇÕ´Ï´Ù.
+        // íƒ„í™˜ ê²Œì´ì§€ë¥¼ ê°±ì‹ í•©ë‹ˆë‹¤.
         UpdateBulletGauge();
     }
 
     private void FixedUpdate()
     {
-        // Å¸ÄÏÆÃ ´ë»óÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+        // íƒ€ì¼“íŒ… ëŒ€ìƒì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
         UpdateTargeting();
     }
 
     /// <summary>
-    /// Attack ÄÄÆ÷³ÍÆ®¸¦ ¸®¼ÂÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// Attack ì»´í¬ë„ŒíŠ¸ë¥¼ ë¦¬ì…‹í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void ResetAttackComponent()
     {
-        // Àç»ç¿ë ´ë±â½Ã°£À» ¸®¼ÂÇÕ´Ï´Ù.
+        // ì¬ì‚¬ìš© ëŒ€ê¸°ì‹œê°„ì„ ë¦¬ì…‹í•©ë‹ˆë‹¤.
         _ReuseTimeGuage.max = m_AttackReuseTime;
 
-        // È¸º¹ ºÒ°¡ »óÅÂ¸¦ ÇØÁ¦ÇÕ´Ï´Ù.
+        // íšŒë³µ ë¶ˆê°€ ìƒíƒœë¥¼ í•´ì œí•©ë‹ˆë‹¤.
         _BulletGauge.SwitchProhibitRecover(false);
 
-        // ÇöÀç ÅºÈ¯À» ±âº» ÅºÈ¯À¸·Î º¯°æÇÕ´Ï´Ù.
+        // í˜„ì¬ íƒ„í™˜ì„ ê¸°ë³¸ íƒ„í™˜ìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
         ChangeBullet(BulletType.Basic);
 
-        // ¹ß»ç Á¦ÇÑÀ» ÇØÁ¦ÇÕ´Ï´Ù.
+        // ë°œì‚¬ ì œí•œì„ í•´ì œí•©ë‹ˆë‹¤.
         _ProhibitFire = false;
     }
 
     /// <summary>
-    /// ÄğÅ¸ÀÓ °ÔÀÌÁö¸¦ °»½ÅÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ì¿¨íƒ€ì„ ê²Œì´ì§€ë¥¼ ê°±ì‹ í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void UpdateResueTimeGauge()
     {
-        // ÀÌ¹Ì ÄğÅ¸ÀÓÀÌ ´Ù µ¹¾Ò´Ù¸é È£ÃâÀ» Á¾·áÇÕ´Ï´Ù.
+        // ì´ë¯¸ ì¿¨íƒ€ì„ì´ ë‹¤ ëŒì•˜ë‹¤ë©´ í˜¸ì¶œì„ ì¢…ë£Œí•©ë‹ˆë‹¤.
         if (_ReuseTimeGuage.currentValue == _ReuseTimeGuage.min) return;
 
-        // ÄğÅ¸ÀÓÀ» °¨¼Ò½ÃÅµ´Ï´Ù.
+        // ì¿¨íƒ€ì„ì„ ê°ì†Œì‹œí‚µë‹ˆë‹¤.
         _ReuseTimeGuage.currentValue -= Time.deltaTime;
     }
 
     /// <summary>
-    /// °ø°İÀ» ½ÃµµÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê³µê²©ì„ ì‹œë„í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void TryAttack()
     {
-        // °ø°İÀÌ ºÒ°¡´ÉÇÑ »óÅÂÀÌ°Å³ª ÄğÅ¸ÀÓÀÌ ³²¾ÆÀÖ´Ù¸é È£ÃâÀ» Á¾·áÇÕ´Ï´Ù.
+        // ê³µê²©ì´ ë¶ˆê°€ëŠ¥í•œ ìƒíƒœì´ê±°ë‚˜ ì¿¨íƒ€ì„ì´ ë‚¨ì•„ìˆë‹¤ë©´ í˜¸ì¶œì„ ì¢…ë£Œí•©ë‹ˆë‹¤.
         if (!CheckFire() || _ReuseTimeGuage.currentValue > 0.0f)
             return;
 
-        // ¹ß»çÇÕ´Ï´Ù.
+        // ë°œì‚¬í•©ë‹ˆë‹¤.
         Fire();
     }    
 
     /// <summary>
-    /// ³Ë¹é »óÅÂÀÎÁö Ã¼Å©ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ë„‰ë°± ìƒíƒœì¸ì§€ ì²´í¬í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> ³Ë¹é »óÅÂ¶ó¸é ÂüÀ» ¹İÈ¯ÇÕ´Ï´Ù.</returns>
+    /// <returns> ë„‰ë°± ìƒíƒœë¼ë©´ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.</returns>
     private bool CheckKnockBack()
     {
         return _OwnerCharacter.movementComponent.isKnockBack;
     }    
 
     /// <summary>
-    /// Çàµ¿ ºÒ°¡ »óÅÂÀÎÁö Ã¼Å©ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// í–‰ë™ ë¶ˆê°€ ìƒíƒœì¸ì§€ ì²´í¬í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> Çàµ¿ ºÒ°¡ »óÅÂ¶ó¸é ÂüÀ» ¹İÈ¯ÇÕ´Ï´Ù.</returns>
+    /// <returns> í–‰ë™ ë¶ˆê°€ ìƒíƒœë¼ë©´ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.</returns>
     private bool CheckStunned()
     {
         return _OwnerCharacter.isStunned;
     }
 
     /// <summary>
-    /// ¹ß»ç °¡´ÉÇÑ »óÅÂÀÎÁö È®ÀÎÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ë°œì‚¬ ê°€ëŠ¥í•œ ìƒíƒœì¸ì§€ í™•ì¸í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> °ø°İ °¡´ÉÇÑ »óÅÂ¶ó¸é ÂüÀ» ¹İÈ¯ÇÕ´Ï´Ù.</returns>
+    /// <returns> ê³µê²© ê°€ëŠ¥í•œ ìƒíƒœë¼ë©´ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.</returns>
     private bool CheckFire()
     {
         return CheckRemainedBullet() && !CheckOverburden() && !CheckKnockBack() && !CheckStunned() && !_ProhibitFire;
     }
 
     /// <summary>
-    /// ÅºÈ¯À» ¹ß»çÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ„í™˜ì„ ë°œì‚¬í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void Fire()
     {
-        // ÅºÈ¯ °ÔÀÌÁö¸¦ ¼Ò¸ğÇÕ´Ï´Ù.
+        // íƒ„í™˜ ê²Œì´ì§€ë¥¼ ì†Œëª¨í•©ë‹ˆë‹¤.
         CostBulletGauge(m_CostBulletGauge);
 
-        // Åõ»çÃ¼¸¦ »ı¼ºÇÕ´Ï´Ù.
+        // íˆ¬ì‚¬ì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
         InstantiateBullet();
 
-        // °ø°İ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» Àç»ıÇÕ´Ï´Ù.
+        // ê³µê²© ì• ë‹ˆë©”ì´ì…˜ì„ ì¬ìƒí•©ë‹ˆë‹¤.
         _OwnerCharacter.animController.TriggerAttackParam();
 
-        // ¹ß»ç ÀÌÆåÆ® »ı¼º
+        // ë°œì‚¬ ì´í™íŠ¸ ìƒì„±
         InstantiateEffect();
 
-        // ÄğÅ¸ÀÓÀ» µ¹¸®±â ½ÃÀÛÇÕ´Ï´Ù.
+        // ì¿¨íƒ€ì„ì„ ëŒë¦¬ê¸° ì‹œì‘í•©ë‹ˆë‹¤.
         _ReuseTimeGuage.currentValue = _ReuseTimeGuage.max;
 
-        // ¹ß»ç »ç¿îµå¸¦ Àç»ıÇÕ´Ï´Ù.
+        // ë°œì‚¬ ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•©ë‹ˆë‹¤.
         PlayFireSound();
     }
 
     
 
     /// <summary>
-    /// ÇöÀç ÅºÈ¯ Á¾·ù¿¡ µû¶ó ÅºÈ¯À» »ı¼ºÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// í˜„ì¬ íƒ„í™˜ ì¢…ë¥˜ì— ë”°ë¼ íƒ„í™˜ì„ ìƒì„±í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void InstantiateBullet()
     {
-        // ¹ß»çÇÒ ÅºÈ¯
+        // ë°œì‚¬í•  íƒ„í™˜
         Bullet bullet = null;
 
-        // ÇöÀç ÅºÈ¯ÀÇ Á¾·ù¿¡ µû¶ó ¹ß»çÇÒ ÅºÈ¯À» °áÁ¤ÇÕ´Ï´Ù.
+        // í˜„ì¬ íƒ„í™˜ì˜ ì¢…ë¥˜ì— ë”°ë¼ ë°œì‚¬í•  íƒ„í™˜ì„ ê²°ì •í•©ë‹ˆë‹¤.
         switch (_CurrentBullet)
         {            
-            // ±âº» ÅºÈ¯
+            // ê¸°ë³¸ íƒ„í™˜
             case BulletType.Basic:
-                // ¿ÀºêÁ§Æ® Ç®¿¡¼­ ±âº» ÅºÈ¯ ÇÏ³ª¸¦ °¡Á®¿É´Ï´Ù.
+                // ì˜¤ë¸Œì íŠ¸ í’€ì—ì„œ ê¸°ë³¸ íƒ„í™˜ í•˜ë‚˜ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
                 GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
                 bullet = obj.GetComponent<Bullet>();                
                 obj.SetActive(true);
                 break;
-            // Æ÷Åº
+            // í¬íƒ„
             case BulletType.Shell:
-                // Æ÷Åº ÇÁ¸®ÆÕÀ» º¹»ç »ı¼ºÇÕ´Ï´Ù.
+                // í¬íƒ„ í”„ë¦¬íŒ¹ì„ ë³µì‚¬ ìƒì„±í•©ë‹ˆë‹¤.
                 bullet = Instantiate(m_Shell);                
                 break;
         }
 
-        // ÅºÈ¯ÀÇ À§Ä¡, ¼Óµµ, °ø°İ·ÂÀ» ¼³Á¤ÇÕ´Ï´Ù.
+        // íƒ„í™˜ì˜ ìœ„ì¹˜, ì†ë„, ê³µê²©ë ¥ì„ ì„¤ì •í•©ë‹ˆë‹¤.
         bullet.transform.position = _StartPosition.position;
         bullet.SetProjectile(this.gameObject, transform.forward, m_BulletSpeed);
         bullet.SetAttackPower(_AttackForce * m_PushPowerMultiplier);
 
-        // ÅºÈ¯ÀÇ ¸ñÇ¥ Transform À» ¼³Á¤ÇØÁİ´Ï´Ù.
+        // íƒ„í™˜ì˜ ëª©í‘œ Transform ì„ ì„¤ì •í•´ì¤ë‹ˆë‹¤.
         bullet.SetTarget(_TargetingSystem.currentTargetTransform);                   
     }
 
     /// <summary>
-    /// ¹ß»ç ÀÌÆåÆ®¸¦ »ı¼ºÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ë°œì‚¬ ì´í™íŠ¸ë¥¼ ìƒì„±í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void InstantiateEffect()
     {
@@ -263,7 +263,7 @@ public partial class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹ß»ç »ç¿îµå¸¦ Àç»ıÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ë°œì‚¬ ì‚¬ìš´ë“œë¥¼ ì¬ìƒí•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void PlayFireSound()
     {
@@ -271,16 +271,16 @@ public partial class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// ·¹º§¿¡ µû¸¥ °ø°İ·ÂÀ» ¼³Á¤ÇÕ´Ï´Ù.
+    /// ë ˆë²¨ì— ë”°ë¥¸ ê³µê²©ë ¥ì„ ì„¤ì •í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="level"> ´Ş¼º ·¹º§</param>
+    /// <param name="level"> ë‹¬ì„± ë ˆë²¨</param>
     private void SetAttackForceByLevel(int level)
     {
         _AttackForce = 10 * (level - 1) + 20.0f;
     }    
 
     /// <summary>
-    /// ¹ß»ç ½ÃÀÛÀ§Ä¡¸¦ Ã£½À´Ï´Ù.
+    /// ë°œì‚¬ ì‹œì‘ìœ„ì¹˜ë¥¼ ì°¾ìŠµë‹ˆë‹¤.
     /// </summary>
     private void FindStartPoint()
     {
@@ -288,15 +288,15 @@ public partial class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// ÁÖº¯À» °ø°İÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ì£¼ë³€ì„ ê³µê²©í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="damageMultiplier"> ÇöÀç °ø°İ·Â¿¡ °öÇØÁú ¹ĞÄ¡±â °ø°İ µ¥¹ÌÁö °è¼ö </param>
+    /// <param name="damageMultiplier"> í˜„ì¬ ê³µê²©ë ¥ì— ê³±í•´ì§ˆ ë°€ì¹˜ê¸° ê³µê²© ë°ë¯¸ì§€ ê³„ìˆ˜ </param>
     public void AttackAround(float damageMultiplier)
     {
-        // °ø°İ ¹üÀ§ °¨Áö
+        // ê³µê²© ë²”ìœ„ ê°ì§€
         Collider[] hitResult = Physics.OverlapSphere(transform.position + Vector3.down * 0.35f * transform.localScale.y, 0.3f * transform.localScale.x);
 
-        // °ø°İ ´ë»ó°úÀÇ ¹æÇâÀ» °è»êÇÏ¿© ¹ĞÃÄ³»´Â °ø°İÀ» ½ÇÇàÇÕ´Ï´Ù.
+        // ê³µê²© ëŒ€ìƒê³¼ì˜ ë°©í–¥ì„ ê³„ì‚°í•˜ì—¬ ë°€ì³ë‚´ëŠ” ê³µê²©ì„ ì‹¤í–‰í•©ë‹ˆë‹¤.
         foreach (Collider collider in hitResult)
         {
             if (collider.TryGetComponent<IHit>(out IHit iHit))
@@ -311,15 +311,15 @@ public partial class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇöÀç ÅºÈ¯ÀÇ Á¾·ù¸¦ º¯°æÇÕ´Ï´Ù.
+    /// í˜„ì¬ íƒ„í™˜ì˜ ì¢…ë¥˜ë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="newBulletType"> º¯°æÇÒ ÅºÈ¯ Å¸ÀÔ</param>
+    /// <param name="newBulletType"> ë³€ê²½í•  íƒ„í™˜ íƒ€ì…</param>
     public void ChangeBullet(BulletType newBulletType)
     {
-        // ÅºÈ¯ Á¾·ù ±³Ã¼
+        // íƒ„í™˜ ì¢…ë¥˜ êµì²´
         _CurrentBullet = newBulletType;
 
-        // ±³Ã¼µÈ ÅºÈ¯ Á¾·ù¿¡ µû¸¥ ¹ß»ç »ç¿îµå¸¦ º¯°æÇÕ´Ï´Ù.
+        // êµì²´ëœ íƒ„í™˜ ì¢…ë¥˜ì— ë”°ë¥¸ ë°œì‚¬ ì‚¬ìš´ë“œë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
         switch (newBulletType)
         {
             case BulletType.Basic:                
@@ -333,24 +333,24 @@ public partial class PlayerAttack : MonoBehaviour
     }
 
     /// <summary>
-    /// ·¹º§¾÷ ½Ã È£ÃâµÉ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ë ˆë²¨ì—… ì‹œ í˜¸ì¶œë  ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="level"> ´Ş¼º ·¹º§</param>
+    /// <param name="level"> ë‹¬ì„± ë ˆë²¨</param>
     public void OnLevelUp(int level)
     {
-        // ·¹º§¿¡ µû¸¥ °ø°İ·Â ¼³Á¤
+        // ë ˆë²¨ì— ë”°ë¥¸ ê³µê²©ë ¥ ì„¤ì •
         SetAttackForceByLevel(level);
 
-        // ·¹º§¿¡ µû¸¥ ÅºÃ¢ °ÔÀÌÁö ÃÖ´ë·®À» ¼³Á¤
+        // ë ˆë²¨ì— ë”°ë¥¸ íƒ„ì°½ ê²Œì´ì§€ ìµœëŒ€ëŸ‰ì„ ì„¤ì •
         SetBulletGaugeMaxValueByLevel(level);
 
-        // ¹ß»ç ÁöÁ¡ Àç¼³Á¤
+        // ë°œì‚¬ ì§€ì  ì¬ì„¤ì •
         FindStartPoint();
     }
 
     /// <summary>
-    /// °ø°İ ÀÔ·ÂÀ» ¹Ş¾ÒÀ» ¶§ È£ÃâµÇ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
-    /// Åõ»çÃ¼ ¹ß»ç¸¦ ½ÃµµÇÕ´Ï´Ù.
+    /// ê³µê²© ì…ë ¥ì„ ë°›ì•˜ì„ ë•Œ í˜¸ì¶œë˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
+    /// íˆ¬ì‚¬ì²´ ë°œì‚¬ë¥¼ ì‹œë„í•©ë‹ˆë‹¤.
     /// </summary>
     public void OnAttackInput()
     {
@@ -363,44 +363,44 @@ public partial class PlayerAttack : MonoBehaviour
         if (_BulletGauge == null) return;
 
         GUIContent gUIContent = new GUIContent();
-        gUIContent.text = $"\n\n\n\n\n°ø°İ·Â : {_AttackForce}\nÅºÈ¯ °ÔÀÌÁö : {_BulletGauge.currentValue} / {_BulletGauge.max}";
+        gUIContent.text = $"\n\n\n\n\nê³µê²©ë ¥ : {_AttackForce}\níƒ„í™˜ ê²Œì´ì§€ : {_BulletGauge.currentValue} / {_BulletGauge.max}";
         Handles.Label(transform.position + Vector3.down, gUIContent);
     }
 #endif
 }
 
 /// <summary>
-/// ÅºÈ¯ °ÔÀÌÁö °ü·Ã ºÎºĞ
+/// íƒ„í™˜ ê²Œì´ì§€ ê´€ë ¨ ë¶€ë¶„
 /// </summary>
 public partial class PlayerAttack
 {
-    [Header("# ÅºÈ¯ °ÔÀÌÁö °ü·Ã")]
-    [Header("¹ß»ç ½Ã ¼Ò¸ğ °ÔÀÌÁö")]
+    [Header("# íƒ„í™˜ ê²Œì´ì§€ ê´€ë ¨")]
+    [Header("ë°œì‚¬ ì‹œ ì†Œëª¨ ê²Œì´ì§€")]
     public int m_CostBulletGauge = 1;
 
-    [Header("1È¸ °ÔÀÌÁö È¸º¹·®")]
+    [Header("1íšŒ ê²Œì´ì§€ íšŒë³µëŸ‰")]
     public int m_BulletGaugeRecoverAmount = 2;
 
-    [Header("È¸º¹ ÁÖ±â")]
+    [Header("íšŒë³µ ì£¼ê¸°")]
     public float m_BulletGaugeRecoverCycle = 1.0f;
 
-    [Header("°ø°İ ÈÄ °ÔÀÌÁö È¸º¹À» ½ÃÀÛÇÏ´Â ½Ã°£")]
+    [Header("ê³µê²© í›„ ê²Œì´ì§€ íšŒë³µì„ ì‹œì‘í•˜ëŠ” ì‹œê°„")]
     public float m_BulletGaugeStartRecoverTime = 1.0f;
 
     [Header("------------------------------------------------------------------------------")]
 
     /// <summary>
-    /// ÅºÈ¯ °ÔÀÌÁö °´Ã¼
+    /// íƒ„í™˜ ê²Œì´ì§€ ê°ì²´
     /// </summary>
     private BulletGauge _BulletGauge;
 
     /// <summary>
-    /// ÅºÈ¯ °ÔÀÌÁö °´Ã¼¿¡ ´ëÇÑ ÀĞ±â Àü¿ë ÇÁ·ÎÆÛÆ¼ÀÔ´Ï´Ù.
+    /// íƒ„í™˜ ê²Œì´ì§€ ê°ì²´ì— ëŒ€í•œ ì½ê¸° ì „ìš© í”„ë¡œí¼í‹°ì…ë‹ˆë‹¤.
     /// </summary>
     public BulletGauge bulletGauge => _BulletGauge;
 
     /// <summary>
-    /// ÅºÈ¯ °ÔÀÌÁö¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ„í™˜ ê²Œì´ì§€ë¥¼ ì—…ë°ì´íŠ¸í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void UpdateBulletGauge()
     {
@@ -408,64 +408,64 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// ÅºÈ¯ÀÌ ³²¾ÆÀÖ´ÂÁö Ã¼Å©ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ„í™˜ì´ ë‚¨ì•„ìˆëŠ”ì§€ ì²´í¬í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> ÅºÈ¯ÀÌ ³²¾ÆÀÖ´Ù¸é ÂüÀ» ¹İÈ¯ÇÕ´Ï´Ù.</returns>
+    /// <returns> íƒ„í™˜ì´ ë‚¨ì•„ìˆë‹¤ë©´ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.</returns>
     private bool CheckRemainedBullet()
     {
         return !(_BulletGauge.currentValue - m_CostBulletGauge < _BulletGauge.min);
     }
 
     /// <summary>
-    /// ÅºÈ¯ °ÔÀÌÁö°¡ °úºÎÇÏ »óÅÂÀÎÁö Ã¼Å©ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ„í™˜ ê²Œì´ì§€ê°€ ê³¼ë¶€í•˜ ìƒíƒœì¸ì§€ ì²´í¬í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <returns> °úºÎÇÏ »óÅÂ¶ó¸é ÂüÀ» ¹İÈ¯ÇÕ´Ï´Ù.</returns>
+    /// <returns> ê³¼ë¶€í•˜ ìƒíƒœë¼ë©´ ì°¸ì„ ë°˜í™˜í•©ë‹ˆë‹¤.</returns>
     private bool CheckOverburden()
     {
         return _BulletGauge.isOverburden;
     }
 
     /// <summary>
-    /// ÅºÈ¯ °ÔÀÌÁö¸¦ ¼Ò¸ğÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ„í™˜ ê²Œì´ì§€ë¥¼ ì†Œëª¨í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="cost"> ¼Ò¸ğ·®</param>
+    /// <param name="cost"> ì†Œëª¨ëŸ‰</param>
     private void CostBulletGauge(int cost)
     {
         _BulletGauge.CostBullet(cost);
     }
 
     /// <summary>
-    /// ·¹º§¿¡ µû¸¥ ÅºÈ¯ °ÔÀÌÁö ÃÖ´ë·®À» ¼³Á¤ÇÏ°í, °ÔÀÌÁö¸¦ 100% Ã¤¿ó´Ï´Ù.
+    /// ë ˆë²¨ì— ë”°ë¥¸ íƒ„í™˜ ê²Œì´ì§€ ìµœëŒ€ëŸ‰ì„ ì„¤ì •í•˜ê³ , ê²Œì´ì§€ë¥¼ 100% ì±„ì›ë‹ˆë‹¤.
     /// </summary>
-    /// <param name="level"> ´Ş¼º ·¹º§</param>
+    /// <param name="level"> ë‹¬ì„± ë ˆë²¨</param>
     private void SetBulletGaugeMaxValueByLevel(int level)
     {
-        // ÃÖ´ë·® °è»ê ½Ä
+        // ìµœëŒ€ëŸ‰ ê³„ì‚° ì‹
         _BulletGauge.max = 10 + level * 2;
         _BulletGauge.currentValue = _BulletGauge.max;
     }
 }
 
 /// <summary>
-/// Å¸°ÙÆÃ ½Ã½ºÅÛ °ü·Ã ºÎºĞ
+/// íƒ€ê²ŸíŒ… ì‹œìŠ¤í…œ ê´€ë ¨ ë¶€ë¶„
 /// </summary>
 public partial class PlayerAttack
 {
-    [Header("# Å¸°ÙÆÃ °ü·Ã")]
-    [Header("°¨Áö ÃÖ´ë ±æÀÌ")]
+    [Header("# íƒ€ê²ŸíŒ… ê´€ë ¨")]
+    [Header("ê°ì§€ ìµœëŒ€ ê¸¸ì´")]
     public float m_SencerDistance = 20.0f;
 
-    [Header("°¨Áö Æø")]
+    [Header("ê°ì§€ í­")]
     public float m_SencerWidth = 3.0f;
 
-    [Header("°¨Áö ³ôÀÌ")]
+    [Header("ê°ì§€ ë†’ì´")]
     public float m_SencerHeight = 3.0f;
 
-    [Header("°¨Áö ·¹ÀÌ¾î")]
+    [Header("ê°ì§€ ë ˆì´ì–´")]
     public LayerMask m_SenceLayer;
 
     /// <summary>
-    /// Å¸°ÙÆÃ ´ë»óÀ» ¾÷µ¥ÀÌÆ®ÇÏ´Â ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// íƒ€ê²ŸíŒ… ëŒ€ìƒì„ ì—…ë°ì´íŠ¸í•˜ëŠ” ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     private void UpdateTargeting()
     {
@@ -475,12 +475,12 @@ public partial class PlayerAttack
 
 
 /// <summary>
-/// ¾ÆÀÌÅÛ È¿°ú °ü·Ã ºÎºĞ
+/// ì•„ì´í…œ íš¨ê³¼ ê´€ë ¨ ë¶€ë¶„
 /// </summary>
 public partial class PlayerAttack
 {
     /// <summary>
-    /// °Å´ëÈ­ ½½¶óÀÓÀÇ ÂøÁö °ø°İ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê±°ëŒ€í™” ìŠ¬ë¼ì„ì˜ ì°©ì§€ ê³µê²© ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void GiantSlimeLandAttack()
     {
@@ -488,7 +488,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// °Å´ëÈ­ ¾ÆÀÌÅÛ È¿°ú ½ÃÀÛ ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê±°ëŒ€í™” ì•„ì´í…œ íš¨ê³¼ ì‹œì‘ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnStartGiant()
     {
@@ -498,7 +498,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// °Å´ëÈ­ ¾ÆÀÌÅÛ È¿°ú Á¾·á ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê±°ëŒ€í™” ì•„ì´í…œ íš¨ê³¼ ì¢…ë£Œ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnFinishGiant()
     {
@@ -507,7 +507,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// ±â°üÃÑ ¾ÆÀÌÅÛ È¿°ú ½ÃÀÛ ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê¸°ê´€ì´ ì•„ì´í…œ íš¨ê³¼ ì‹œì‘ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnStartMachineGun()
     {
@@ -519,7 +519,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// ±â°üÃÑ ¾ÆÀÌÅÛ È¿°ú Á¾·á ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// ê¸°ê´€ì´ ì•„ì´í…œ íš¨ê³¼ ì¢…ë£Œ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnFinishMachineGun()
     {
@@ -531,7 +531,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// Æ÷Åº ¾ÆÀÌÅÛ È¿°ú ½ÃÀÛ ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// í¬íƒ„ ì•„ì´í…œ íš¨ê³¼ ì‹œì‘ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnStartShell()
     {   
@@ -544,7 +544,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// Æ÷Åº ¾ÆÀÌÅÛ È¿°ú ¾÷µ¥ÀÌÆ® ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// í¬íƒ„ ì•„ì´í…œ íš¨ê³¼ ì—…ë°ì´íŠ¸ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnUpdateShell()
     {
@@ -552,7 +552,7 @@ public partial class PlayerAttack
     }
 
     /// <summary>
-    /// Æ÷Åº ¾ÆÀÌÅÛ È¿°ú Á¾·á ½ÃÀÇ µ¿ÀÛÀ» ³ªÅ¸³½ ¸Ş¼­µåÀÔ´Ï´Ù.
+    /// í¬íƒ„ ì•„ì´í…œ íš¨ê³¼ ì¢…ë£Œ ì‹œì˜ ë™ì‘ì„ ë‚˜íƒ€ë‚¸ ë©”ì„œë“œì…ë‹ˆë‹¤.
     /// </summary>
     public void OnFinishShell()
     {

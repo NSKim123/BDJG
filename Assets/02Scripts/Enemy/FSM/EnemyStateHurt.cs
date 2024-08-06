@@ -13,17 +13,17 @@ public class EnemyStateHurt : EnemyStateBase
         
     }
 
-    public override bool canExecute() => stateMachine.currentStateType != State.Die;
+    public override bool CanExecute() => stateMachine.currentStateType != EState.Die;
 
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Hurt;
+        EState nextState = EState.Hurt;
         //Debug.Log(_currentStep);
         switch (_currentStep)
         {
-            case StepInState.None:
-            case StepInState.Start:
+            case EStepInState.None:
+            case EStepInState.Start:
                 {
                     //enemyAgent.isStopped = true;
                     //enemyAgent.velocity = Vector3.zero;
@@ -43,7 +43,7 @@ public class EnemyStateHurt : EnemyStateBase
                     _currentStep++;
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     if(knockBackVelocity.sqrMagnitude >= 0.1f)
                     {
@@ -61,9 +61,9 @@ public class EnemyStateHurt : EnemyStateBase
                     }
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
-                    nextState = State.Move;
+                    nextState = EState.Move;
                     if (!enemyAgent.isOnNavMesh)
                     {
                         enemyCharacter.OnDead();

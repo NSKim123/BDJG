@@ -13,8 +13,10 @@ public enum SoundType
 
 public class SoundManager : SingletonBase<SoundManager>
 {
+    // SoundType마다 오디오소스를 1개씩 가짐
     [SerializeField] private AudioSource[] _audioSources = new AudioSource[Enum.GetValues(typeof(SoundType)).Length];
 
+    // string : 음원 파일 이름, AudioClip : 음원 파일
     private Dictionary<string, AudioClip> _bgmAudioClips = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> _effectAudioClips = new Dictionary<string, AudioClip>();
 
@@ -57,19 +59,6 @@ public class SoundManager : SingletonBase<SoundManager>
     /// </summary>
     public void StopSound()
     {
-        // Stop bgm
-        /* AudioSource audioSource = _audioSources[(int)SoundType.Bgm];
-        //if (audioSource == null)
-        //{
-        //    return;
-        //}
-
-        //if (audioSource.isPlaying)
-        //{
-        //    audioSource.Stop();
-        }*/
-
-        // Stop all sounds
         foreach (AudioSource audiosource in _audioSources)
         {
             if (audiosource == null || audiosource.clip == null)
@@ -88,34 +77,27 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <summary>
     /// 오디오클립을 가져와서 재생합니다.
     /// </summary>
-    /// <param name="audioName">사운드의 파일명입니다.</param>
-    /// <param name="type">사운드의 종류입니다.</param>
-    /// <param name="pitch">사운드의 빠르기입니다.</param>
+    /// <param name="audioName">사운드의 파일명</param>
+    /// <param name="type">사운드의 종류</param>
+    /// <param name="pitch">사운드의 빠르기</param>
     public void PlaySound(string audioName, SoundType type, float pitch = 1, float volume = 1)
     {
         AudioClip clip = GetOrLoadAudioClip(audioName, type);
         
         Play(clip, type, pitch, volume);
-
     }
 
     /// <summary>
     /// 오디오소스의 클립을 재생합니다.
     /// </summary>
-    /// <param name="audioClip"></param>
-    /// <param name="type"></param>
+    /// <param name="audioClip">재생할 오디오 클립</param>
+    /// <param name="type">오디오 클립의 타입</param>
     private void Play(AudioClip audioClip, SoundType type, float pitch = 1, float volume = 1)
     {
         if (audioClip == null)
         {
             return;
         }
-
-        //if (volume != 1)
-        //{
-        //    float current = _audioSources[(int)SoundType.Bgm].volume;
-        //    _audioSources[(int)SoundType.Bgm].volume = 0.5f;
-        //}
 
         // bgm은 하나만 재생
         if (type == SoundType.Bgm)
@@ -145,7 +127,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// </summary>
     /// <param name="audioName">오디오파일의 이름</param>
     /// <param name="type">오디오타입</param>
-    /// <returns></returns>
+    /// <returns>요청한 오디오클립</returns>
     private AudioClip GetOrLoadAudioClip(string audioName, SoundType type = SoundType.Effect)
     {
         AudioClip audioClip;
@@ -187,6 +169,10 @@ public class SoundManager : SingletonBase<SoundManager>
         _effectAudioClips.Clear();
     }
 
+    /// <summary>
+    /// 마스터 볼륨을 조정합니다.
+    /// </summary>
+    /// <param name="value">볼륨 크기</param>
     public void SetMasterVolume(float value)
     {
         m_MasterVolume = value;
@@ -197,7 +183,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <summary>
     /// bgm의 볼륨을 조정합니다.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">볼륨 크기</param>
     public void SetBgmVolume(float value)
     {   
         m_BGMVolume = value;
@@ -208,7 +194,7 @@ public class SoundManager : SingletonBase<SoundManager>
     /// <summary>
     /// 효과음의 볼륨을 조정합니다.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">볼륨 크기</param>
     public void SetEffectVolume(float value)
     {
         m_EffectVolume = value;

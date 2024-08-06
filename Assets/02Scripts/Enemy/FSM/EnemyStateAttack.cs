@@ -15,15 +15,8 @@ public class EnemyStateAttack : EnemyStateBase
         watch = new System.Diagnostics.Stopwatch();
     }
 
-    public override bool canExecute() => stateMachine.currentStateType == State.Move;
+    public override bool CanExecute() => stateMachine.currentStateType == EState.Move;
 
-
-  /*
-    public void AttackPlayer(GameObject target)
-    {
-        target.transform.position += Vector3.back * 3;
-        //_rigid.AddForce((target.transform.position - transform.position).normalized * _attackForce, ForceMode.Impulse);
-    } */
 
     public void AttackTiming()
     {
@@ -37,15 +30,15 @@ public class EnemyStateAttack : EnemyStateBase
     }
 
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Attack;
+        EState nextState = EState.Attack;
 
         //Debug.Log(_currentStep);
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     watch.Reset();
                     watch.Start();
@@ -53,7 +46,7 @@ public class EnemyStateAttack : EnemyStateBase
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
 
                     animLength = animator.GetCurrentAnimatorStateInfo(0).length;
@@ -67,7 +60,7 @@ public class EnemyStateAttack : EnemyStateBase
 
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
 
                     // 애니메이션에 이벤트 걸기
@@ -90,10 +83,10 @@ public class EnemyStateAttack : EnemyStateBase
 
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
                     enemyAgent.isStopped = false;
-                    nextState = State.Move;
+                    nextState = EState.Move;
                     animator.speed = 1;
                     watch.Stop();
                     //Debug.Log(watch.ElapsedMilliseconds + "ms");

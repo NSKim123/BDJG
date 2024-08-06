@@ -7,15 +7,15 @@ public class EnemyStateInit : EnemyStateBase
     {
     }
 
-    public override bool canExecute() => false;
+    public override bool CanExecute() => false;
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Init;
+        EState nextState = EState.Init;
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     if (!enemyAgent.enabled)
                     {
@@ -37,14 +37,14 @@ public class EnemyStateInit : EnemyStateBase
 
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     animator.Play("init");
                     _currentStep++;
 
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.8f)
                     {
@@ -53,9 +53,9 @@ public class EnemyStateInit : EnemyStateBase
 
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
-                    stateMachine.ChangeState(State.Idle);
+                    stateMachine.ChangeState(EState.Idle);
                 }
                 break;
             default:
