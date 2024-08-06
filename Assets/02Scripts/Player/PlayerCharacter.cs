@@ -112,13 +112,7 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
     /// <summary>
     /// 사망 시 호출되는 메서드입니다.
     /// </summary>
-    public event System.Action onDead;
-
-    /// <summary>
-    /// 프로토타입을 위한 임시 이벤트입니다.
-    /// 거대화가 끝난 뒤 호출됩니다.
-    /// </summary>
-    public event Action onGiantEnd;
+    public event System.Action onDead;   
 
 
     private void Awake()
@@ -153,25 +147,6 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
 
         // 버프 시스템을 갱신합니다.
         UpdateBuffList();
-    }
-
-    // test
-    Coroutine testCoroutine;
-    private void OnDestroy()
-    {
-        if(testCoroutine != null)
-            StopCoroutine(testCoroutine);
-    }
-
-    //test
-    private IEnumerator Test_IncreaseKillCountPer5s()
-    {
-        while(true)
-        {
-           yield return new WaitForSeconds(5.0f);
-           //_BuffSystem.AddBuff(100001);
-           // _LevelSystem.IncreaseKillCount();
-        }
     }
 
     /// <summary>
@@ -299,9 +274,7 @@ public partial class PlayerCharacter : PlayerCharacterBase, IHit
     public void AddBuff(int buffCode)
     {
         _BuffSystem.AddBuff(buffCode);
-    }
-
-    
+    }  
 
     
 
@@ -413,14 +386,14 @@ public partial class PlayerCharacter
         // MovementComponent 에서 실행되어야하는 동작 실행
         movementComponent.OnStartGiant();
 
-        // 점프 애니메이션 이벤트 바인딩
-        animController.onLand += attackComponent.AttackAround;
-        animController.onLand += movementComponent.InstantiateLandEffect;
-        animController.onLand += movementComponent.PlayGiantSlimeLandSound;
-        animController.onLand += FollowCamera.ShakeCamera;        
-
-        // 탄창 게이지 초기화 및 설정
+        // AttackComponent 에서 실행되어야하는 동작 실행
         attackComponent.OnStartGiant();
+
+        // 점프 애니메이션 이벤트 바인딩
+        animController.onLand += attackComponent.GiantSlimeLandAttack;
+        animController.onLand += movementComponent.InstantiateGiantSlimeLandEffect;
+        animController.onLand += movementComponent.PlayGiantSlimeLandSound;
+        animController.onLand += FollowCamera.ShakeCamera;                
 
         // UI 이펙트 생성
         GameObject UIEffect = Instantiate(m_UIEffect_GiantStarted);
@@ -433,21 +406,17 @@ public partial class PlayerCharacter
         // 레벨업 이벤트 재개
         _AbleToLevelUp = true;
 
-        // 점프 애니메이션 이벤트 언바인딩
-        animController.onLand -= attackComponent.AttackAround;
-        animController.onLand -= movementComponent.InstantiateLandEffect;
-        animController.onLand -= movementComponent.PlayGiantSlimeLandSound;
-        animController.onLand -= FollowCamera.ShakeCamera;
-
         // MovementComponent 에서 실행되어야하는 동작 실행
         movementComponent.OnFinishGiant();
-        
-        // 탄창 원상복구
-        attackComponent.OnLevelUp(_LevelSystem.level);
+
+        // AttackComponent 에서 실행되어야하는 동작 실행
         attackComponent.OnFinishGiant();
 
-        // **임시** 거대화 끝나고 호출
-        onGiantEnd?.Invoke();
+        // 점프 애니메이션 이벤트 언바인딩
+        animController.onLand -= attackComponent.GiantSlimeLandAttack;
+        animController.onLand -= movementComponent.InstantiateGiantSlimeLandEffect;
+        animController.onLand -= movementComponent.PlayGiantSlimeLandSound;
+        animController.onLand -= FollowCamera.ShakeCamera;       
     }
 
 
