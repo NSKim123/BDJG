@@ -77,7 +77,7 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.isReused = true;
             newEnemy.onDead += IncreaseScore;
-            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.SpawnItemByPercentage;
         }
         
     }
@@ -105,7 +105,7 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.isReused = true;
             newEnemy.onDead += IncreaseScore;
-            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.ItemSpawnByPercentage;
+            newEnemy.OnRequestSpawnItem += EnemyManager.Instance.itemSpawner.SpawnItemByPercentage;
             newEnemy.OnRequestThornAttack += EnemyManager.Instance.CreateThornArea;
             newEnemy.OnRequestCloudAttack += EnemyManager.Instance.CreateCloud;
         }
@@ -164,11 +164,11 @@ public class EnemySpawner : MonoBehaviour
                         //enemydata = cactusData[1];
                         //spawndata = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         //GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
@@ -191,17 +191,17 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -224,18 +224,18 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -257,18 +257,18 @@ public class EnemySpawner : MonoBehaviour
                         enemydata[1] = cactusData[1];
                         spawndata[1] = cactusSpawnInfo[1];
 
-                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
-                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
+                        Vector3 randomPosition1 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[0].SpawnRadius);
+                        Vector3 randomPosition2 = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata[1].SpawnRadius);
 
                         yield return new WaitForSeconds(_specialSpawnTime);
 
-                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialMushroom);
+                        GameObject newEnemy_mush = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialMushroom);
                         newEnemy_mush.transform.position = randomPosition1;
                         newEnemy_mush.transform.rotation = Quaternion.identity;
                         newEnemy_mush.SetActive(true);
 
 
-                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(PoolType.SpecialCactus);
+                        GameObject newEnemy_cac = ObjectPoolManager.Instance.GetFromPool(EPoolType.SpecialCactus);
                         newEnemy_cac.transform.position = randomPosition2;
                         newEnemy_cac.transform.rotation = Quaternion.identity;
                         newEnemy_cac.SetActive(true);
@@ -328,11 +328,11 @@ public class EnemySpawner : MonoBehaviour
                         enemydata = mushroomData[0];
                         spawndata = mushroomSpawnInfo[0];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(mushroomSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(mushroomSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Mushroom);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.Mushroom);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
                         newEnemy.SetActive(true);
@@ -350,11 +350,11 @@ public class EnemySpawner : MonoBehaviour
                         enemydata = cactusData[0];
                         spawndata = cactusSpawnInfo[0];
 
-                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircleEdge(cactusSpawnAxis.position, spawndata.SpawnRadius);
+                        Vector3 randomPosition = UtilSpawn.GetRandomPositionOnCircle(cactusSpawnAxis.position, spawndata.SpawnRadius);
 
                         yield return new WaitForSeconds(spawndata.SpawnTime);
 
-                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(PoolType.Cactus);
+                        GameObject newEnemy = ObjectPoolManager.Instance.GetFromPool(EPoolType.Cactus);
                         newEnemy.transform.position = randomPosition;
                         newEnemy.transform.rotation = Quaternion.identity;
                         newEnemy.SetActive(true);

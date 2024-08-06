@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyInfoData : ScriptableObject
 {
     // 정렬용
-    public EnemyType Type => _enemyType;
+    public EEnemyType Type => _enemyType;
 
     // enemy에 적용할 데이터
     public string EnemyID => _enemyID;
@@ -24,7 +24,7 @@ public class EnemyInfoData : ScriptableObject
 
 
 
-    [SerializeField] private EnemyType _enemyType;
+    [SerializeField] private EEnemyType _enemyType;
     [SerializeField] private string _enemyID;
     [SerializeField] private float _attackForce;
     [SerializeField] private float _defenseForce;

@@ -16,7 +16,7 @@ public class MapController : MonoBehaviour
     //물 높이를 단계별로 저장한 배열
     private float[] _heightOfWater;
 
-    // 물이 높아질 때 호출할 이벤트
+    // 물 높이가 변경될 때 호출할 이벤트
     public event Action<int> OnChangeWave;
 
     private Coroutine _waterCoroutine;
@@ -24,19 +24,17 @@ public class MapController : MonoBehaviour
     private float _waterDownOffset;
 
     // 경고 UI
-    public GameObject warning;
+    public GameObject Warning;
     private Animation _warningUIAnim;
-
-    Wave currentWave;
 
     private void Start()
     {
         _navMeshMap = _map.GetComponent<NavMeshSurface>();
-        _warningUIAnim = warning.GetComponent<Animation>();
+        _warningUIAnim = Warning.GetComponent<Animation>();
         _waterDownDefaultSecond = 40f;
         _waterDownOffset = 10f;
 
-        // 물 y축 높이 1단계: 1.5, 2단계: 3.1, 3단계: 4.7, 4단계: 6.4 (변동가능)
+        // 물 y축 높이
         _heightOfWater = new float[]
         {
             6.4f,
@@ -50,32 +48,29 @@ public class MapController : MonoBehaviour
     /// 시간에 따라 물 높이를 조절하는 코루틴입니다.
     /// </summary>
     /// <returns></returns>
-    public IEnumerator C_WaterUP()
+    public IEnumerator C_WaterDown()
     {
         int waterIndex = 0;
 
         _waterGround.transform.position = new Vector3(_waterGround.transform.position.x, _heightOfWater[waterIndex], _waterGround.transform.position.z);
         _navMeshMap.BuildNavMesh();
 
+        // 물이 내려가는 마지막 단계까지 반복
         while (waterIndex < _heightOfWater.Length - 1)
         {
-            
-            // time for water rising
+            // 아래 시간동안 대기
             yield return new WaitForSeconds(_waterDownDefaultSecond + waterIndex * _waterDownOffset);
-
             waterIndex++;
-
             OnChangeWave?.Invoke(waterIndex);
 
-            // Show warning UI
+            // 경고 UI 표시
             _warningUIAnim.Play();
-
             while (_warningUIAnim.isPlaying)
             {
                 yield return null;
             }
             
-
+            // 물 높이 내려감
             while (_waterGround.transform.position.y > _heightOfWater[waterIndex])
             {
                 _waterGround.transform.position -= new Vector3(0, 0.1f, 0);
@@ -104,6 +99,6 @@ public class MapController : MonoBehaviour
             StopCoroutine(_waterCoroutine);
             _waterCoroutine = null;
         }
-        _waterCoroutine = StartCoroutine(C_WaterUP());
+        _waterCoroutine = StartCoroutine(C_WaterDown());
     }
 }

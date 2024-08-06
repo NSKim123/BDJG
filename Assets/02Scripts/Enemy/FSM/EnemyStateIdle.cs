@@ -6,31 +6,31 @@ public class EnemyStateIdle : EnemyStateBase
     {
     }
 
-    public override bool canExecute() => stateMachine.currentStateType == State.Init;
+    public override bool CanExecute() => stateMachine.currentStateType == EState.Init;
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Idle;
+        EState nextState = EState.Idle;
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     _currentStep++;
                     
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     animator.Play("idle");
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
                     
                 }

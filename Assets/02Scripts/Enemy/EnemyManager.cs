@@ -2,18 +2,13 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum Wave
-{
-    one,
-    two,
-    three,
-    four,
-}
 public class EnemyManager : SingletonBase<EnemyManager>
 {
     public EnemySpawner spawner;
     public ItemSpawner itemSpawner;
     public MapController mapController;
+
+    // 탄창 깨짐 UI
     public GameObject brokenUIEffect;
 
     private PlayerCharacter player;
@@ -25,7 +20,6 @@ public class EnemyManager : SingletonBase<EnemyManager>
     private float currentDuration;
     private float decreaseOffset = 0.2f;
     private bool isStartCloud;
-
 
     private GameObject particleObj;
     private ParticleSystem.MainModule particle;
@@ -51,7 +45,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
 
     private void Update()
     {
-        // 가시 함정
+        // 가시 함정 공격
         if (isCountingProhibit)
         {
             holdingtimeGauge -= Time.deltaTime;            
@@ -67,7 +61,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
             }
         }
 
-        // 포자구름
+        // 포자구름 공격
         if (isStartCloud)
         {
              if (player.movementComponent.normalizedZXSpeed > 0)
@@ -86,7 +80,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     /// <summary>
     /// 가시 함정을 생성합니다.
     /// </summary>
-    /// <param name="cactus"></param>
+    /// <param name="cactus">가시 함정을 생성하는 주체(선인장)</param>
     public void CreateThornArea(SpecialCactus cactus)
     {
         Transform thornTransform = cactus.transform.GetChild(1).transform;
@@ -97,7 +91,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     /// <summary>
     /// 가시 함정에 닿았을 때 데미지를 적용합니다.
     /// </summary>
-    /// <param name="other"></param>
+    /// <param name="other">가시 함정에 충돌한 플레이어</param>
     public void StartThornAttack(Collider other)
     {
         player = other.GetComponent<PlayerCharacter>();
@@ -122,7 +116,7 @@ public class EnemyManager : SingletonBase<EnemyManager>
     /// <summary>
     /// 포자 구름을 생성합니다.
     /// </summary>
-    /// <param name="mushroom"></param>
+    /// <param name="mushroom">포자 구름을 생성하는 주체(버섯)</param>
     public void CreateCloud(SpecialMushroom mushroom)
     {
         Vector3 pos = mushroom.transform.position + new Vector3(0, 1.0f, 1.5f);
@@ -132,8 +126,8 @@ public class EnemyManager : SingletonBase<EnemyManager>
     /// <summary>
     /// 포자구름에 닿았을 때 공격을 시작합니다.(파티클의 지속시간을 줄이기 위한 초기화 작업)
     /// </summary>
-    /// <param name="cloud"></param>
-    /// <param name="other"></param>
+    /// <param name="cloud">포자구름</param>
+    /// <param name="other">포자구름에 충돌한 플레이어</param>
     public void StartCloud(GameObject cloud, GameObject other)
     {
         isStartCloud = true;

@@ -4625,5 +4625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be5510e546f6ee4ab1ba36054fcb556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenEffect: {fileID: 3618436748560455377, guid: d83909521cb272d4baf28d768443f44a,
+  _screenEffect: {fileID: 3618436748560455377, guid: d83909521cb272d4baf28d768443f44a,
     type: 3}
+  _initPositionOffset: 2
+  _moveOffset: 0.15

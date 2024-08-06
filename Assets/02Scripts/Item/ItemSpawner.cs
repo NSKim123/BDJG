@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    private float rate;
+    // 일반 개체 아이템 확률
     private float normalRate = 0.2f;
+    // 특수 개체 아이템 확률
     private float specialRate = 0.5f;
 
     private float itemSpawnRadius = 8.0f;
@@ -14,13 +15,13 @@ public class ItemSpawner : MonoBehaviour
     private int _currentItemCount = 0;
     private int _maxItemCount = 4;
 
- 
-    private void ItemCountDecrease()
+
+    private void DecreaseItemCount()
     {
         _currentItemCount--;
     }
 
-    private void ItemCountIncrease()
+    private void IncreaseItemCount()
     {
         _currentItemCount++;
     }
@@ -30,34 +31,30 @@ public class ItemSpawner : MonoBehaviour
         return _currentItemCount >= _maxItemCount;
     }
 
-    private void Update()
+
+    /// <summary>
+    /// 확률에 따라 아이템을 생성합니다.
+    /// </summary>
+    /// <param name="type">죽은 적의 타입</param>
+    public void SpawnItemByPercentage(EEnemyType type)
     {
-        if (Time.timeScale == 0.0f)
-        {
-            return;
-        }
-    }
-
-
-    public void ItemSpawnByPercentage(EnemyType type)
-    {
-        rate = UnityEngine.Random.Range(0.0f, 1.0f);
-
         // 스폰된 아이템이 이미 최대 개수만큼 있다면 리턴
         if (IsItemsFullInMap())
         {
             return;
         }
-        
+
+        float rate = Random.Range(0.0f, 1.0f);
+
         // 일반 개체
         if ((int)type == 0 || (int)type == 1)
         {
             if (rate >= 0 && rate <= normalRate)
             {
-                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
+                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircle(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
-                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
-                ItemCountIncrease();
+                obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
+                IncreaseItemCount();
             }
 
         }
@@ -66,14 +63,17 @@ public class ItemSpawner : MonoBehaviour
         {
             if (rate>=0 && rate <= specialRate)
             {
-                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircleEdge(itemSpawnAxis.position, itemSpawnRadius);
+                Vector3 spawnPos = UtilSpawn.GetRandomPositionOnCircle(itemSpawnAxis.position, itemSpawnRadius);
                 GameObject obj = Instantiate(randomItem, spawnPos, Quaternion.identity);
-                obj.GetComponent<RandomItem>().onItemCountDecrease += ItemCountDecrease;
-                ItemCountIncrease();
+                obj.GetComponent<RandomItem>().onItemCountDecrease += DecreaseItemCount;
+                IncreaseItemCount();
             }
         }
     }
 
+    /// <summary>
+    /// 게임 시작(재시작 시) 맵에 아이템이 있다면 파괴합니다.
+    /// </summary>
     public void ResetItems()
     {
         UtilReset.DestroyActivatedItems("Item");

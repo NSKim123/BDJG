@@ -10,20 +10,20 @@ public class EnemyStateDie : EnemyStateBase
     {
     }
 
-    public override bool canExecute() => true;
+    public override bool CanExecute() => true;
 
-    public override State MoveNextStep()
+    public override EState MoveNextStep()
     {
-        State nextState = State.Die;
+        EState nextState = EState.Die;
 
         switch (_currentStep)
         {
-            case StepInState.None:
+            case EStepInState.None:
                 {
                     _currentStep++;
                 }
                 break;
-            case StepInState.Start:
+            case EStepInState.Start:
                 {
                     enemyAgent.enabled = false;
                     rigid.useGravity = false;
@@ -31,7 +31,7 @@ public class EnemyStateDie : EnemyStateBase
                     _currentStep++;
                 }
                 break;
-            case StepInState.Playing:
+            case EStepInState.Playing:
                 {
                     
                     if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
@@ -40,7 +40,7 @@ public class EnemyStateDie : EnemyStateBase
                     }
                 }
                 break;
-            case StepInState.End:
+            case EStepInState.End:
                 {
                     fadeCoroutine = enemyCharacter.StartCoroutine(FadeOut());
                 }

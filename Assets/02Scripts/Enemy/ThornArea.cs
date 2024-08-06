@@ -7,33 +7,35 @@ using UnityEngine;
 
 public class ThornArea : MonoBehaviour
 {
-    float currentTime = 0f;
-    float destroyTime = 7f;
-    float desiredPos;
+    private float _currentTime = 0f;
+    [SerializeField] private float _destroyTime = 7f;
+    private float _desiredPos;
 
-    public Terrain terrain;
-    public Vector3 worldPosition;
+    private Terrain _terrain;
+    private Vector3 _worldPosition;
+
+    [SerializeField] private float _moveOffset = 0.15f;
 
     private void Awake()
     {
-        terrain = GameObject.FindAnyObjectByType<Terrain>();
+        _terrain = FindAnyObjectByType<Terrain>();
     }
 
 
     private void Start()
     {
-        desiredPos = transform.position.y + 0.5f;
+        _desiredPos = transform.position.y + 0.5f;
 
         // 터레인의 로컬 좌표계로 변환
-        worldPosition = transform.position;
-        Vector3 terrainPosition = worldPosition - terrain.transform.position;
+        _worldPosition = transform.position;
+        Vector3 terrainPosition = _worldPosition - _terrain.transform.position;
 
         // 정규화된 좌표로 변환
-        float normalizedX = terrainPosition.x / terrain.terrainData.size.x;
-        float normalizedZ = terrainPosition.z / terrain.terrainData.size.z;
+        float normalizedX = terrainPosition.x / _terrain.terrainData.size.x;
+        float normalizedZ = terrainPosition.z / _terrain.terrainData.size.z;
 
         // 특정 위치에서 법선 벡터를 얻음
-        Vector3 normal = terrain.terrainData.GetInterpolatedNormal(normalizedX, normalizedZ);
+        Vector3 normal = _terrain.terrainData.GetInterpolatedNormal(normalizedX, normalizedZ);
 
         // 법선 벡터와 월드 좌표의 위쪽 벡터 사이의 회전 계산
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
@@ -44,13 +46,13 @@ public class ThornArea : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.y >= desiredPos)
+        // 다 올라온 후부터 삭제 타이머 체크
+        if (transform.position.y >= _desiredPos)
         {
-            currentTime += Time.deltaTime;
+            _currentTime += Time.deltaTime;
         }
-
-
-        if (currentTime > destroyTime)
+        
+        if (_currentTime > _destroyTime)
         {
             Destroy(gameObject);
         }
@@ -59,14 +61,16 @@ public class ThornArea : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (transform.position.y < desiredPos)
+        // 생성 후 점점 위로 올라오는 효과
+        if (transform.position.y < _desiredPos)
         {
-            transform.position += Vector3.up * Time.fixedDeltaTime * 0.15f;
+            transform.position += Vector3.up * Time.fixedDeltaTime * _moveOffset;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // 플레이어가 밟을 시 가시함정 공격 시작
         if (other.CompareTag("Player"))
         {
             EnemyManager.Instance.StartThornAttack(other);

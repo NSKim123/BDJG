@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public enum State
+public enum EState
 {
     Init,
     Idle,
@@ -13,10 +13,13 @@ public enum State
     Die,
 }
 
-
+/// <summary>
+/// 각 상태의 베이스 클래스입니다.
+/// </summary>
 public abstract class EnemyStateBase
 {
-    public enum StepInState
+    // 상태 내부에서의 진행 단계
+    public enum EStepInState
     {
         None,
         Start,
@@ -24,11 +27,10 @@ public abstract class EnemyStateBase
         End
     }
 
-    public abstract bool canExecute();
+    // 새로운 상태로의 전환 조건
+    public abstract bool CanExecute();
 
-    public StepInState currentStep => _currentStep;
-
-    protected StepInState _currentStep;
+    protected EStepInState _currentStep;
 
     // 필요한 컴포넌트 선언
     protected Rigidbody rigid;
@@ -39,7 +41,7 @@ public abstract class EnemyStateBase
     protected Enemy enemyCharacter;
     protected NavMeshAgent enemyAgent;
 
-
+    // 생성자에서 컴포넌트 초기화
     public EnemyStateBase(StateMachine stateMachine)
     {
         this.stateMachine = stateMachine;
@@ -51,11 +53,18 @@ public abstract class EnemyStateBase
         this.enemyAgent = stateMachine.GetComponent<NavMeshAgent>();
     }
 
-    public abstract State MoveNextStep();
+    /// <summary>
+    /// 상태 내부에서 다음 단계로 진행합니다.
+    /// </summary>
+    /// <returns>상태 반환</returns>
+    public abstract EState MoveNextStep();
 
+    /// <summary>
+    /// 상태 내부의 단계를 초기화합니다.
+    /// </summary>
     public void Reset()
     {
-        _currentStep = StepInState.None;
+        _currentStep = EStepInState.None;
     }
 
 }

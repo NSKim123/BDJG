@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+// 싱글톤 베이스 스크립트
+// DontDestroy는 상속받은 자식 클래스에서 필요할 시 구현
 public class SingletonBase<T> : MonoBehaviour
        where T : MonoBehaviour
 {
