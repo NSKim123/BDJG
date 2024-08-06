@@ -15,10 +15,7 @@ public class MushroomAIController : EnemyAIController
             _stateMachine.ChangeState(EState.Move);
         }
 
-        if (_stateMachine.currentStateType == EState.Move)
-        {
-            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
-        }
+        _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
 
         // 타켓(플레이어) 감지
         if (_attackDetect.Length > 0 && !_attacked)

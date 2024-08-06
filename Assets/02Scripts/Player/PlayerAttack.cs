@@ -232,7 +232,7 @@ public partial class PlayerAttack : MonoBehaviour
             // 기본 탄환
             case BulletType.Basic:
                 // 오브젝트 풀에서 기본 탄환 하나를 가져옵니다.
-                GameObject obj = ObjectPoolManager.Instance.GetFromPool(PoolType.Bullet);
+                GameObject obj = ObjectPoolManager.Instance.GetFromPool(EPoolType.Bullet);
                 bullet = obj.GetComponent<Bullet>();                
                 obj.SetActive(true);
                 break;
