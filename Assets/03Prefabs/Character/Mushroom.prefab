@@ -629,10 +629,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  _targetLayer:
+  targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  _attacked: 0
+  attacked: 0
 --- !u!114 &4573696292898162353
 MonoBehaviour:
   m_ObjectHideFlags: 0

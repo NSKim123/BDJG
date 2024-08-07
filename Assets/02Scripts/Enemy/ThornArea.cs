@@ -30,14 +30,13 @@ public class ThornArea : MonoBehaviour
         _worldPosition = transform.position;
         Vector3 terrainPosition = _worldPosition - _terrain.transform.position;
 
-        // 정규화된 좌표로 변환
         float normalizedX = terrainPosition.x / _terrain.terrainData.size.x;
         float normalizedZ = terrainPosition.z / _terrain.terrainData.size.z;
 
-        // 특정 위치에서 법선 벡터를 얻음
+        // 법선 벡터 계산
         Vector3 normal = _terrain.terrainData.GetInterpolatedNormal(normalizedX, normalizedZ);
 
-        // 법선 벡터와 월드 좌표의 위쪽 벡터 사이의 회전 계산
+        // 법선 벡터와 가시 함정의 위쪽 벡터 사이 회전 계산
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
 
         transform.rotation = rotation;

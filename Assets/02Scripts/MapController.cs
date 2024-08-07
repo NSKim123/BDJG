@@ -48,7 +48,7 @@ public class MapController : MonoBehaviour
     /// 시간에 따라 물 높이를 조절하는 코루틴입니다.
     /// </summary>
     /// <returns></returns>
-    public IEnumerator C_WaterDown()
+    public IEnumerator C_MoveDownWater()
     {
         int waterIndex = 0;
 
@@ -99,6 +99,6 @@ public class MapController : MonoBehaviour
             StopCoroutine(_waterCoroutine);
             _waterCoroutine = null;
         }
-        _waterCoroutine = StartCoroutine(C_WaterDown());
+        _waterCoroutine = StartCoroutine(C_MoveDownWater());
     }
 }

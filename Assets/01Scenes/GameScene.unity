@@ -164,8 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dd3cf9c654db5942aa8ab50cbb55483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mushroomSpawnAxis: {fileID: 878436948}
-  cactusSpawnAxis: {fileID: 1899784337}
+  _enemySpawnAxis: {fileID: 878436948}
   mushroomData:
   - {fileID: 11400000, guid: e7a0001652bd7394bbe053b3378d023f, type: 2}
   - {fileID: 11400000, guid: 0bc8be7d5bb63b247acedb004f667e52, type: 2}
@@ -1121,7 +1120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 878436948}
   m_Layer: 0
-  m_Name: MushroomSpawnPos
+  m_Name: EnemySpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -2415,37 +2414,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1163955621}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1899784336
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1899784337}
-  m_Layer: 0
-  m_Name: 'CactusSpawnPos '
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1899784337
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1899784336}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.2, y: 7.5, z: 17.57}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1900393177
 GameObject:
   m_ObjectHideFlags: 0
@@ -3036,7 +3004,6 @@ SceneRoots:
   - {fileID: 911747145}
   - {fileID: 1164451484}
   - {fileID: 878436948}
-  - {fileID: 1899784337}
   - {fileID: 1295599412}
   - {fileID: 593470963}
   - {fileID: 2058321943}

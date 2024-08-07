@@ -3,38 +3,43 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class EnemyAIController : MonoBehaviour
+public class EnemyAIController : MonoBehaviour
 {
-    protected StateMachine _stateMachine;
-    protected Enemy _enemyCharacter;
+    protected StateMachine stateMachine;
+    protected Enemy enemyCharacter;
 
     public GameObject Target;
 
-    [SerializeField] protected LayerMask _targetLayer;
-    [SerializeField] protected bool _attacked = false;
+    [SerializeField] protected LayerMask targetLayer;
+    [SerializeField] protected bool attacked = false;
 
     // 감지된 플레이어
-    public abstract Collider[] AttackDetect { get; }
+    public Collider[] AttackDetect { get; set; }
 
-    private MapController _mapManager;
 
     private void Start()
     {
         Init();
     }
 
-    // 오브젝트풀로 관리하기때문에 필요
-    private void OnEnable()
+    protected virtual void OnDisable()
     {
-        Init();
+        attacked = false;
+    }
+
+    protected virtual void Update()
+    {
+        if (Time.timeScale == 0.0f)
+        {
+            return;
+        }
     }
 
     private void Init()
     {
         Target = GameObject.FindGameObjectWithTag("Player");
-        _stateMachine = GetComponent<StateMachine>();
-        _enemyCharacter = GetComponent<Enemy>();
-        _mapManager = FindAnyObjectByType<MapController>();
+        stateMachine = GetComponent<StateMachine>();
+        enemyCharacter = GetComponent<Enemy>();
     }
 }
 

@@ -660,6 +660,7 @@ MonoBehaviour:
     type: 3}
   defaultMat: {fileID: 2100000, guid: 2d8643687b664580b4248d279407fb7c, type: 2}
   changeMat: {fileID: 2100000, guid: c434d8c3d93524344bf2e01ff64dc04b, type: 2}
+  isReused: 0
 --- !u!195 &2619652223798999380
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -694,11 +695,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99bb9b8c70a0491419e2cc8c0f886402, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  _targetLayer:
+  Target: {fileID: 0}
+  targetLayer:
     serializedVersion: 2
     m_Bits: 128
-  _attacked: 0
+  attacked: 0
 --- !u!114 &8435892596008370001
 MonoBehaviour:
   m_ObjectHideFlags: 0

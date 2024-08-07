@@ -9,19 +9,19 @@ using UnityEngine.AI;
 // Enemy에 대한 정보. 값을 데이터로 받아오고 각각의 적이 상속받습니다.
 public abstract class Enemy : MonoBehaviour, IHit
 {
-    public abstract EEnemyType Type { get; set; }
-    public abstract float MoveSpeed { get; set; }
-    public abstract float AttackRange { get; set; }
-    public abstract float AttackForce { get; set; }
-    public abstract float AttackTime { get; set; }
-    public abstract float AttackSpeed { get; set; }
-    public abstract float Damage_Distance { get; set; }
-    public abstract Vector3 Damage_Direction { get; set; }
+    public EEnemyType Type { get; set; }
+    public float MoveSpeed { get; set; }
+    public float AttackRange { get; set; }
+    public float AttackForce { get; set; }
+    public float AttackTime { get; set; }
+    public float AttackSpeed { get; set; }
+    public float Damage_Distance { get; set; }
+    public Vector3 Damage_Direction { get; set; }
 
     #region 특수개체의 특수공격용
-    public abstract float SpecialAttackCoolTime { get; set; }
-    public abstract float SpecialAttackRange {  get; set; }
-    public abstract float SpecialAttackTime { get; set; }
+    public float SpecialAttackCoolTime { get; set; }
+    public float SpecialAttackRange { get; set; }
+    public float SpecialAttackTime { get; set; }
     #endregion
 
 
@@ -46,32 +46,37 @@ public abstract class Enemy : MonoBehaviour, IHit
 
     public bool isReused = false;
 
+    protected bool isInitialized = false;
+
     protected virtual void Start()
     {
         stateMachine = GetComponent<StateMachine>();
         dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
+        isInitialized = true;
     }
 
-    protected virtual void OnEnable()
-    {
-        stateMachine = GetComponent<StateMachine>();
-        dieRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
-    }
 
     public virtual void OnDamaged(float distance, Vector3 direction)
     {
         // 피격 이펙트 생성
-        //GameObject effect = Instantiate(Effect_Hit);
         GameObject effect = ObjectPoolManager.Instance.GetFromPool(EPoolType.Effect_Hit);
-      
         effect.SetActive(true);
-
         effect.transform.position = transform.position + Vector3.up * GetComponent<CapsuleCollider>().height * 0.5f;
         effect.transform.SetParent(transform);
 
+        Damage_Distance = distance;
+        Damage_Direction = direction;
+        stateMachine.ChangeState_AllowSameState(EState.Hurt);
     }
 
-    public void RequestCloudAttack(SpecialMushroom mushroom)
+    public virtual void OnDead()
+    {
+        onDead?.Invoke();
+        OnRequestSpawnItem?.Invoke(Type);
+        stateMachine.ChangeState(EState.Die);
+    }
+
+    public virtual void RequestCloudAttack(SpecialMushroom mushroom)
     {
         OnRequestCloudAttack?.Invoke(mushroom);
     }
@@ -81,16 +86,14 @@ public abstract class Enemy : MonoBehaviour, IHit
         OnRequestThornAttack?.Invoke(cactus);
     }
 
-    public virtual void OnDead()
-    {
-        onDead?.Invoke();
-        OnRequestSpawnItem?.Invoke(Type);
-    }
 
     private void OnDisable()
-    {
-        stateMachine.currentStateType = EState.Init;
-        dieRenderer.material = defaultMat;
+    {   
+        if (isInitialized)
+        {
+            stateMachine.currentStateType = EState.Init;
+            dieRenderer.material = defaultMat;
+        }
     }
 
 }

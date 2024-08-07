@@ -71,8 +71,6 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
                 item.GetComponentInChildren<Renderer>().material = newMaterial;
             }
         }
-        
-
     }
 
     /// <summary>
@@ -127,8 +125,6 @@ public class ObjectPoolManager : SingletonBase<ObjectPoolManager>
         {
             obj = Instantiate(_dataOfType[type].prefab);
         }
-
-        obj.SetActive(false);
 
         return obj;
     }

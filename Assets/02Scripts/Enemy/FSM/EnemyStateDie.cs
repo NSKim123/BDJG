@@ -33,7 +33,6 @@ public class EnemyStateDie : EnemyStateBase
                 break;
             case EStepInState.Playing:
                 {
-                    
                     if (fadeCoroutine == null && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.7f)
                     {
                         _currentStep++;
@@ -52,22 +51,20 @@ public class EnemyStateDie : EnemyStateBase
         return nextState;
     }
 
-    IEnumerator FadeOut()
+    private IEnumerator FadeOut()
     {
         float f = 1;
         while (f > 0)
         {
             f -= 0.3f;
             enemyCharacter.dieRenderer.material = enemyCharacter.changeMat;
-            Color ColorAlhpa = enemyCharacter.dieRenderer.material.color;
-            ColorAlhpa.a = f;
-            enemyCharacter.dieRenderer.material.color = ColorAlhpa;
+            Color colorAlhpa = enemyCharacter.dieRenderer.material.color;
+            colorAlhpa.a = f;
+            enemyCharacter.dieRenderer.material.color = colorAlhpa;
             yield return new WaitForSeconds(0.1f);
         }
         
         ObjectPoolManager.Instance.ReturnToPool(enemyCharacter.gameObject);
-        
-        //GameObject.Destroy(enemyCharacter.gameObject);
     }
 
 }

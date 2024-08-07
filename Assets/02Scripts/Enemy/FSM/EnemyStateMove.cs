@@ -21,7 +21,6 @@ public class EnemyStateMove : EnemyStateBase
     public override EState MoveNextStep()
     {
         EState nextState = EState.Move;
-        //Debug.Log(enemyCharacter.GetType());
 
         switch (_currentStep)
         {

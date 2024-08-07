@@ -1,73 +1,70 @@
 ﻿using UnityEngine;
 
-public class SpecialMushroomAIController : EnemyAIController
+public class SpecialMushroomAIController : MushroomAIController
 {
     // 특수공격 가능한지, 가능하면 우선
     // 쿨타임 걸리면 일반공격
 
-    [SerializeField] private bool isAvailableSpecialAttack = true;
-    [SerializeField] private bool coolTimeStart = false;
-    private float coolTime = 0;
+    [SerializeField] private bool _isAvailableSpecialAttack = true;
+    [SerializeField] private bool _coolTimeStart = false;
+    private float _coolTime = 0;
 
-    public override Collider[] AttackDetect { get { return _attackDetect; } }
-
-    private Collider[] _attackDetect;
-
-  
-
-    protected void Update()
+    protected override void OnDisable()
     {
-        // idle 건너뜀
-        if (_stateMachine.currentStateType == EState.Idle)
-        {
-            _stateMachine.ChangeState(EState.Move);
-        }
+        base.OnDisable();
+        _isAvailableSpecialAttack = true;
+        _coolTimeStart = false;
+        _coolTime = 0;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
 
         // 특수공격 쿨타임 계산
-        if (coolTimeStart)
+        if (_coolTimeStart)
         {
-            coolTime += Time.deltaTime;
+            _coolTime += Time.deltaTime;
 
-            if (coolTime > _enemyCharacter.SpecialAttackCoolTime)
+            if (_coolTime > enemyCharacter.SpecialAttackCoolTime)
             {
-                isAvailableSpecialAttack = true;
-                coolTimeStart = false;
+                _isAvailableSpecialAttack = true;
+                _coolTimeStart = false;
             }
         }
 
 
         // 특수공격이 가능하다면
-        if (isAvailableSpecialAttack)
+        if (_isAvailableSpecialAttack)
         {
-            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange, _targetLayer);
+            AttackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, enemyCharacter.SpecialAttackRange, targetLayer);
 
-            if (_attackDetect.Length > 0 && !_attacked)
+            if (AttackDetect.Length > 0 && !attacked)
             {
-                _attacked = true;
-                isAvailableSpecialAttack = false;
-                coolTimeStart = true;
-                coolTime = 0;
-                _stateMachine.ChangeState(EState.AttackSpecial);
-                
+                attacked = true;
+                _isAvailableSpecialAttack = false;
+                _coolTimeStart = true;
+                _coolTime = 0;
+                stateMachine.ChangeState(EState.AttackSpecial);
             }
             
         }
         else
         {
-            _attackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange, _targetLayer);
+            AttackDetect = Physics.OverlapSphere(transform.position + Vector3.up * 1.8f, enemyCharacter.AttackRange, targetLayer);
 
-            if (_attackDetect.Length > 0 && !_attacked)
+            if (AttackDetect.Length > 0 && !attacked)
             {
-                _attacked = true;
-                _stateMachine.ChangeState(EState.Attack);
+                attacked = true;
+                stateMachine.ChangeState(EState.Attack);
             }
         }
 
 
-        if ((_stateMachine.currentStateType != EState.Attack || _stateMachine.currentStateType != EState.AttackSpecial)
-            && _attacked)
+        if ((stateMachine.currentStateType != EState.Attack || stateMachine.currentStateType != EState.AttackSpecial)
+            && attacked)
         {
-            _attacked = false;
+            attacked = false;
         }
 
     }
@@ -76,17 +73,17 @@ public class SpecialMushroomAIController : EnemyAIController
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        if (_enemyCharacter != null)
+        if (enemyCharacter != null)
         {
             Gizmos.color = Color.green;
-            if (isAvailableSpecialAttack)
+            if (_isAvailableSpecialAttack)
             {
-                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.SpecialAttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, enemyCharacter.SpecialAttackRange);
 
             }
             else
             {
-                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, _enemyCharacter.AttackRange);
+                Gizmos.DrawSphere(transform.position + Vector3.up * 1.8f, enemyCharacter.AttackRange);
 
             }
         }

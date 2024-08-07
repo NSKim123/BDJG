@@ -4,11 +4,11 @@ using UnityEngine;
 // 파티클을 오브젝트풀로 관리할 때 파티클에 붙는 컴포넌트입니다.
 public class ParticleInPool : MonoBehaviour
 {
-    private ParticleSystem myParticle;
+    private ParticleSystem _myParticle;
 
     private void Awake()
     {
-        myParticle = GetComponent<ParticleSystem>();
+        _myParticle = GetComponent<ParticleSystem>();
     }
    
     void OnEnable()
@@ -22,7 +22,7 @@ public class ParticleInPool : MonoBehaviour
     /// <returns></returns>
     private IEnumerator C_WaitForParticleSystem()
     {
-        while (myParticle.isPlaying || myParticle.particleCount > 0)
+        while (_myParticle.isPlaying || _myParticle.particleCount > 0)
         {
             yield return null;
         }
